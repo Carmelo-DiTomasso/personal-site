@@ -1,0 +1,41 @@
+services:
+  db:
+    image: postgres:16
+    container_name: personal_site_db
+    environment:
+      POSTGRES_DB: personal_site
+      POSTGRES_USER: personal_site
+      POSTGRES_PASSWORD: personal_site_password
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+
+  backend:
+    build:
+      context: ./backend
+    container_name: personal_site_backend
+    env_file:
+      - .env
+    depends_on:
+      - db
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./backend:/app
+
+  frontend:
+    build:
+      context: ./frontend
+    container_name: personal_site_frontend
+    depends_on:
+      - backend
+    ports:
+      - "5173:5173"
+    volumes:
+      - ./frontend:/app
+      - frontend_node_modules:/app/node_modules
+
+volumes:
+  pgdata:
+  frontend_node_modules:
