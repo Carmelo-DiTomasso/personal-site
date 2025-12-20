@@ -1,35 +1,43 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import { useEffect, useState } from "react";
+import "./App.css";
+
+type HealthResponse = {
+  status: string;
+};
 
 function App() {
-  const [count, setCount] = useState(0)
+  const [healthStatus, setHealthStatus] = useState<string>("loading...");
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
+
+  useEffect(() => {
+    const run = async () => {
+      try {
+        const response = await fetch("/api/health/");
+
+        if (!response.ok) {
+          throw new Error(`Health check failed: HTTP ${response.status}`);
+        }
+
+        const data = (await response.json()) as HealthResponse;
+        setHealthStatus(data.status);
+      } catch (error) {
+        setErrorMessage(error instanceof Error ? error.message : "Unknown error");
+      }
+    };
+
+    run();
+  }, []);
 
   return (
     <>
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
+      <h1>personal-site</h1>
+
+      <div style={{ marginTop: "1rem" }}>
+        <strong>Backend health:</strong>{" "}
+        {errorMessage ? <span>{errorMessage}</span> : <span>{healthStatus}</span>}
       </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
     </>
-  )
+  );
 }
 
-export default App
+export default App;
