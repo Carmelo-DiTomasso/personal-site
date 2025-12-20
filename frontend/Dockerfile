@@ -2,5 +2,10 @@ FROM node:20-alpine
 
 WORKDIR /app
 
-# placeholder until React is created
-CMD ["node", "-e", "console.log('frontend container OK')"]
+COPY package*.json /app/
+RUN npm install
+
+COPY . /app
+
+EXPOSE 5173
+CMD ["npm", "run", "dev", "--", "--host", "0.0.0.0"]
