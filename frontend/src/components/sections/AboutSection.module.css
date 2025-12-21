@@ -1,0 +1,14 @@
+.section {
+  padding: 2rem 0;
+}
+
+.title {
+  margin: 0 0 0.75rem;
+  font-size: 1.25rem;
+}
+
+.body {
+  margin: 0;
+  opacity: 0.9;
+  max-width: 70ch;
+}

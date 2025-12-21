@@ -1,0 +1,69 @@
+.hero {
+  padding: 2.5rem 0 2rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.nav {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 0.75rem 0;
+}
+
+.brand {
+  font-weight: 700;
+  text-decoration: none;
+}
+
+.navLinks {
+  display: flex;
+  gap: 1rem;
+}
+
+.content {
+  padding: 2rem 0 1rem;
+}
+
+.title {
+  font-size: 2rem;
+  line-height: 1.15;
+  margin: 0;
+}
+
+.subtitle {
+  margin: 0.75rem 0 0;
+  opacity: 0.85;
+}
+
+.ctas {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  margin-top: 1.25rem;
+}
+
+.primaryButton,
+.secondaryButton {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.65rem 0.95rem;
+  border-radius: 0.75rem;
+  text-decoration: none;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+}
+
+.primaryButton {
+  font-weight: 600;
+}
+
+.secondaryButton {
+  opacity: 0.9;
+}
+
+.links {
+  margin-top: 1.25rem;
+  display: flex;
+  gap: 1rem;
+}
