@@ -14,6 +14,7 @@ This file is the current working checklist. Keep it small and actionable.
   - [ ] `.\scripts\superuser.ps1`
 - [ ] Add `scripts/status.ps1` (prints `docker compose ps`)
 - [ ] Create GitHub labels + project board
+- [ ] Add a Search Console note to PLAN (domain verified; postpone SEO work until after real pages exist)
 
 ## Next (First end-to-end integration)
 - [ ] Backend: add `/api/health/` endpoint returning `{ "status": "ok" }`
@@ -34,6 +35,12 @@ This file is the current working checklist. Keep it small and actionable.
   - [ ] eslint (already present via Vite template)
   - [ ] prettier
 - [ ] Add CI on GitHub Actions (lint + tests on PRs)
+- [ ] SEO basics (after Home/Projects/About exist):
+  - [ ] Add `<title>` + meta description + OG tags
+  - [ ] Add `robots.txt` + `sitemap.xml`
+  - [ ] Add Person schema (name + links)
+  - [ ] Add site URL to LinkedIn + GitHub profile
+  - [ ] Submit sitemap + request indexing in Search Console
 
 ## Later (Deployment prep)
 - [ ] Add `infra/` plan for DigitalOcean deployment

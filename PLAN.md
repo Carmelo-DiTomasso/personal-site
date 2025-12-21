@@ -61,6 +61,11 @@ Deliverables:
 - API client pattern (single place for fetch logic)
 - Baseline UI styling and shared components
 - Error handling and loading states
+- Basic SEO metadata (title/description/OG) once routes exist
+
+Notes
+- Search Console (domain property) verified for `carmeloditomasso.app`.
+- SEO work is intentionally deferred until the site has real pages (Home/About/Projects) to index.
 
 Definition of Done:
 - No single file becomes a “god component”
