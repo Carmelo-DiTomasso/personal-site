@@ -58,6 +58,11 @@ Goal: Real site layout and a clean way to call the API.
 
 Deliverables:
 - Routing + layout (Home, Projects, Blog, Resume, Contact)
+  - Contact
+    - Contact form (no public email) can add rate limiting and CAPTCHA
+    - alias email that forwards to real inbox
+    - obfuscate email
+    - clickable mailto + scrape
 - API client pattern (single place for fetch logic)
 - Baseline UI styling and shared components
 - Error handling and loading states
