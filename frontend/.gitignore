@@ -22,3 +22,8 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+
+# Prevent accidental TS declaration output in source tree
+src/**/*.d.ts
+vite.config.d.ts
+*.tsbuildinfo
