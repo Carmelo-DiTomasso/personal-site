@@ -50,6 +50,12 @@ export function HeroSection({
             </a>
           </div>
 
+          <div className={styles.links} aria-label="">
+            <ExternalLink href="/resume" aria-label="Resume">
+              Resume
+            </ExternalLink>
+          </div>
+
           <div className={styles.links} aria-label="External links">
             <ExternalLink href="https://github.com/" aria-label="GitHub">
               GitHub
