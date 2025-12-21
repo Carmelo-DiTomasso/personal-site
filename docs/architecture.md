@@ -18,6 +18,7 @@ Responsibilities:
 - UI routes/pages (Home, Projects, Blog, Resume, Contact, etc.)
 - API calls to backend
 - Client-side state and rendering
+- Frontend structure uses src/pages/* for route-level components and src/components/sections/* for page sections. - Styling uses CSS Modules (*.module.css) to keep styles local and scalable.
 
 ### Backend (`backend/`)
 Responsibilities:
