@@ -43,6 +43,7 @@ This is a practical checklist to keep the project “professional-grade” as it
 ## Definition of Done (for tasks)
 
 A task is “done” when:
+
 - Code works locally via Docker Compose
 - Basic errors are handled (no crashing on common failures)
 - Docs updated (README/architecture/tasks as appropriate)

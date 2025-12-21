@@ -3,6 +3,7 @@
 This file is the current working checklist. Keep it small and actionable.
 
 ## Now
+
 - [ ] Paste finalized docs (README/PLAN/TASKS/architecture/joel-test)
 - [ ] Commit + push documentation updates
 - [ ] Verify scripts work end-to-end:
@@ -14,14 +15,17 @@ This file is the current working checklist. Keep it small and actionable.
   - [ ] `.\scripts\superuser.ps1`
 - [ ] Add `scripts/status.ps1` (prints `docker compose ps`)
 - [ ] Create GitHub labels + project board
-- [ ] Add a Search Console note to PLAN (domain verified; postpone SEO work until after real pages exist)
+- [ ] Add a Search Console note to PLAN (domain verified;
+      postpone SEO work until after real pages exist)
 
 ## Next (First end-to-end integration)
+
 - [ ] Backend: add `/api/health/` endpoint returning `{ "status": "ok" }`
 - [ ] Frontend: fetch `/api/health/` and render status on home page
 - [ ] Document API conventions in `docs/architecture.md`
 
 ## Soon
+
 - [ ] Decide API base path: `/api/` now, migrate to `/api/v1/` later
 - [ ] Create Django apps:
   - [ ] accounts
@@ -43,6 +47,7 @@ This file is the current working checklist. Keep it small and actionable.
   - [ ] Submit sitemap + request indexing in Search Console
 
 ## Later (Deployment prep)
+
 - [ ] Add `infra/` plan for DigitalOcean deployment
 - [ ] Add production env strategy (secrets, DEBUG=0, allowed hosts)
 - [ ] Add HTTPS + reverse proxy plan
