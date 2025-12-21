@@ -10,6 +10,13 @@ function App() {
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
   useEffect(() => {
+
+    // Only check backend health in local development
+    if (!import.meta.env.DEV) {
+      setHealthStatus("not configured (frontend-only deploy)");
+      return;
+    }
+
     const run = async () => {
       try {
         const response = await fetch("/api/health/");
