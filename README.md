@@ -67,10 +67,17 @@ From the repo root:
 .\scripts\dev.ps1
 ```
 
+Optional verification:
+
+```powershell
+.\scripts\status.ps1
+```
+
 Services:
 
 - Frontend: <http://localhost:5173>
 - Backend: <http://localhost:8000>
+- Health: <http://localhost:8000/api/health/>
 - Admin: <http://localhost:8000/admin/>
 - DB: localhost:5432
 
@@ -82,7 +89,12 @@ Services:
 
 ### 4) Create a Django admin user
 
+This script is non-interactive and requires env vars:
+
 ```powershell
+$env:DJANGO_SUPERUSER_USERNAME="admin"
+$env:DJANGO_SUPERUSER_EMAIL="admin@example.com"
+$env:DJANGO_SUPERUSER_PASSWORD="admin"
 .\scripts\superuser.ps1
 ```
 
@@ -98,23 +110,35 @@ Then sign in at:
 
 ## Common Commands
 
-### Show running containers
+### Show status (containers + URLs + health)
 
 ```powershell
-docker compose ps
+.\scripts\status.ps1
 ```
 
 ### Follow logs
 
 ```powershell
-.\scripts\logs-backend.ps1
-.\scripts\logs-frontend.ps1
+.\scripts\logs-backend.ps1 -Tail 200
+.\scripts\logs-frontend.ps1 -Tail 200
 ```
 
-### Rebuild after dependency changes
+### Rebuild and start stack
 
 ```powershell
-docker compose up -d --build
+.\scripts\dev.ps1
+```
+
+### Stop everything
+
+```powershell
+.\scripts\down.ps1
+```
+
+### Run migrations
+
+```powershell
+.\scripts\migrate.ps1
 ```
 
 ## Environment Variables
