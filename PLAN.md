@@ -98,6 +98,7 @@ Goal: Create/edit content in Django Admin and display in frontend.
 
 Deliverables:
 
+- Update site logo and name
 - Blog post model (title, slug, body, published, timestamps)
 - Projects model (title, stack, description, links, timestamps)
 - Django Admin customization (search, list display)
