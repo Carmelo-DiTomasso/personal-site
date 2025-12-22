@@ -42,16 +42,31 @@ if (-not (Test-Path ".\.env")) {
 
 Write-Host "Bringing up dev stack (docker compose up -d --build)..."
 
-# IMPORTANT: Docker/BuildKit writes progress to stderr even on success.
-# Redirect stderr to stdout to avoid PowerShell NativeCommandError noise.
-& docker compose up -d --build 2>&1 | ForEach-Object { $_ }
+$artifactsDir = Join-Path $PSScriptRoot ".artifacts"
+New-Item -ItemType Directory -Force -Path $artifactsDir | Out-Null
 
-if ($LASTEXITCODE -ne 0) {
-  Fail "docker compose up failed with exit code $LASTEXITCODE"
+$stdout = Join-Path $artifactsDir "dev-compose-stdout.txt"
+$stderr = Join-Path $artifactsDir "dev-compose-stderr.txt"
+
+# Clear old logs
+Remove-Item $stdout, $stderr -ErrorAction SilentlyContinue
+
+$proc = Start-Process -FilePath "docker" `
+  -ArgumentList @("compose","up","-d","--build") `
+  -NoNewWindow -Wait -PassThru `
+  -RedirectStandardOutput $stdout `
+  -RedirectStandardError $stderr
+
+# Print combined output in a stable order (and avoid NativeCommandError)
+if (Test-Path $stdout) { Get-Content $stdout | ForEach-Object { $_ } }
+if (Test-Path $stderr) { Get-Content $stderr | ForEach-Object { $_ } }
+
+if ($proc.ExitCode -ne 0) {
+  Fail "docker compose up failed with exit code $($proc.ExitCode)"
 }
 
 Write-Host "Waiting for backend health..."
 Wait-ForHealth
 
-Write-Host "Dev stack is up ✅"
+Write-Host "Dev stack is up (OK)"
 docker compose ps
