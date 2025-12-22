@@ -9,4 +9,13 @@ export default defineConfig({
       "@": fileURLToPath(new URL("./src", import.meta.url)),
     },
   },
+  server: {
+    proxy: {
+      // Proxy API requests during local dev to the Django backend container.
+      "/api": {
+        target: "http://backend:8000",
+        changeOrigin: true,
+      },
+    },
+  },
 });
