@@ -1,0 +1,11 @@
+ personal-site-backend  Built
+ personal-site-frontend  Built
+ Container personal_site_db  Running
+ Container personal_site_backend  Recreate
+ Container personal_site_backend  Recreated
+ Container personal_site_frontend  Recreate
+ Container personal_site_frontend  Recreated
+ Container personal_site_backend  Starting
+ Container personal_site_backend  Started
+ Container personal_site_frontend  Starting
+ Container personal_site_frontend  Started
