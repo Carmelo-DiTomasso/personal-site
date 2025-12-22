@@ -22,3 +22,6 @@ build/
 # Django
 staticfiles/
 media/
+
+# Scripts
+.artifacts/
