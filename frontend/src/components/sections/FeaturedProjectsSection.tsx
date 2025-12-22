@@ -39,8 +39,8 @@ export function FeaturedProjectsSection({ projects }: FeaturedProjectsSectionPro
               <p className={styles.cardBody}>{project.description}</p>
 
               <ul className={styles.stack} aria-label="Tech stack">
-                {project.stack.map((item) => (
-                  <li key={item} className={styles.stackItem}>
+                {project.stack.map((item, index) => (
+                  <li key={`${item}-${index}`} className={styles.stackItem}>
                     {item}
                   </li>
                 ))}
