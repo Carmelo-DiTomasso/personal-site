@@ -141,6 +141,36 @@ Then sign in at:
 .\scripts\migrate.ps1
 ```
 
+### Lint (run pre-commit hooks on all files)
+
+```powershell
+.\scripts\lint.ps1
+```
+
+### Troubleshooting
+
+Rebuild everything (if containers/images got out of sync):
+
+```powershell
+docker compose up -d --build
+```
+
+See container status:
+
+```powershell
+docker compose ps
+```
+
+Follow logs directly (if scripts aren’t enough):
+
+```powershell
+docker compose logs -f --tail 200 backend
+```
+
+```powershell
+docker compose logs -f --tail 200 frontend
+```
+
 ## Environment Variables
 
 Local dev uses `.env` (not committed). See `.env.example` for required variables.
@@ -151,6 +181,8 @@ Local dev uses `.env` (not committed). See `.env.example` for required variables
 - Keep docs current (docs/ is source of truth).
 - “Done” means: implementation + basic verification + docs updated.
 - Track features/bugs in GitHub Issues.
+- Prefer scripts in `scripts/` over raw docker commands
+  (docs and onboarding assume scripts-first).
 
 ## Documentation
 
