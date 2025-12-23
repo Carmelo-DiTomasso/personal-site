@@ -1,0 +1,35 @@
+# Auto-detect text files, but keep explicit rules below as the source of truth.
+* text=auto
+
+# Normalize common text formats to LF to avoid cross-platform diffs.
+*.md   text eol=lf
+*.yml  text eol=lf
+*.yaml text eol=lf
+*.json text eol=lf
+*.toml text eol=lf
+
+# App/source files (safe as LF across platforms).
+*.ts   text eol=lf
+*.tsx  text eol=lf
+*.js   text eol=lf
+*.jsx  text eol=lf
+*.css  text eol=lf
+*.scss text eol=lf
+*.html text eol=lf
+*.py   text eol=lf
+Dockerfile text eol=lf
+*.sh   text eol=lf
+
+# Windows-friendly line endings for PowerShell and batch scripts.
+*.ps1 text eol=crlf
+*.bat text eol=crlf
+*.cmd text eol=crlf
+
+# Treat common binaries as binary (no EOL conversion).
+*.png  binary
+*.jpg  binary
+*.jpeg binary
+*.webp binary
+*.gif  binary
+*.ico  binary
+*.pdf  binary
