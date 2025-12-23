@@ -41,3 +41,12 @@ repos:
         entry: npm --prefix frontend run typecheck
         language: system
         pass_filenames: false
+
+  # Backend linting via ruff
+  - repo: https://github.com/astral-sh/ruff-pre-commit
+    # Ruff version (keep this fresh with `pre-commit autoupdate`).
+    rev: v0.14.10
+    hooks:
+      - id: ruff-check
+        args: ["--config=backend/pyproject.toml"]
+        files: ^backend/.*\.py$
