@@ -5,11 +5,11 @@ It stays small and actionable. The PM Hub conversation uses this file to plan sp
 
 ## How we work (ChatGPT Projects workflow)
 
-- **PM Hub conversation (this one):**
-  - Chooses the **next milestone**
-  - Proposes a **sprint backlog (5–10 issues max)** with labels + DoD
-  - After each sprint, ingests a **Sprint Handoff Packet** and updates docs +
-    progress here
+- **PM Hub conversation:**
+  - Chooses the next **Milestone**
+  - Proposes a sprint backlog (**5–10 issues max**) with labels + DoD
+  - After each sprint, ingests a **Sprint Handoff Packet** and updates docs and
+  progress here
 
 - **Each sprint gets its own ChatGPT conversation**
   - Work issue-by-issue (1–3 commits each)
@@ -17,40 +17,36 @@ It stays small and actionable. The PM Hub conversation uses this file to plan sp
 
 ## Current status
 
-- **Active milestone:** Phase 3 Kickoff — Repo Hygiene + Tooling Baseline ✅
-- **Last completed sprint:** Sprint 2 — Phase 3 Kickoff baseline ✅
-- **Phase alignment:** Phase 3 is active; next work should implement Backend
-  Foundations (apps + tests).
+- **Active Milestone:** Projects v0 — Admin + Seed + Frontend Consumption
+  (proposed)
+- **Last completed sprint:** Sprint 3 — Phase 3 Backend Foundations v0 ✅
+- **Phase alignment:** Phase 3 foundations are in place; next is project
+  content workflow + frontend consumption.
 
 ---
 
-## Now (prepare next milestone + sprint)
+## Now (Projects v0 milestone)
 
-These are the **next 3–7 items** that should become GitHub Issues for the next sprint.
+Turn these into GitHub issues for the next sprint.
 
-- [ ] Create/confirm GitHub **Milestone** for Phase 3 Backend Foundations
-- [ ] Backend Foundations sprint backlog (5–10 issues):
-  - [ ] Scaffold Django apps: accounts, content, games, analytics
-  - [ ] Add minimal backend tests for `/api/health/` (smoke test)
-  - [ ] Decide initial API error shape and add one example endpoint using it
-
----
-
-## Next (Phase 3 — Backend Foundations)
-
-These should be scheduled once “Now” items are underway or complete.
-
-- [ ] Create Django apps (scaffolding only to start):
-  - [ ] accounts
-  - [ ] content
-  - [ ] games
-  - [ ] analytics
-- [ ] Move `/api/health/` into an appropriate app/module (optional refactor)
-- [ ] Add minimal backend tests for health endpoint (smoke test)
+- [ ] Backend: register `Project` in Django Admin with useful list display /
+  search / filter
+- [ ] Backend: add repeatable local seed data for projects (management
+  command or fixture)
+- [ ] Frontend: render projects from `GET /api/content/projects/` (home
+  section and/or Projects page)
+- [ ] Frontend: centralize API calls into a small client module (typed DTO
+  - consistent error handling)
+- [ ] Docs: update architecture or README with:
+  - `/api/content/projects/` contract (response shape, ordering
+    expectations)
+  - API error envelope shape + usage guidance
+- [ ] Optional: add pagination + ordering contract to projects endpoint
+  (only if list will grow soon)
 
 ---
 
-## Soon (Phase 4 — Frontend Foundations)
+## Next (Phase 4 — Frontend Foundations)
 
 - [ ] Routing + layout baseline:
   - [ ] Home
@@ -58,8 +54,17 @@ These should be scheduled once “Now” items are underway or complete.
   - [ ] Blog
   - [ ] Resume
   - [ ] Contact
-- [ ] Centralize API calls (single API client module)
-- [ ] Standard loading/error patterns (shared components)
+- [ ] Standard loading/error patterns (shared UI components)
+
+---
+
+## Soon (Quality & safety rails)
+
+- [ ] CI: strengthen checks (tests + lint parity) as coverage grows
+- [ ] Add backend formatting/linting expansions (only when low-churn):
+  - [ ] tighten Ruff rules
+  - [ ] optional Black
+- [ ] Add basic API pagination patterns (DRF pagination or custom)
 
 ---
 
@@ -74,27 +79,21 @@ These should be scheduled once “Now” items are underway or complete.
 
 ## Done (reference)
 
-These are completed; keep only as a historical record.
+### Sprint 1 — E2E Integration v0 ✅
 
-- [x] Paste finalized docs (README/PLAN/TASKS/architecture/joel-test)
-- [x] Commit + push documentation updates
-- [x] Verify scripts work end-to-end:
-  - [x] `.\scripts\dev.ps1`
-  - [x] `.\scripts\down.ps1`
-  - [x] `.\scripts\logs-backend.ps1`
-  - [x] `.\scripts\logs-frontend.ps1`
-  - [x] `.\scripts\migrate.ps1`
-  - [x] `.\scripts\superuser.ps1`
-- [x] Add `scripts/status.ps1`
-- [x] Create GitHub labels + project board
-- [x] Add Search Console note to PLAN (domain verified; postpone SEO)
+- Scripts hardened + status script + Vite proxy + Home API status
 
-- [x] Backend: add `/api/health/` endpoint returning `{ "status": "ok" }`
-- [x] Frontend: fetch `/api/health/` and render status on home page
-- [x] Document API conventions in `docs/architecture.md`
-- [x] Decide API base path strategy: keep `/api/` now; plan `/api/v1/`
-  later (documented migration trigger)
-- [x] Add repo-wide line ending normalization (`.gitattributes`)
-- [x] Establish backend lint baseline (ruff)
-- [x] Establish frontend formatting baseline (prettier)
-- [x] Add GitHub Actions CI baseline for backend/frontend checks
+### Sprint 2 — Repo Hygiene + Tooling Baseline ✅
+
+- `.gitattributes`, API base path decision, Ruff + Prettier, CI workflow,
+  docs updated
+
+### Sprint 3 — Backend Foundations v0 ✅
+
+- Django apps scaffolded: accounts/content/games/analytics
+- `/api/health/` moved into apps/analytics
+- Health smoke tests (SQLite override for tests)
+- CI runs `python manage.py test`
+- API error envelope introduced and adopted
+- First real endpoint: `GET /api/content/projects/` (model + serializer +
+  migration + test)

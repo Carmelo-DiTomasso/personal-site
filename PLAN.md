@@ -1,6 +1,6 @@
 ﻿# Plan
 
-This plan is organized into phases. Each phase ends with:
+Phased delivery plan. Each phase ends with:
 
 - working functionality
 - updated documentation
@@ -12,6 +12,7 @@ This plan is organized into phases. Each phase ends with:
 
 - Each phase (or phase subset) maps to a GitHub **Milestone**.
 - Every GitHub Issue belongs to **exactly one milestone**.
+- Milestones are kept small (typically 5–15 issues).
 - A milestone is “done” when its Definition of Done is satisfied and
   all issues are closed.
 
@@ -25,14 +26,14 @@ This plan is organized into phases. Each phase ends with:
   - phase status here
   - any docs affected by decisions
 
-### Labels (required per issue)
+### Required labels per issue
 
 Every issue must have exactly:
 
 - 1 area: `area:frontend | area:backend | area:db | area:infra`
-- 1 type:
-  `type:feature | type:bug | type:docs | type:chore | type:security |
-  type:refactor | type:test | type:ci | type:perf | type:deps`
+- 1 type: `type:feature | type:bug | type:docs | type:chore |
+  type:security | type:refactor | type:test | type:ci | type:perf |
+  type:deps`
 - 1 priority: `priority:P0 | priority:P1 | priority:P2 | priority:P3`
 
 ---
@@ -42,8 +43,10 @@ Every issue must have exactly:
 - Phase 0 — DONE
 - Phase 1 — DONE
 - Phase 2 — DONE
-- **Phase 3 — ACTIVE**
-- Phase 4+ — PLANNED
+- **Phase 3 — ACTIVE (foundations established; continue building content
+  APIs + tests)**
+- Phase 4 — PLANNED
+- Phase 5 — PLANNED
 
 ---
 
@@ -94,33 +97,37 @@ Notes:
 
 ## Phase 3 — Backend Foundations (ACTIVE)
 
-Goal: A clean Django module structure and scalable API conventions.
-
-Notes:
-
-- Phase 3 kickoff baseline is complete (line endings, `/api/` decision,
-  backend/frontend lint + format, and CI).
-- Next focus: app scaffolding and the first tested endpoints beyond health.
+Goal: Clean Django module structure and scalable API conventions.
 
 Deliverables:
 
-- Django apps created (initial scaffolding is fine to start):
+- Django apps created:
   - accounts (auth + profiles)
   - content (posts + projects)
   - games (scores + leaderboards)
   - analytics (events + aggregations)
-- API base path: keep `/api/` now; introduce `/api/v1/` when we need
-  breaking changes or stable multi-client endpoints (see
-  `docs/architecture.md`)
+- Routing conventions under `/api/` (migrate to `/api/v1/` when needed)
 - API error format conventions documented
+- Minimal tests for critical endpoints
 
 Definition of Done:
 
-- Module boundaries are clear (apps own their models/serializers/views)
-- Critical endpoints have minimal tests (at least a health smoke test)
-- Lint/format baseline exists for backend (and ideally CI runs it)
+- Clear app boundaries (apps own their models/serializers/views/urls)
+- CI runs backend tests
+- First real endpoint shipped beyond health
 
-## Phase 4 — Frontend Foundations (NEXT)
+Milestone notes:
+
+- **Backend Foundations v0 — DONE (Dec 23, 2025)**
+  - Apps scaffolded: accounts/content/games/analytics
+  - `/api/health/` moved into apps/analytics
+  - Health smoke tests (SQLite override so tests run without Postgres
+    locally)
+  - CI runs `python manage.py test`
+  - Baseline API error envelope added and adopted
+  - First real endpoint shipped: `GET /api/content/projects/`
+
+## Phase 4 — Frontend Foundations (PLANNED)
 
 Goal: Real site layout and a clean way to call the API.
 
@@ -143,7 +150,7 @@ Definition of Done:
 - No single file becomes a “god component”
 - API calls are centralized and consistent
 
-## Phase 5 — Content System (Blog/Admin Workflow)
+## Phase 5 — Content System (Blog/Admin Workflow) (PLANNED)
 
 Goal: Create/edit content in Django Admin and display in frontend.
 
@@ -157,7 +164,7 @@ Deliverables:
 
 Definition of Done:
 
-- New post created in admin appears on site
+- Admin-created content appears on site
 - Slugs work and pages are shareable
 
 ## Phase 6 — Accounts + Security Baseline
