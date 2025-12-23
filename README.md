@@ -143,6 +143,13 @@ Then sign in at:
 .\scripts\migrate.ps1
 ```
 
+### Seed example Projects (local)
+
+```powershell
+.\scripts\seed-projects.ps1
+.\scripts\seed-projects.ps1 --clear
+```
+
 ### Lint (run pre-commit hooks on all files)
 
 ```powershell
