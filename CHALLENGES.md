@@ -1,3 +1,5 @@
+<!-- markdownlint-disable MD013 -->
+
 # Challenges
 
 Running log of issues we hit while building this monorepo.

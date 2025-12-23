@@ -1,4 +1,6 @@
-﻿# personal-site
+﻿<!-- markdownlint-disable MD013 -->
+
+# personal-site
 
 Monorepo for my personal website + portfolio.
 This project is intentionally run like a real software product:
