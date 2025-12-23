@@ -36,6 +36,12 @@ INSTALLED_APPS = [
 
     # Third-party apps
     'rest_framework',
+
+    # Local apps
+    'apps.accounts.apps.AccountsConfig',
+    'apps.content.apps.ContentConfig',
+    'apps.games.apps.GamesConfig',
+    'apps.analytics.apps.AnalyticsConfig',
 ]
 
 MIDDLEWARE = [

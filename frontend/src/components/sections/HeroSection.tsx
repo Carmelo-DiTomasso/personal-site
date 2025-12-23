@@ -1,6 +1,6 @@
-import styles from "./HeroSection.module.css";
-import { Container } from "../layout/Container";
-import { ExternalLink } from "../ui/ExternalLink";
+import styles from './HeroSection.module.css';
+import { Container } from '../layout/Container';
+import { ExternalLink } from '../ui/ExternalLink';
 
 type HeroSectionProps = {
   name: string;
@@ -39,7 +39,9 @@ export function HeroSection({
 
         <div className={styles.content}>
           <h1 className={styles.title}>{tagline}</h1>
-          {locationLine ? <p className={styles.subtitle}>{locationLine}</p> : null}
+          {locationLine ? (
+            <p className={styles.subtitle}>{locationLine}</p>
+          ) : null}
 
           <div className={styles.ctas}>
             <a className={styles.primaryButton} href={primaryCtaHref}>
@@ -60,7 +62,10 @@ export function HeroSection({
             <ExternalLink href="https://github.com/" aria-label="GitHub">
               GitHub
             </ExternalLink>
-            <ExternalLink href="https://www.linkedin.com/" aria-label="LinkedIn">
+            <ExternalLink
+              href="https://www.linkedin.com/"
+              aria-label="LinkedIn"
+            >
               LinkedIn
             </ExternalLink>
           </div>

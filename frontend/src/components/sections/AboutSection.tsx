@@ -1,5 +1,5 @@
-import styles from "./AboutSection.module.css";
-import { Container } from "../layout/Container";
+import styles from './AboutSection.module.css';
+import { Container } from '../layout/Container';
 
 type AboutSectionProps = {
   shortBio: string;
@@ -7,7 +7,11 @@ type AboutSectionProps = {
 
 export function AboutSection({ shortBio }: AboutSectionProps) {
   return (
-    <section id="about" className={styles.section} aria-labelledby="about-title">
+    <section
+      id="about"
+      className={styles.section}
+      aria-labelledby="about-title"
+    >
       <Container>
         <h2 id="about-title" className={styles.title}>
           About

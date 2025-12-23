@@ -1,6 +1,6 @@
-import styles from "./FeaturedProjectsSection.module.css";
-import { Container } from "../layout/Container";
-import { ExternalLink } from "../ui/ExternalLink";
+import styles from './FeaturedProjectsSection.module.css';
+import { Container } from '../layout/Container';
+import { ExternalLink } from '../ui/ExternalLink';
 
 export type FeaturedProject = {
   title: string;
@@ -13,7 +13,9 @@ type FeaturedProjectsSectionProps = {
   projects: FeaturedProject[];
 };
 
-export function FeaturedProjectsSection({ projects }: FeaturedProjectsSectionProps) {
+export function FeaturedProjectsSection({
+  projects,
+}: FeaturedProjectsSectionProps) {
   return (
     <section
       id="projects"

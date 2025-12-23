@@ -1,5 +1,5 @@
-import { Container } from "@/components/layout/Container";
-import styles from "./ResumePage.module.css";
+import { Container } from '@/components/layout/Container';
+import styles from './ResumePage.module.css';
 
 export function ResumePage() {
   return (
@@ -21,7 +21,10 @@ export function ResumePage() {
           </div>
         </header>
 
-        <section className={styles.viewerSection} aria-label="Resume PDF viewer">
+        <section
+          className={styles.viewerSection}
+          aria-label="Resume PDF viewer"
+        >
           {/* iframe works well on desktop; mobile varies, so keep the download link above */}
           <iframe
             className={styles.viewer}
@@ -29,7 +32,7 @@ export function ResumePage() {
             title="Resume PDF"
           />
           <p className={styles.fallback}>
-            If the PDF doesn’t render,{" "}
+            If the PDF doesn’t render,{' '}
             <a href="/resume.pdf" target="_blank" rel="noopener noreferrer">
               open it in a new tab
             </a>

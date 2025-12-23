@@ -1,8 +1,8 @@
-import type { AnchorHTMLAttributes, ReactNode } from "react";
+import type { AnchorHTMLAttributes, ReactNode } from 'react';
 
 type ExternalLinkProps = {
   children: ReactNode;
-} & Omit<AnchorHTMLAttributes<HTMLAnchorElement>, "rel" | "target">;
+} & Omit<AnchorHTMLAttributes<HTMLAnchorElement>, 'rel' | 'target'>;
 
 /**
  * ExternalLink:
