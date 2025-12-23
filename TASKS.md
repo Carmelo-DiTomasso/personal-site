@@ -1,6 +1,4 @@
-﻿<!-- markdownlint-disable MD013 -->
-
-# Tasks
+﻿# Tasks
 
 This is the **single source of truth** for what’s **Now / Next / Soon / Later**.
 It stays small and actionable. The PM Hub conversation uses this file to plan sprints.
@@ -10,7 +8,8 @@ It stays small and actionable. The PM Hub conversation uses this file to plan sp
 - **PM Hub conversation (this one):**
   - Chooses the **next milestone**
   - Proposes a **sprint backlog (5–10 issues max)** with labels + DoD
-  - After each sprint, ingests a **Sprint Handoff Packet** and updates docs + progress here
+  - After each sprint, ingests a **Sprint Handoff Packet** and updates docs +
+    progress here
 
 - **Each sprint gets its own ChatGPT conversation**
   - Work issue-by-issue (1–3 commits each)
@@ -18,9 +17,10 @@ It stays small and actionable. The PM Hub conversation uses this file to plan sp
 
 ## Current status
 
-- **Active milestone:** *(set by PM Hub when you say “suggest next milestone” or “start sprint”)*
-- **Last completed sprint:** E2E Integration v0 (Health Check + Dev Workflow Baseline) ✅
-- **Phase alignment:** Phase 2 is complete; next work should advance Phase 3 (Backend Foundations).
+- **Active milestone:** Phase 3 Kickoff — Repo Hygiene + Tooling Baseline ✅
+- **Last completed sprint:** Sprint 2 — Phase 3 Kickoff baseline ✅
+- **Phase alignment:** Phase 3 is active; next work should implement Backend
+  Foundations (apps + tests).
 
 ---
 
@@ -28,18 +28,11 @@ It stays small and actionable. The PM Hub conversation uses this file to plan sp
 
 These are the **next 3–7 items** that should become GitHub Issues for the next sprint.
 
-- [ ] Create/confirm GitHub **Milestone** for Phase 3 kickoff (see PLAN Phase 3)
-- [ ] Add repo-wide line ending normalization to prevent CRLF/LF lint churn:
-  - [ ] Add `.gitattributes`
-  - [ ] Ensure YAML/MD stay lint-clean on Windows
-- [ ] Establish backend lint/format baseline (minimal, safe):
-  - [ ] Add `ruff` (and optionally `black`) configuration
-  - [ ] Add a script or documented command to run backend lint locally
-- [ ] Establish frontend formatting baseline:
-  - [ ] Add `prettier` (and keep ESLint as-is if already present)
-  - [ ] Add a script or documented command to format/lint frontend
-- [ ] Add a minimal GitHub Actions CI workflow:
-  - [ ] Run lint (backend + frontend) and tests (if present) on PRs
+- [ ] Create/confirm GitHub **Milestone** for Phase 3 Backend Foundations
+- [ ] Backend Foundations sprint backlog (5–10 issues):
+  - [ ] Scaffold Django apps: accounts, content, games, analytics
+  - [ ] Add minimal backend tests for `/api/health/` (smoke test)
+  - [ ] Decide initial API error shape and add one example endpoint using it
 
 ---
 
@@ -101,3 +94,7 @@ These are completed; keep only as a historical record.
 - [x] Document API conventions in `docs/architecture.md`
 - [x] Decide API base path strategy: keep `/api/` now; plan `/api/v1/`
   later (documented migration trigger)
+- [x] Add repo-wide line ending normalization (`.gitattributes`)
+- [x] Establish backend lint baseline (ruff)
+- [x] Establish frontend formatting baseline (prettier)
+- [x] Add GitHub Actions CI baseline for backend/frontend checks

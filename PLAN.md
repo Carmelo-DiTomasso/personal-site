@@ -1,6 +1,4 @@
-﻿<!-- markdownlint-disable MD013 -->
-
-# Plan
+﻿# Plan
 
 This plan is organized into phases. Each phase ends with:
 
@@ -14,13 +12,15 @@ This plan is organized into phases. Each phase ends with:
 
 - Each phase (or phase subset) maps to a GitHub **Milestone**.
 - Every GitHub Issue belongs to **exactly one milestone**.
-- A milestone is “done” when its Definition of Done is satisfied and all issues are closed.
+- A milestone is “done” when its Definition of Done is satisfied and
+  all issues are closed.
 
 ### Sprints
 
 - A sprint is **one focused set of 5–10 issues** from the active milestone.
 - Each sprint is executed in a **separate ChatGPT conversation**.
-- The sprint ends with a **Sprint Handoff Packet** pasted back into the PM Hub conversation, which updates:
+- The sprint ends with a **Sprint Handoff Packet** pasted back into the
+  PM Hub conversation, which updates:
   - `TASKS.md`
   - phase status here
   - any docs affected by decisions
@@ -30,7 +30,9 @@ This plan is organized into phases. Each phase ends with:
 Every issue must have exactly:
 
 - 1 area: `area:frontend | area:backend | area:db | area:infra`
-- 1 type: `type:feature | type:bug | type:docs | type:chore | type:security | type:refactor | type:test | type:ci | type:perf | type:deps`
+- 1 type:
+  `type:feature | type:bug | type:docs | type:chore | type:security |
+  type:refactor | type:test | type:ci | type:perf | type:deps`
 - 1 priority: `priority:P0 | priority:P1 | priority:P2 | priority:P3`
 
 ---
@@ -39,8 +41,8 @@ Every issue must have exactly:
 
 - Phase 0 — DONE
 - Phase 1 — DONE
-- **Phase 2 — DONE**
-- Phase 3 — NEXT
+- Phase 2 — DONE
+- **Phase 3 — ACTIVE**
 - Phase 4+ — PLANNED
 
 ---
@@ -87,11 +89,18 @@ Definition of Done:
 Notes:
 
 - Search Console (domain property) verified for `carmeloditomasso.app`.
-- SEO work is intentionally deferred until real pages exist (Home/About/Projects) to index.
+- SEO work is intentionally deferred until real pages exist
+  (Home/About/Projects) to index.
 
-## Phase 3 — Backend Foundations (NEXT)
+## Phase 3 — Backend Foundations (ACTIVE)
 
 Goal: A clean Django module structure and scalable API conventions.
+
+Notes:
+
+- Phase 3 kickoff baseline is complete (line endings, `/api/` decision,
+  backend/frontend lint + format, and CI).
+- Next focus: app scaffolding and the first tested endpoints beyond health.
 
 Deliverables:
 
@@ -111,7 +120,7 @@ Definition of Done:
 - Critical endpoints have minimal tests (at least a health smoke test)
 - Lint/format baseline exists for backend (and ideally CI runs it)
 
-## Phase 4 — Frontend Foundations
+## Phase 4 — Frontend Foundations (NEXT)
 
 Goal: Real site layout and a clean way to call the API.
 
