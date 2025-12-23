@@ -100,7 +100,9 @@ Deliverables:
   - content (posts + projects)
   - games (scores + leaderboards)
   - analytics (events + aggregations)
-- Routing conventions under `/api/` (plan migration to `/api/v1/` later)
+- API base path: keep `/api/` now; introduce `/api/v1/` when we need
+  breaking changes or stable multi-client endpoints (see
+  `docs/architecture.md`)
 - API error format conventions documented
 
 Definition of Done:

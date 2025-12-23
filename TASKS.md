@@ -29,9 +29,6 @@ It stays small and actionable. The PM Hub conversation uses this file to plan sp
 These are the **next 3–7 items** that should become GitHub Issues for the next sprint.
 
 - [ ] Create/confirm GitHub **Milestone** for Phase 3 kickoff (see PLAN Phase 3)
-- [ ] Decide API base path strategy:
-  - [ ] Keep `/api/` now
-  - [ ] Define migration plan to `/api/v1/` later (docs-only decision is fine)
 - [ ] Add repo-wide line ending normalization to prevent CRLF/LF lint churn:
   - [ ] Add `.gitattributes`
   - [ ] Ensure YAML/MD stay lint-clean on Windows
@@ -102,3 +99,5 @@ These are completed; keep only as a historical record.
 - [x] Backend: add `/api/health/` endpoint returning `{ "status": "ok" }`
 - [x] Frontend: fetch `/api/health/` and render status on home page
 - [x] Document API conventions in `docs/architecture.md`
+- [x] Decide API base path strategy: keep `/api/` now; plan `/api/v1/`
+  later (documented migration trigger)
