@@ -115,7 +115,7 @@ Goal: Real site layout and a clean way to call the API.
 
 Deliverables:
 
-- Routing + layout (Home, Projects, Blog, Resume, Contact)
+- Routing + layout (Home, Projects, Blog, Resume, Contact, Games)
 - API client pattern (single place for fetch logic)
 - Baseline UI styling and shared components
 - Error handling and loading states
@@ -138,7 +138,7 @@ Goal: Create/edit content in Django Admin and display in frontend.
 
 Deliverables:
 
-- Update site logo and name
+- Update site logo and name (instead of Vite logo and "app")
 - Blog post model (title, slug, body, published, timestamps)
 - Projects model (title, stack, description, links, timestamps)
 - Django Admin customization (search, list display)
