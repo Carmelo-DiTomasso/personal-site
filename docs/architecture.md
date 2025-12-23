@@ -70,8 +70,15 @@ Base path:
 
 Versioning:
 
-- No version prefix yet. If/when needed, migrate to `/api/v1/` and
-    keep `/api/` as an alias during transition.
+- Current base path is `/api/` (no version prefix yet).
+- Introduce `/api/v1/` when we either:
+  - need a breaking change to existing endpoints, or
+  - ship endpoints meant to stay stable across multiple clients
+    (e.g., multiple frontends / public docs).
+- Migration approach:
+  - add `/api/v1/` routes, and
+  - keep `/api/` as an alias to v1 during a transition window, then
+  - remove the alias once all clients move.
 
 Request/response:
 
