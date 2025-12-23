@@ -61,22 +61,55 @@ Scripts:
 - `.\scripts\migrate.ps1` runs migrations in backend container
 - `.\scripts\superuser.ps1` creates a Django admin user
 
-## API conventions (initial)
+## API conventions
 
 Base path:
 
-- Start with `/api/`
-- Option to migrate later to `/api/v1/` when versioning matters
+- All backend endpoints live under `/api/`.
+- Trailing slashes are used (Django default): e.g. `/api/health/`.
 
-Response format:
+Versioning:
 
-- JSON
-- Errors should be returned as JSON with a consistent shape
-    (to be defined once endpoints expand)
+- No version prefix yet. If/when needed, migrate to `/api/v1/` and
+    keep `/api/` as an alias during transition.
 
-Planned first endpoint:
+Request/response:
 
-- `GET /api/health/` → `{ "status": "ok" }`
+- Requests and responses are JSON for API endpoints.
+- Health check: `GET /api/health/` returns `{ "status": "ok" }`.
+
+Naming:
+
+- JSON keys use `snake_case` to match Python/Django conventions.
+- URLs use lowercase with hyphens only if needed (prefer short, noun-based paths).
+
+Errors:
+
+- API errors should return JSON (not HTML).
+- Initial error shape convention (to standardize as endpoints expand):
+
+  ```json
+  {
+    "error": {
+      "code": "string",
+      "message": "human readable",
+      "details": {}
+    }
+  }
+  ```
+
+  Examples:
+  - 400: invalid input / validation errors
+  - 401: unauthenticated
+  - 403: unauthorized
+  - 404: not found
+  - 500: unexpected server error (avoid leaking internals)
+
+Local dev routing:
+
+- Frontend calls APIs via relative paths like `fetch("/api/...")`.
+- In Docker dev, Vite proxies `/api/*` to the backend service.
+- Backend is reachable at `http://localhost:8000`, frontend at `http://localhost:5173`.
 
 ## Deployment (later)
 
