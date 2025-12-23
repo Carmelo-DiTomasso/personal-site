@@ -149,6 +149,8 @@ Then sign in at:
 .\scripts\lint.ps1
 ```
 
+- Backend Python lint only: `pre-commit run ruff-check -a`
+
 ### Troubleshooting
 
 Rebuild everything (if containers/images got out of sync):
