@@ -1,0 +1,66 @@
+.section {
+  padding: 2rem 0;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.headerRow {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+.title {
+  margin: 0;
+  font-size: 1.25rem;
+}
+
+.badge {
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 999px;
+  padding: 0.25rem 0.75rem;
+  font-size: 0.875rem;
+  opacity: 0.95;
+}
+
+.badge[data-kind="ok"] {
+  border-color: rgba(80, 200, 120, 0.6);
+}
+
+.badge[data-kind="error"] {
+  border-color: rgba(255, 80, 80, 0.6);
+}
+
+.card {
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 1rem;
+  padding: 1rem;
+}
+
+.container {
+  width: 100%;
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 0 1.5rem;
+}
+
+.text {
+  margin: 0;
+  line-height: 1.5;
+}
+
+.code {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas,
+    "Liberation Mono", "Courier New", monospace;
+  font-size: 0.9em;
+}
+
+.errorText {
+  font-weight: 600;
+}
+
+.hint {
+  margin-top: 0.75rem;
+  opacity: 0.9;
+}
