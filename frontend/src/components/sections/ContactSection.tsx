@@ -1,5 +1,5 @@
-import styles from "./ContactSection.module.css";
-import { Container } from "../layout/Container";
+import styles from './ContactSection.module.css';
+import { Container } from '../layout/Container';
 
 type ContactSectionProps = {
   email: string;
@@ -7,7 +7,11 @@ type ContactSectionProps = {
 
 export function ContactSection({ email }: ContactSectionProps) {
   return (
-    <section id="contact" className={styles.section} aria-labelledby="contact-title">
+    <section
+      id="contact"
+      className={styles.section}
+      aria-labelledby="contact-title"
+    >
       <Container>
         <h2 id="contact-title" className={styles.title}>
           Contact

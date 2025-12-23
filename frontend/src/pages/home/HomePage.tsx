@@ -1,12 +1,12 @@
-import styles from "./HomePage.module.css";
-import { ApiStatusSection } from "../../components/sections/ApiStatusSection";
-import { HeroSection } from "../../components/sections/HeroSection";
-import { AboutSection } from "../../components/sections/AboutSection";
+import styles from './HomePage.module.css';
+import { ApiStatusSection } from '../../components/sections/ApiStatusSection';
+import { HeroSection } from '../../components/sections/HeroSection';
+import { AboutSection } from '../../components/sections/AboutSection';
 import {
   FeaturedProjectsSection,
   type FeaturedProject,
-} from "../../components/sections/FeaturedProjectsSection";
-import { ContactSection } from "../../components/sections/ContactSection";
+} from '../../components/sections/FeaturedProjectsSection';
+import { ContactSection } from '../../components/sections/ContactSection';
 
 /**
  * HomePage:
@@ -16,18 +16,16 @@ import { ContactSection } from "../../components/sections/ContactSection";
 export function HomePage() {
   const featuredProjects: FeaturedProject[] = [
     {
-      title: "Project One (placeholder)",
-      description:
-        "Description coming soon.",
-      stack: ["", "", ""],
-      href: "",
+      title: 'Project One (placeholder)',
+      description: 'Description coming soon.',
+      stack: ['', '', ''],
+      href: '',
     },
     {
-      title: "Project Two (placeholder)",
-      description:
-        "Description coming soon.",
-      stack: ["", "", ""],
-      href: "",
+      title: 'Project Two (placeholder)',
+      description: 'Description coming soon.',
+      stack: ['', '', ''],
+      href: '',
     },
   ];
 
