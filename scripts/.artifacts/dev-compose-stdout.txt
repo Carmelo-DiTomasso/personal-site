@@ -2,97 +2,108 @@
 #1 reading from stdin 1.04kB done
 #1 DONE 0.0s
 
-#2 [frontend internal] load build definition from Dockerfile
-#2 transferring dockerfile: 205B done
+#2 [backend internal] load build definition from Dockerfile
+#2 transferring dockerfile: 377B done
 #2 DONE 0.0s
 
-#3 [backend internal] load build definition from Dockerfile
-#3 transferring dockerfile: 377B done
+#3 [frontend internal] load build definition from Dockerfile
+#3 transferring dockerfile: 205B done
 #3 DONE 0.0s
 
-#4 [backend internal] load metadata for docker.io/library/python:3.12-slim
-#4 ...
+#4 [auth] library/python:pull token for registry-1.docker.io
+#4 DONE 0.0s
 
-#5 [frontend internal] load metadata for docker.io/library/node:20-alpine
-#5 DONE 0.8s
+#5 [auth] library/node:pull token for registry-1.docker.io
+#5 DONE 0.0s
 
-#6 [frontend internal] load .dockerignore
-#6 transferring context: 137B done
-#6 DONE 0.0s
+#6 [frontend internal] load metadata for docker.io/library/node:20-alpine
+#6 ...
 
-#7 [frontend internal] load build context
-#7 transferring context: 1.90kB done
-#7 DONE 0.0s
+#7 [backend internal] load metadata for docker.io/library/python:3.12-slim
+#7 DONE 1.4s
 
-#4 [backend internal] load metadata for docker.io/library/python:3.12-slim
-#4 DONE 0.9s
+#6 [frontend internal] load metadata for docker.io/library/node:20-alpine
+#6 DONE 1.4s
 
-#8 [frontend 1/5] FROM docker.io/library/node:20-alpine@sha256:658d0f63e501824d6c23e06d4bb95c71e7d704537c9d9272f488ac03a370d448
-#8 resolve docker.io/library/node:20-alpine@sha256:658d0f63e501824d6c23e06d4bb95c71e7d704537c9d9272f488ac03a370d448 0.0s done
+#8 [backend internal] load .dockerignore
+#8 transferring context: 2B done
 #8 DONE 0.0s
 
-#9 [frontend 3/5] COPY package*.json /app/
-#9 CACHED
+#9 [frontend internal] load .dockerignore
+#9 transferring context: 137B done
+#9 DONE 0.0s
 
-#10 [frontend 4/5] RUN npm install
-#10 CACHED
+#10 [backend internal] load build context
+#10 transferring context: 461B done
+#10 DONE 0.0s
 
-#11 [frontend 2/5] WORKDIR /app
-#11 CACHED
+#11 [backend 1/6] FROM docker.io/library/python:3.12-slim@sha256:fa48eefe2146644c2308b909d6bb7651a768178f84fc9550dcd495e4d6d84d01
+#11 resolve docker.io/library/python:3.12-slim@sha256:fa48eefe2146644c2308b909d6bb7651a768178f84fc9550dcd495e4d6d84d01 0.0s done
+#11 DONE 0.0s
 
-#12 [frontend 5/5] COPY . /app
+#12 [backend 3/6] RUN pip install --no-cache-dir --upgrade pip
 #12 CACHED
 
-#13 [backend internal] load .dockerignore
-#13 transferring context: 2B done
-#13 DONE 0.0s
+#13 [backend 4/6] COPY requirements.txt /app/requirements.txt
+#13 CACHED
 
-#14 [backend internal] load build context
-#14 transferring context: 461B done
-#14 DONE 0.0s
+#14 [backend 5/6] RUN pip install --no-cache-dir -r /app/requirements.txt
+#14 CACHED
 
-#15 [backend 1/6] FROM docker.io/library/python:3.12-slim@sha256:fa48eefe2146644c2308b909d6bb7651a768178f84fc9550dcd495e4d6d84d01
-#15 resolve docker.io/library/python:3.12-slim@sha256:fa48eefe2146644c2308b909d6bb7651a768178f84fc9550dcd495e4d6d84d01 0.0s done
-#15 DONE 0.0s
+#15 [backend 2/6] WORKDIR /app
+#15 CACHED
 
-#16 [backend 3/6] RUN pip install --no-cache-dir --upgrade pip
+#16 [backend 6/6] COPY . /app
 #16 CACHED
 
-#17 [backend 5/6] RUN pip install --no-cache-dir -r /app/requirements.txt
-#17 CACHED
+#17 [frontend 1/5] FROM docker.io/library/node:20-alpine@sha256:658d0f63e501824d6c23e06d4bb95c71e7d704537c9d9272f488ac03a370d448
+#17 resolve docker.io/library/node:20-alpine@sha256:658d0f63e501824d6c23e06d4bb95c71e7d704537c9d9272f488ac03a370d448 0.0s done
+#17 DONE 0.0s
 
-#18 [backend 2/6] WORKDIR /app
-#18 CACHED
+#18 [frontend internal] load build context
+#18 transferring context: 7.51kB 0.0s done
+#18 DONE 0.0s
 
-#19 [backend 4/6] COPY requirements.txt /app/requirements.txt
+#19 [frontend 2/5] WORKDIR /app
 #19 CACHED
 
-#20 [backend 6/6] COPY . /app
+#20 [frontend 3/5] COPY package*.json /app/
 #20 CACHED
 
-#21 [backend] exporting to image
-#21 exporting layers done
-#21 exporting manifest sha256:ee104ab9f5ae445ea514888ab615214992f4374ff28ee63e35694cbb3f7c9b2a done
-#21 exporting config sha256:10a26873c606094ad63ffa4e6cc4ee05625ecfa678f33cd8a5ee31a51ea38bd8 done
-#21 exporting attestation manifest sha256:ee54906fa2aad02cdf9b5f63ad769c3dbf943492ac605c161e90ef5fedc90ef4
-#21 exporting attestation manifest sha256:ee54906fa2aad02cdf9b5f63ad769c3dbf943492ac605c161e90ef5fedc90ef4 0.0s done
-#21 exporting manifest list sha256:d922298e10af47a6eea93c6333fc085f2ad6580b1eea03f6f0194749e5b414ff 0.0s done
-#21 naming to docker.io/library/personal-site-backend:latest done
-#21 unpacking to docker.io/library/personal-site-backend:latest done
-#21 DONE 0.1s
+#21 [frontend 4/5] RUN npm install
+#21 CACHED
 
-#22 [frontend] exporting to image
-#22 exporting layers done
-#22 exporting manifest sha256:a14ec16410be775debcc5d6b92a1034cc1afd431f084d3368bdbac9d074cf1cf done
-#22 exporting config sha256:06bccb1af7a1c4fb453a5a6426244ce2c22cc306b306d65549a5f71a985dddc3 done
-#22 exporting attestation manifest sha256:f91bc55a0daedb0935c5e190ad08ea0d529cd7bceb217d8267758e51015f231d 0.0s done
-#22 exporting manifest list sha256:1421c0f7e099b40060f57e8cb19c164bc1e8bb46c4e6e4ae4a8632e12a5cebd2 0.0s done
-#22 naming to docker.io/library/personal-site-frontend:latest done
-#22 unpacking to docker.io/library/personal-site-frontend:latest done
-#22 DONE 0.1s
+#22 [frontend 5/5] COPY . /app
+#22 DONE 0.0s
 
-#23 [frontend] resolving provenance for metadata file
-#23 DONE 0.0s
+#23 [frontend] exporting to image
+#23 ...
 
-#24 [backend] resolving provenance for metadata file
-#24 DONE 0.0s
+#24 [backend] exporting to image
+#24 exporting layers done
+#24 exporting manifest sha256:ee104ab9f5ae445ea514888ab615214992f4374ff28ee63e35694cbb3f7c9b2a done
+#24 exporting config sha256:10a26873c606094ad63ffa4e6cc4ee05625ecfa678f33cd8a5ee31a51ea38bd8 done
+#24 exporting attestation manifest sha256:853986e60d787c54fe4ad929a51829161b0f4d11e7ca11f697839f5ef37ed302 0.0s done
+#24 exporting manifest list sha256:2f48c230724d41bb5e6bc73d3099c3116646cad307b27dd6a53021a4410477a1 0.0s done
+#24 naming to docker.io/library/personal-site-backend:latest done
+#24 unpacking to docker.io/library/personal-site-backend:latest done
+#24 DONE 0.1s
+
+#23 [frontend] exporting to image
+#23 exporting layers 0.1s done
+#23 ...
+
+#25 [backend] resolving provenance for metadata file
+#25 DONE 0.0s
+
+#23 [frontend] exporting to image
+#23 exporting manifest sha256:4f0bd16eaa0a3b1fdad245d9eada251a630e8f2647991a7c87a50487456600f3 0.0s done
+#23 exporting config sha256:d430ef522a089a94746bdcfc480082b7a34fbbd301f095734aa0ba4a29eb3323 0.0s done
+#23 exporting attestation manifest sha256:0f25775ad5fa6a20bb7fa52632bb8ec55ddd15ef946e878e872f7fb531300aa4 0.0s done
+#23 exporting manifest list sha256:eccc3e0d3928c68daf9845525ee3917d1d1993cdc2f5469b9948ee588d720bb1 0.0s done
+#23 naming to docker.io/library/personal-site-frontend:latest done
+#23 unpacking to docker.io/library/personal-site-frontend:latest 0.0s done
+#23 DONE 0.2s
+
+#26 [frontend] resolving provenance for metadata file
+#26 DONE 0.0s
