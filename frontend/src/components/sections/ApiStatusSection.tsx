@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import { ApiError, apiGet } from '@/lib/api';
+import { StatusBadge } from '@/components/ui/StatusBadge/StatusBadge';
 import styles from './ApiStatusSection.module.css';
 
 // What we render in the UI depending on the fetch result.
@@ -65,7 +66,7 @@ export function ApiStatusSection() {
 
   const statusLabel =
     status.kind === 'loading'
-      ? 'Checking…'
+      ? 'Loading...'
       : status.kind === 'ok'
         ? 'OK'
         : 'Error';
@@ -77,15 +78,13 @@ export function ApiStatusSection() {
           <h2 className={styles.title} id="api-status-title">
             API Status
           </h2>
-          <div className={styles.badge} data-kind={status.kind}>
-            {statusLabel}
-          </div>
+          <StatusBadge kind={status.kind} label={statusLabel} />
         </div>
 
         <div className={styles.card}>
           {status.kind === 'loading' && (
             <p className={styles.text}>
-              Calling <code className={styles.code}>/api/health/</code>…
+              Calling <code className={styles.code}>/api/health/</code>...
             </p>
           )}
 
