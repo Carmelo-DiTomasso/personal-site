@@ -23,6 +23,14 @@ if not SECRET_KEY:
     raise RuntimeError("SECRET_KEY is not set")
 
 DEBUG = os.getenv("DJANGO_DEBUG", "0") == "1"
+
+
+def csv_env(name: str, default: str = "") -> list[str]:
+    return [x.strip() for x in os.getenv(name, default).split(",") if x.strip()]
+
+ALLOWED_HOSTS = csv_env("ALLOWED_HOSTS", os.getenv("DJANGO_ALLOWED_HOSTS", "localhost"))
+CSRF_TRUSTED_ORIGINS = csv_env("CSRF_TRUSTED_ORIGINS")
+SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
 ALLOWED_HOSTS = os.getenv("DJANGO_ALLOWED_HOSTS", "localhost").split(",")
 
 
