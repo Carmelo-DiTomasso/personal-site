@@ -1,5 +1,5 @@
- personal-site-backend  Built
  personal-site-frontend  Built
+ personal-site-backend  Built
  Container personal_site_db  Running
  Container personal_site_backend  Recreate
  Container personal_site_backend  Recreated
