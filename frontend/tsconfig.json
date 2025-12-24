@@ -1,16 +1,21 @@
 {
   "compilerOptions": {
-    "forceConsistentCasingInFileNames": true,
-    "strict": true,
-    "jsx": "react-jsx",
-
     "target": "ES2022",
     "module": "ESNext",
+    "moduleResolution": "bundler",
+
+    "lib": ["ES2022", "DOM", "DOM.Iterable"],
+    "jsx": "react-jsx",
+    "types": ["vite/client"],
 
     "baseUrl": ".",
     "paths": {
       "@/*": ["src/*"]
-    }
+    },
+
+    "strict": true,
+    "forceConsistentCasingInFileNames": true,
+    "skipLibCheck": true
   },
   "include": ["src"]
 }
