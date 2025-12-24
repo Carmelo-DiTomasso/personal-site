@@ -9,8 +9,7 @@
     "lint": "eslint .",
     "preview": "vite preview",
     "typecheck": "tsc -p tsconfig.app.json --noEmit && tsc -p tsconfig.node.json --noEmit",
-    "format": "prettier . --write",
-    "format:write": "prettier --write .",
+    "format": "prettier --write .",
     "format:check": "prettier . --check"
   },
   "dependencies": {
