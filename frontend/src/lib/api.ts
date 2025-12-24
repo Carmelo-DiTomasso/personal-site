@@ -20,7 +20,7 @@ export class ApiError extends Error {
     details?: unknown;
   }) {
     super(args.message);
-    this.name = "ApiError";
+    this.name = 'ApiError';
     this.status = args.status;
     this.statusText = args.statusText;
     this.code = args.code;
@@ -29,14 +29,14 @@ export class ApiError extends Error {
 }
 
 function isErrorEnvelope(data: unknown): data is ApiErrorEnvelope {
-  if (typeof data !== "object" || data === null) return false;
-  if (!("error" in data)) return false;
+  if (typeof data !== 'object' || data === null) return false;
+  if (!('error' in data)) return false;
 
   const maybeError = (data as { error?: unknown }).error;
-  if (typeof maybeError !== "object" || maybeError === null) return false;
+  if (typeof maybeError !== 'object' || maybeError === null) return false;
 
   const { code, message } = maybeError as { code?: unknown; message?: unknown };
-  return typeof code === "string" && typeof message === "string";
+  return typeof code === 'string' && typeof message === 'string';
 }
 
 export async function apiRequest<T>(
@@ -48,10 +48,10 @@ export async function apiRequest<T>(
     body?: unknown;
   },
 ): Promise<T> {
-  const method = options?.method ?? "GET";
+  const method = options?.method ?? 'GET';
 
   const headers: Record<string, string> = {
-    Accept: "application/json",
+    Accept: 'application/json',
     ...(options?.headers ?? {}),
   };
 
@@ -61,13 +61,13 @@ export async function apiRequest<T>(
     method,
     signal: options?.signal,
     headers: hasBody
-      ? { "Content-Type": "application/json", ...headers }
+      ? { 'Content-Type': 'application/json', ...headers }
       : headers,
     body: hasBody ? JSON.stringify(options?.body) : undefined,
   });
 
-  const contentType = response.headers.get("content-type") ?? "";
-  const isJson = contentType.includes("application/json");
+  const contentType = response.headers.get('content-type') ?? '';
+  const isJson = contentType.includes('application/json');
 
   if (response.ok) {
     if (!isJson) {
@@ -75,7 +75,7 @@ export async function apiRequest<T>(
       throw new ApiError({
         status: response.status,
         statusText: response.statusText,
-        message: "Expected JSON response",
+        message: 'Expected JSON response',
       });
     }
 
@@ -112,5 +112,5 @@ export async function apiRequest<T>(
 }
 
 export function apiGet<T>(path: string, options?: { signal?: AbortSignal }) {
-  return apiRequest<T>(path, { method: "GET", signal: options?.signal });
+  return apiRequest<T>(path, { method: 'GET', signal: options?.signal });
 }
