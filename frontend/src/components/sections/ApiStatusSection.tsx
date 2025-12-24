@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import { ApiError, apiGet } from '@/lib/api';
 import styles from './ApiStatusSection.module.css';
 
 // What we render in the UI depending on the fetch result.
@@ -6,6 +7,8 @@ type ApiStatusState =
   | { kind: 'loading' }
   | { kind: 'ok' }
   | { kind: 'error'; message: string };
+
+type HealthResponse = { status: 'ok' };
 
 /**
  * ApiStatusSection
@@ -24,30 +27,11 @@ export function ApiStatusSection() {
       try {
         setStatus({ kind: 'loading' });
 
-        // Relative URL so it works with Vite proxy and future deployments.
-        const response = await fetch('/api/health/', {
-          method: 'GET',
+        const data = await apiGet<HealthResponse>('/api/health/', {
           signal: abortController.signal,
-          headers: { Accept: 'application/json' },
         });
 
-        if (!response.ok) {
-          setStatus({
-            kind: 'error',
-            message: `HTTP ${response.status} ${response.statusText}`,
-          });
-          return;
-        }
-
-        const data: unknown = await response.json();
-
-        // Minimal shape check.
-        if (
-          typeof data === 'object' &&
-          data !== null &&
-          'status' in data &&
-          (data as { status?: unknown }).status === 'ok'
-        ) {
+        if (data.status === 'ok') {
           setStatus({ kind: 'ok' });
           return;
         }
@@ -56,6 +40,14 @@ export function ApiStatusSection() {
       } catch (err) {
         // Ignore abort errors (happens on unmount / fast refresh).
         if (err instanceof DOMException && err.name === 'AbortError') return;
+
+        if (err instanceof ApiError) {
+          setStatus({
+            kind: 'error',
+            message: err.code ? `${err.code}: ${err.message}` : err.message,
+          });
+          return;
+        }
 
         setStatus({
           kind: 'error',
