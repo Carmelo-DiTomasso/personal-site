@@ -31,8 +31,6 @@ def csv_env(name: str, default: str = "") -> list[str]:
 ALLOWED_HOSTS = csv_env("ALLOWED_HOSTS", os.getenv("DJANGO_ALLOWED_HOSTS", "localhost"))
 CSRF_TRUSTED_ORIGINS = csv_env("CSRF_TRUSTED_ORIGINS")
 SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
-ALLOWED_HOSTS = os.getenv("DJANGO_ALLOWED_HOSTS", "localhost").split(",")
-
 
 # Application definition
 
