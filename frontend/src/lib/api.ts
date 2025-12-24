@@ -1,3 +1,16 @@
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL ?? '';
+
+function resolveUrl(path: string) {
+  // If caller passes an absolute URL, leave it alone.
+  if (path.startsWith('http://') || path.startsWith('https://')) return path;
+
+  // For local dev, keep using Vite proxy by leaving base empty.
+  if (!API_BASE_URL) return path;
+
+  // Avoid double slashes.
+  return `${API_BASE_URL.replace(/\/$/, '')}${path}`;
+}
+
 export type ApiErrorEnvelope = {
   error: {
     code: string;
@@ -57,7 +70,7 @@ export async function apiRequest<T>(
 
   const hasBody = options?.body !== undefined;
 
-  const response = await fetch(path, {
+  const response = await fetch(resolveUrl(path), {
     method,
     signal: options?.signal,
     headers: hasBody
