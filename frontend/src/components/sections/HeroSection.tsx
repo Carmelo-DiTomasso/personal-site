@@ -56,7 +56,10 @@ export function HeroSection({
             <ExternalLink href="/resume" aria-label="Resume">
               Resume
             </ExternalLink>
-            <ExternalLink href="https://github.com/Carmelo-DiTomasso" aria-label="GitHub">
+            <ExternalLink
+              href="https://github.com/Carmelo-DiTomasso"
+              aria-label="GitHub"
+            >
               GitHub
             </ExternalLink>
             <ExternalLink

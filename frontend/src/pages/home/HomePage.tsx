@@ -1,9 +1,9 @@
-import styles from "./HomePage.module.css";
-import { ApiStatusSection } from "../../components/sections/ApiStatusSection";
-import { HeroSection } from "../../components/sections/HeroSection";
-import { AboutSection } from "../../components/sections/AboutSection";
-import { ProjectsSection } from "../../components/sections/ProjectsSection";
-import { ContactSection } from "../../components/sections/ContactSection";
+import styles from './HomePage.module.css';
+import { ApiStatusSection } from '../../components/sections/ApiStatusSection';
+import { HeroSection } from '../../components/sections/HeroSection';
+import { AboutSection } from '../../components/sections/AboutSection';
+import { ProjectsSection } from '../../components/sections/ProjectsSection';
+import { ContactSection } from '../../components/sections/ContactSection';
 
 /**
  * HomePage:
