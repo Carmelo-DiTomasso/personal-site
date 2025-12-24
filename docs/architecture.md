@@ -118,6 +118,66 @@ Local dev routing:
 - In Docker dev, Vite proxies `/api/*` to the backend service.
 - Backend is reachable at `http://localhost:8000`, frontend at `http://localhost:5173`.
 
+### Projects
+
+#### GET /api/content/projects/
+
+Returns the list of Projects for the site.
+
+##### Ordering
+
+- Sorted by `sort_order` (ascending), then `title` (ascending).
+
+##### 200 OK (JSON)
+
+Returns a JSON array of project objects:
+
+```json
+[
+  {
+    "slug": "personal-site",
+    "title": "Personal Site",
+    "description": "Monorepo personal site with Django API + React frontend.",
+    "live_url": "",
+    "repo_url": "",
+    "sort_order": 10,
+    "is_featured": true
+  }
+]
+```
+
+##### Fields
+
+| Field        | Type    | Notes                                        |
+|--------------|---------|----------------------------------------------|
+| `slug`       | string  | Unique, stable identifier (use as UI key)    |
+| `title`      | string  | Display name                                 |
+| `description`| string  | Optional; may be empty                       |
+| `live_url`   | string  | Optional; may be empty                       |
+| `repo_url`   | string  | Optional; may be empty                       |
+| `sort_order` | number  | Lower comes first                            |
+| `is_featured`| boolean | Optional UI emphasis flag                    |
+
+#### Error envelope
+
+Non-2xx responses should use the standard error envelope:
+
+```json
+{
+  "error": {
+    "code": "SOME_CODE",
+    "message": "Human readable message",
+    "details": null
+  }
+}
+```
+
+| Field            | Type      | Notes                                      |
+|-----------------|-----------|--------------------------------------------|
+| `error.code`     | string    | Stable, machine-readable error code        |
+| `error.message`  | string    | User/developer-readable description        |
+| `error.details`  | any\|null | Optional extra context for debugging       |
+
 ## Deployment (later)
 
 Target hosting:
