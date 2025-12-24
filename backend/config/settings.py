@@ -28,9 +28,14 @@ DEBUG = os.getenv("DJANGO_DEBUG", "0") == "1"
 def csv_env(name: str, default: str = "") -> list[str]:
     return [x.strip() for x in os.getenv(name, default).split(",") if x.strip()]
 
+# Security settings
 ALLOWED_HOSTS = csv_env("ALLOWED_HOSTS", os.getenv("DJANGO_ALLOWED_HOSTS", "localhost"))
 CSRF_TRUSTED_ORIGINS = csv_env("CSRF_TRUSTED_ORIGINS")
 SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
+
+# CORS settings
+CORS_ALLOWED_ORIGINS = csv_env("CORS_ALLOWED_ORIGINS")
+CORS_ALLOWED_ORIGIN_REGEXES = csv_env("CORS_ALLOWED_ORIGIN_REGEXES")
 
 # Application definition
 
@@ -43,6 +48,8 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
 
+    "corsheaders",
+
     # Third-party apps
     'rest_framework',
 
@@ -54,6 +61,8 @@ INSTALLED_APPS = [
 ]
 
 MIDDLEWARE = [
+    "corsheaders.middleware.CorsMiddleware",
+
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
