@@ -1,79 +1,85 @@
 ﻿# Tasks
 
-This is the **single source of truth** for what’s **Now / Next / Soon / Later**.
-It stays small and actionable. The PM Hub conversation uses this file to plan sprints.
+Single source of truth for **Now / Next / Soon / Later**.
+The PM Hub conversation plans sprints from this file.
 
 ## How we work (ChatGPT Projects workflow)
 
 - **PM Hub conversation:**
   - Chooses the next **Milestone**
-  - Proposes a sprint backlog (**5–10 issues max**) with labels + DoD
+  - Proposes a sprint backlog
   - After each sprint, ingests a **Sprint Handoff Packet** and updates docs and
   progress here
 
-- **Each sprint gets its own ChatGPT conversation**
-  - Work issue-by-issue (1–3 commits each)
+- **Each sprint = separate ChatGPT conversation**
+  - Work issue-by-issue
   - End with a Sprint Handoff Packet pasted back into the PM Hub
+
+## Workflow tweak (reduced overhead)
+
+We are optimizing for momentum:
+
+- **One branch per sprint**
+- **One PR per sprint**
+- Fewer, larger issues (2–4 per sprint) with clear deliverables
 
 ## Current status
 
-- **Active Milestone:** Projects v0 — Admin + Seed + Frontend Consumption
-  (proposed)
-- **Last completed sprint:** Sprint 3 — Phase 3 Backend Foundations v0 ✅
-- **Phase alignment:** Phase 3 foundations are in place; next is project
-  content workflow + frontend consumption.
+- **Live hosting:** Vercel (frontend-only)
+- **Backend hosting:** not deployed yet (local only via Docker + Vite proxy)
+- **Last completed sprint:** Sprint 4 — Projects v0 ✅
+- **Blocker:** Live site cannot reach `/api/*` yet
 
 ---
 
-## Now (Projects v0 milestone)
+## Now (Sprint 5 / Milestone: Live API on DigitalOcean v0)
 
-Turn these into GitHub issues for the next sprint.
+Goal: Deploy Django + Postgres on DigitalOcean so the live site works.
 
-- [ ] Backend: register `Project` in Django Admin with useful list display /
-  search / filter
-- [ ] Backend: add repeatable local seed data for projects (management
-  command or fixture)
-- [ ] Frontend: render projects from `GET /api/content/projects/` (home
-  section and/or Projects page)
-- [ ] Frontend: centralize API calls into a small client module (typed DTO
-  - consistent error handling)
-- [ ] Docs: update architecture or README with:
-  - `/api/content/projects/` contract (response shape, ordering
-    expectations)
-  - API error envelope shape + usage guidance
-- [ ] Optional: add pagination + ordering contract to projects endpoint
-  (only if list will grow soon)
+- [ ] Provision DigitalOcean infrastructure
+  - [ ] Create App Platform app for Django
+  - [ ] Create Managed Postgres
+  - [ ] Attach DB to app and store secrets/env vars in DO
+  - [ ] Decide API hostname strategy (recommended: `api.<domain>`)
+- [ ] Deploy backend + validate API
+  - [ ] Build + deploy container
+  - [ ] Run migrations in the deployed environment
+  - [ ] Create admin user (prod)
+  - [ ] Verify:
+    - `/api/health/` returns `{ "status": "ok" }`
+    - `/api/content/projects/` returns JSON list
+- [ ] Wire Vercel frontend to live API
+  - [ ] Add `VITE_API_BASE_URL` support in frontend API client
+  - [ ] Set Vercel env var + redeploy
+  - [ ] Verify on live homepage:
+    - API Status is OK
+    - Projects load from API (not failing)
 
 ---
 
-## Next (Phase 4 — Frontend Foundations)
+## Next (Projects v1 polish + Phase 4 routing)
 
-- [ ] Routing + layout baseline:
-  - [ ] Home
-  - [ ] Projects
-  - [ ] Blog
-  - [ ] Resume
-  - [ ] Contact
-- [ ] Standard loading/error patterns (shared UI components)
+- [ ] Add `/projects` route page (optional if you want it soon)
+- [ ] Featured project display rules (UI + ordering contract)
+- [ ] Pagination contract for projects endpoint (if list grows)
+- [ ] Expand content system: Blog model + API + admin
 
 ---
 
 ## Soon (Quality & safety rails)
 
-- [ ] CI: strengthen checks (tests + lint parity) as coverage grows
-- [ ] Add backend formatting/linting expansions (only when low-churn):
-  - [ ] tighten Ruff rules
-  - [ ] optional Black
-- [ ] Add basic API pagination patterns (DRF pagination or custom)
+- [ ] Tighten tests for content endpoints
+- [ ] Add basic rate limiting plan (when forms/auth arrive)
+- [ ] SEO basics once routes exist (title/meta/OG/robots/sitemap)
 
 ---
 
-## Later (Deployment prep)
+## Later (Hardened production deployment)
 
-- [ ] Add `infra/` plan for DigitalOcean deployment
-- [ ] Production env strategy (secrets, DEBUG=0, allowed hosts)
-- [ ] HTTPS + reverse proxy plan
-- [ ] Backups plan for Postgres
+- [ ] DigitalOcean hardening phase (reverse proxy, HTTPS plan, backups,
+  monitoring, CI/CD, rollback docs)
+- [ ] Security headers + CSP + dependency scanning
+- [ ] Performance + accessibility baseline
 
 ---
 
@@ -91,9 +97,12 @@ Turn these into GitHub issues for the next sprint.
 ### Sprint 3 — Backend Foundations v0 ✅
 
 - Django apps scaffolded: accounts/content/games/analytics
-- `/api/health/` moved into apps/analytics
-- Health smoke tests (SQLite override for tests)
-- CI runs `python manage.py test`
+- `/api/health/` moved into apps/analytics + tests + CI
 - API error envelope introduced and adopted
-- First real endpoint: `GET /api/content/projects/` (model + serializer +
-  migration + test)
+- First real endpoint: `GET /api/content/projects/`
+
+### Sprint 4 — Projects v0 ✅
+
+- Project Admin UX + seed script
+- Frontend API client + Projects section on Home
+- Projects API contract documented

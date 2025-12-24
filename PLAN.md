@@ -18,23 +18,40 @@ Phased delivery plan. Each phase ends with:
 
 ### Sprints
 
-- A sprint is **one focused set of 5–10 issues** from the active milestone.
+- A sprint is a small set of issues from the active milestone.
 - Each sprint is executed in a **separate ChatGPT conversation**.
 - The sprint ends with a **Sprint Handoff Packet** pasted back into the
   PM Hub conversation, which updates:
   - `TASKS.md`
   - phase status here
-  - any docs affected by decisions
+  - any impacted docs
 
-### Required labels per issue
+### Labels (required per issue)
 
 Every issue must have exactly:
 
 - 1 area: `area:frontend | area:backend | area:db | area:infra`
-- 1 type: `type:feature | type:bug | type:docs | type:chore |
-  type:security | type:refactor | type:test | type:ci | type:perf |
-  type:deps`
+- 1 type: `type:feature | type:bug | type:docs | type:chore | type:security |
+  type:refactor | type:test | type:ci | type:perf | type:deps`
 - 1 priority: `priority:P0 | priority:P1 | priority:P2 | priority:P3`
+
+### Reduced overhead mode (current)
+
+To keep momentum, we’re minimizing admin overhead:
+
+- **One branch per sprint**
+- **One PR per sprint**
+- Fewer, larger issues (2–4 per sprint)
+
+---
+
+## Hosting reality (explicit constraint)
+
+- Vercel currently hosts the **frontend only**.
+- Local dev works because Vite proxies `/api/*` to the Docker backend.
+- Live `/api/*` does not work until the backend is deployed.
+
+We are moving backend deployment earlier because the UI now depends on it.
 
 ---
 
@@ -43,10 +60,15 @@ Every issue must have exactly:
 - Phase 0 — DONE
 - Phase 1 — DONE
 - Phase 2 — DONE
-- **Phase 3 — ACTIVE (foundations established; continue building content
-  APIs + tests)**
-- Phase 4 — PLANNED
+- Phase 3 — DONE (v0 milestone complete)
+- Phase 4 — ACTIVE (frontend uses real API locally; routing pending)
+- Phase 4.5 — NEXT (Live API deployment on DigitalOcean)
 - Phase 5 — PLANNED
+- Phase 6 — PLANNED
+- Phase 7 — PLANNED
+- Phase 8 — PLANNED
+- Phase 9 — PLANNED (hardening and ops polish)
+- Phase 10 — PLANNED
 
 ---
 
@@ -80,7 +102,7 @@ Goal: Prove frontend ↔ backend communication.
 
 Deliverables:
 
-- Backend: `GET /api/health/` returns JSON `{ "status": "ok" }`
+- Backend: `GET /api/health/` returns `{ "status": "ok" }`
 - Frontend: fetch `/api/health/` and display status on the home page
 - Document API conventions in `docs/architecture.md`
 
@@ -89,66 +111,67 @@ Definition of Done:
 - `/api/health/` returns expected output
 - Frontend renders health status with basic error handling
 
-Notes:
+## Phase 3 — Backend Foundations (DONE for v0)
 
-- Search Console (domain property) verified for `carmeloditomasso.app`.
-- SEO work is intentionally deferred until real pages exist
-  (Home/About/Projects) to index.
-
-## Phase 3 — Backend Foundations (ACTIVE)
-
-Goal: Clean Django module structure and scalable API conventions.
-
-Deliverables:
-
-- Django apps created:
-  - accounts (auth + profiles)
-  - content (posts + projects)
-  - games (scores + leaderboards)
-  - analytics (events + aggregations)
-- Routing conventions under `/api/` (migrate to `/api/v1/` when needed)
-- API error format conventions documented
-- Minimal tests for critical endpoints
+Goal: Clean Django module structure + scalable API conventions.
 
 Definition of Done:
 
-- Clear app boundaries (apps own their models/serializers/views/urls)
+- Clear app boundaries (apps own their code)
 - CI runs backend tests
 - First real endpoint shipped beyond health
 
 Milestone notes:
 
-- **Backend Foundations v0 — DONE (Dec 23, 2025)**
-  - Apps scaffolded: accounts/content/games/analytics
-  - `/api/health/` moved into apps/analytics
-  - Health smoke tests (SQLite override so tests run without Postgres
-    locally)
-  - CI runs `python manage.py test`
-  - Baseline API error envelope added and adopted
-  - First real endpoint shipped: `GET /api/content/projects/`
+- Backend Foundations v0 — DONE (Dec 23, 2025)
+  - apps: accounts/content/games/analytics
+  - health endpoint app-owned + tests + CI
+  - API error envelope baseline
+  - first endpoint: `GET /api/content/projects/`
 
-## Phase 4 — Frontend Foundations (PLANNED)
+## Phase 4 — Frontend Foundations (ACTIVE)
 
 Goal: Real site layout and a clean way to call the API.
 
 Deliverables:
 
-- Routing + layout (Home, Projects, Blog, Resume, Contact, Games)
+- Routing + layout (Home, Projects, Blog, Resume, Contact)
 - API client pattern (single place for fetch logic)
-- Baseline UI styling and shared components
-- Error handling and loading states
-- Basic SEO metadata (title/description/OG) once routes exist
-
-Contact notes:
-
-- Contact form (no public email) should support rate limiting and CAPTCHA (later)
-- Consider alias email that forwards to a real inbox
-- Avoid exposing raw email to scraping (mailto only if obfuscated)
+- Shared components, loading/error states
+- Basic SEO metadata once routes exist
 
 Definition of Done:
 
-- No single file becomes a “god component”
-- API calls are centralized and consistent
+- No “god components”
+- API calls centralized and consistent
+
+Progress notes:
+
+- API client exists and Home renders Projects locally.
+- Live site currently cannot call the API (frontend-only deploy).
+
+## Phase 4.5 — Live API Deployment on DigitalOcean (NEXT)
+
+Goal: Make the live site talk to a real API now (not waiting for Phase 9).
+
+Deliverables:
+
+- Django deployed on DigitalOcean App Platform
+- DigitalOcean Managed Postgres connected
+- Migrations run; Admin usable
+- Frontend configured to call the deployed API (base URL env var)
+- Live site shows:
+  - API Status OK
+  - Projects loaded from API
+
+Definition of Done:
+
+- Live Vercel home page shows API Status OK
+- Live Vercel home page renders Projects from API
+
+Notes:
+
+- This is not “full hardening.” That’s Phase 9.
 
 ## Phase 5 — Content System (Blog/Admin Workflow) (PLANNED)
 
@@ -156,10 +179,8 @@ Goal: Create/edit content in Django Admin and display in frontend.
 
 Deliverables:
 
-- Update site logo and name (instead of Vite logo and "app")
-- Blog post model (title, slug, body, published, timestamps)
-- Projects model (title, stack, description, links, timestamps)
-- Django Admin customization (search, list display)
+- Projects workflow polish
+- Blog model + admin workflow
 - Frontend pages render content from API
 
 Definition of Done:
@@ -167,7 +188,7 @@ Definition of Done:
 - Admin-created content appears on site
 - Slugs work and pages are shareable
 
-## Phase 6 — Accounts + Security Baseline
+## Phase 6 — Accounts + Security Baseline (PLANNED)
 
 Goal: Own-auth flows with good security practices.
 
@@ -176,7 +197,7 @@ Deliverables:
 - Registration + login + logout
 - Password reset flow
 - Email verification (if feasible early)
-- Rate limiting for auth endpoints (basic)
+- Basic rate limiting for auth endpoints
 - Security notes documented
 
 Stretch:
@@ -188,7 +209,7 @@ Definition of Done:
 - Auth flows verified end-to-end
 - Basic abuse prevention in place
 
-## Phase 7 — Games + Leaderboards
+## Phase 7 — Games + Leaderboards (PLANNED)
 
 Goal: Small interactive games and user score tracking.
 
@@ -203,7 +224,7 @@ Definition of Done:
 
 - Users can submit scores and see rankings
 
-## Phase 8 — Analytics Dashboard
+## Phase 8 — Analytics Dashboard (PLANNED)
 
 Goal: Site and user activity metrics with graphs.
 
@@ -217,34 +238,32 @@ Definition of Done:
 
 - Dashboard displays real data from Postgres
 
-## Phase 9 — Deployment to DigitalOcean (Student Pack)
+## Phase 9 — Hardened DigitalOcean Production (PLANNED)
 
-Goal: Production deployment with control and maintainability.
+Goal: Production deployment with maintainability and ops maturity.
 
 Deliverables:
 
-- Production container strategy
-- Nginx reverse proxy + HTTPS (Let’s Encrypt)
-- CI/CD deployment plan
-- Backups plan (db dumps, retention)
-- Monitoring/logging plan
+- Reverse proxy + HTTPS plan
+- CI/CD plan
+- Backups + monitoring/logging plan
+- Rollback steps documented
 
 Definition of Done:
 
 - Public site reachable over HTTPS
-- Rollback steps documented
+- Rollback steps documented and tested
 
-## Phase 10 — Hardening + Polish
+## Phase 10 — Hardening + Polish (PLANNED)
 
-Goal: Make it robust, maintainable, and interview-ready.
+Goal: Robust, maintainable, interview-ready.
 
 Deliverables:
 
 - Security headers + CSP
 - Dependency scanning in CI
-- Better tests (backend + frontend)
-- Performance checks (Lighthouse baseline)
-- Accessibility pass
+- Better tests
+- Performance + accessibility baselines
 
 Definition of Done:
 
