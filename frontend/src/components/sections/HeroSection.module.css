@@ -19,6 +19,7 @@
 .navLinks {
   display: flex;
   gap: 1rem;
+  flex-wrap: wrap;
 }
 
 .content {
@@ -66,4 +67,5 @@
   margin-top: 1.25rem;
   display: flex;
   gap: 1rem;
+  flex-wrap: wrap;
 }

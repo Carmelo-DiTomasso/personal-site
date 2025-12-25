@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { ApiError, apiGet } from '@/lib/api';
 import { StatusBadge } from '@/components/ui/StatusBadge/StatusBadge';
+import { Container } from '../layout/Container';
 import styles from './ApiStatusSection.module.css';
 
 // What we render in the UI depending on the fetch result.
@@ -72,8 +73,12 @@ export function ApiStatusSection() {
         : 'Error';
 
   return (
-    <section className={styles.section} aria-labelledby="api-status-title">
-      <div className={styles.container}>
+    <section
+      className={styles.section}
+      aria-labelledby="api-status-title"
+      id="api-status"
+    >
+      <Container>
         <div className={styles.headerRow}>
           <h2 className={styles.title} id="api-status-title">
             API Status
@@ -110,7 +115,7 @@ export function ApiStatusSection() {
             </div>
           )}
         </div>
-      </div>
+      </Container>
     </section>
   );
 }

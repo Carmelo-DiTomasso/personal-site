@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { ApiError, apiGet } from '@/lib/api';
 import { StatusBadge } from '@/components/ui/StatusBadge/StatusBadge';
+import { Container } from '../layout/Container';
 import styles from './ProjectsSection.module.css';
 
 type Project = {
@@ -94,7 +95,7 @@ export function ProjectsSection() {
       aria-labelledby="projects-title"
       id="projects"
     >
-      <div className={styles.container}>
+      <Container>
         <div className={styles.headerRow}>
           <h2 className={styles.title} id="projects-title">
             Projects
@@ -166,7 +167,7 @@ export function ProjectsSection() {
             ))}
           </div>
         )}
-      </div>
+      </Container>
     </section>
   );
 }
