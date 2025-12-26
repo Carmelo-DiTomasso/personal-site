@@ -17,13 +17,20 @@ import dj_database_url
 from dotenv import load_dotenv
 load_dotenv()
 
+IS_TESTING = "test" in sys.argv
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 SECRET_KEY = os.getenv("SECRET_KEY") or os.getenv("DJANGO_SECRET_KEY")
+
+# In CI/tests, use a throwaway key so Django can boot.
+if not SECRET_KEY and IS_TESTING:
+    SECRET_KEY = "insecure-test-secret-key"
+
 if not SECRET_KEY:
     raise RuntimeError("SECRET_KEY is not set")
+
 
 DEBUG = os.getenv("DJANGO_DEBUG", "0") == "1"
 
