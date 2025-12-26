@@ -14,13 +14,23 @@ from pathlib import Path
 import os
 import sys
 import dj_database_url
+from dotenv import load_dotenv
+load_dotenv()
+
+IS_TESTING = "test" in sys.argv
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 SECRET_KEY = os.getenv("SECRET_KEY") or os.getenv("DJANGO_SECRET_KEY")
+
+# In CI/tests, use a throwaway key so Django can boot.
+if not SECRET_KEY and IS_TESTING:
+    SECRET_KEY = "insecure-test-secret-key"
+
 if not SECRET_KEY:
     raise RuntimeError("SECRET_KEY is not set")
+
 
 DEBUG = os.getenv("DJANGO_DEBUG", "0") == "1"
 
@@ -36,6 +46,11 @@ SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
 # CORS settings
 CORS_ALLOWED_ORIGINS = csv_env("CORS_ALLOWED_ORIGINS")
 CORS_ALLOWED_ORIGIN_REGEXES = csv_env("CORS_ALLOWED_ORIGIN_REGEXES")
+
+# Static files settings
+STATIC_URL = "/static/"
+STATIC_ROOT = BASE_DIR / "staticfiles"
+STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
 
 # Application definition
 
@@ -61,9 +76,9 @@ INSTALLED_APPS = [
 ]
 
 MIDDLEWARE = [
-    "corsheaders.middleware.CorsMiddleware",
-
     'django.middleware.security.SecurityMiddleware',
+    "corsheaders.middleware.CorsMiddleware",
+    "whitenoise.middleware.WhiteNoiseMiddleware",
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
