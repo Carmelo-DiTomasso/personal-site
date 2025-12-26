@@ -12,8 +12,8 @@ RUN pip install --no-cache-dir -r /app/requirements.txt
 
 COPY . /app
 
-ENV DJANGO_COLLECTSTATIC=1
-RUN python manage.py collectstatic --noinput
+# collect static assets into /app/staticfiles
+RUN DJANGO_COLLECTSTATIC=1 python manage.py collectstatic --noinput
 
 EXPOSE 8000
 CMD ["sh", "-c", "python manage.py migrate --noinput && python manage.py collectstatic --noinput && gunicorn config.wsgi:application --bind 0.0.0.0:${PORT:-8000}"]

@@ -29,7 +29,10 @@ if not SECRET_KEY and IS_TESTING:
     SECRET_KEY = "insecure-test-secret-key"
 
 if not SECRET_KEY:
-    raise RuntimeError("SECRET_KEY is not set")
+    if os.getenv("DJANGO_COLLECTSTATIC") == "1":
+        SECRET_KEY = "collectstatic-placeholder"
+    else:
+        raise RuntimeError("SECRET_KEY is not set")
 
 
 DEBUG = os.getenv("DJANGO_DEBUG", "0") == "1"
