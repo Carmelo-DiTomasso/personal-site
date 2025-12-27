@@ -1,8 +1,9 @@
 Set-StrictMode -Version Latest
 $ErrorActionPreference = "Stop"
 
-cd .\frontend\
+Set-Location .\frontend\
 npm run format -- --write
+Set-Location ..
 
 # docker compose exec frontend npm run format:write
 

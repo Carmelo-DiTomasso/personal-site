@@ -1,3 +1,4 @@
+import { Container } from '../../components/layout/Container';
 import styles from './SimplePage.module.css';
 
 type SimplePageProps = {
@@ -8,8 +9,10 @@ type SimplePageProps = {
 export function SimplePage({ title, children }: SimplePageProps) {
   return (
     <main className={styles.page}>
-      <h1 className={styles.title}>{title}</h1>
-      <div className={styles.content}>{children}</div>
+      <Container>
+        <h1 className={styles.title}>{title}</h1>
+        <div className={styles.content}>{children}</div>
+      </Container>
     </main>
   );
 }
