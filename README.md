@@ -158,6 +158,14 @@ Then sign in at:
 
 - Backend Python lint only: `pre-commit run ruff-check -a`
 
+### Universal check (run before opening a PR)
+
+Runs repo lint/format + backend tests + frontend lint + frontend typecheck:
+
+```powershell
+.\scripts\check.ps1
+```
+
 ### Troubleshooting
 
 Rebuild everything (if containers/images got out of sync):
