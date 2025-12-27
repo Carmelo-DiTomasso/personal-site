@@ -9,7 +9,7 @@ The PM Hub conversation plans sprints from this file.
   - Chooses the next **Milestone**
   - Proposes a sprint backlog
   - After each sprint, ingests a **Sprint Handoff Packet** and updates docs and
-  progress here
+    progress here
 
 - **Each sprint = separate ChatGPT conversation**
   - Work issue-by-issue
@@ -25,44 +25,47 @@ We are optimizing for momentum:
 
 ## Current status
 
-- **Live hosting:** Vercel (frontend-only)
-- **Backend hosting:** not deployed yet (local only via Docker + Vite proxy)
-- **Last completed sprint:** Sprint 4 — Projects v0 ✅
-- **Blocker:** Live site cannot reach `/api/*` yet
+- **Live hosting:** Vercel (frontend)
+- **Backend hosting:** DigitalOcean App Platform + DO Managed Postgres
+- **Last completed sprint:** Sprint 5 — Live API on DigitalOcean v0 ✅
+- **Live behavior:** API Status and Projects work on the live homepage
 
 ---
 
-## Now (Sprint 5 / Milestone: Live API on DigitalOcean v0)
+## Now (Sprint 6 / Milestone: Phase 4 — Site Skeleton v0)
 
-Goal: Deploy Django + Postgres on DigitalOcean so the live site works.
+Goal: Lay groundwork for a multi-page site with shared layout and navigation.
+No heavy content work yet; pages can be placeholders.
 
-- [ ] Provision DigitalOcean infrastructure
-  - [ ] Create App Platform app for Django
-  - [ ] Create Managed Postgres
-  - [ ] Attach DB to app and store secrets/env vars in DO
-  - [ ] Decide API hostname strategy (recommended: `api.<domain>`)
-- [ ] Deploy backend + validate API
-  - [ ] Build + deploy container
-  - [ ] Run migrations in the deployed environment
-  - [ ] Create admin user (prod)
-  - [ ] Verify:
-    - `/api/health/` returns `{ "status": "ok" }`
-    - `/api/content/projects/` returns JSON list
-- [ ] Wire Vercel frontend to live API
-  - [ ] Add `VITE_API_BASE_URL` support in frontend API client
-  - [ ] Set Vercel env var + redeploy
-  - [ ] Verify on live homepage:
-    - API Status is OK
-    - Projects load from API (not failing)
+- [ ] Add routing for:
+  - [ ] `/` (Home)
+  - [ ] `/resume`
+  - [ ] `/projects`
+  - [ ] `/games`
+  - [ ] `/contact`
+  - [ ] `/site` (site info)
+  - [ ] `/stats`
+- [ ] Add universal layout:
+  - [ ] Header (brand + nav)
+  - [ ] Footer (basic links + copyright)
+  - [ ] Shared page wrapper (consistent spacing)
+- [ ] Add nav UX baseline:
+  - [ ] Active link state
+  - [ ] Keyboard accessible navigation
+  - [ ] Mobile-friendly baseline (simple stacked or menu button, minimal)
+- [ ] Add a root "check" command (universal pre-PR check)
+  - [ ] Create `.\scripts\check.ps1`
+  - [ ] Run lint + backend tests (and any existing frontend checks)
+  - [ ] Document in README as "run before PR"
 
 ---
 
-## Next (Projects v1 polish + Phase 4 routing)
+## Next (Projects polish + content workflows)
 
-- [ ] Add `/projects` route page (optional if you want it soon)
 - [ ] Featured project display rules (UI + ordering contract)
-- [ ] Pagination contract for projects endpoint (if list grows)
-- [ ] Expand content system: Blog model + API + admin
+- [ ] Add `/projects/:slug` (optional detail pages)
+- [ ] Blog: model + API + admin + placeholder page
+- [ ] Site info + stats: decide data sources and API needs
 
 ---
 
@@ -74,10 +77,9 @@ Goal: Deploy Django + Postgres on DigitalOcean so the live site works.
 
 ---
 
-## Later (Hardened production deployment)
+## Later (Hardening / ops polish)
 
-- [ ] DigitalOcean hardening phase (reverse proxy, HTTPS plan, backups,
-  monitoring, CI/CD, rollback docs)
+- [ ] DO production hardening (reverse proxy, backups, monitoring, rollback)
 - [ ] Security headers + CSP + dependency scanning
 - [ ] Performance + accessibility baseline
 
@@ -106,3 +108,11 @@ Goal: Deploy Django + Postgres on DigitalOcean so the live site works.
 - Project Admin UX + seed script
 - Frontend API client + Projects section on Home
 - Projects API contract documented
+
+### Sprint 5 — Live API on DigitalOcean v0 ✅
+
+- DO App Platform backend + DO Managed Postgres deployed
+- WhiteNoise + collectstatic so admin/static work in prod
+- CI fixed for SECRET_KEY enforcement during tests
+- Production Projects seeded via admin
+- Live homepage API Status + Projects working

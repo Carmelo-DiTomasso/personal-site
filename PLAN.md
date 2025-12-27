@@ -13,7 +13,7 @@ Phased delivery plan. Each phase ends with:
 - Each phase (or phase subset) maps to a GitHub **Milestone**.
 - Every GitHub Issue belongs to **exactly one milestone**.
 - Milestones are kept small (typically 5–15 issues).
-- A milestone is “done” when its Definition of Done is satisfied and
+- A milestone is "done" when its Definition of Done is satisfied and
   all issues are closed.
 
 ### Sprints
@@ -37,7 +37,7 @@ Every issue must have exactly:
 
 ### Reduced overhead mode (current)
 
-To keep momentum, we’re minimizing admin overhead:
+To keep momentum, we're minimizing admin overhead:
 
 - **One branch per sprint**
 - **One PR per sprint**
@@ -45,13 +45,12 @@ To keep momentum, we’re minimizing admin overhead:
 
 ---
 
-## Hosting reality (explicit constraint)
+## Hosting reality (current)
 
-- Vercel currently hosts the **frontend only**.
-- Local dev works because Vite proxies `/api/*` to the Docker backend.
-- Live `/api/*` does not work until the backend is deployed.
-
-We are moving backend deployment earlier because the UI now depends on it.
+- Frontend: Vercel
+- Backend: DigitalOcean App Platform
+- Database: DigitalOcean Managed Postgres
+- Local dev: Vite proxies `/api/*` to the Docker backend
 
 ---
 
@@ -61,8 +60,8 @@ We are moving backend deployment earlier because the UI now depends on it.
 - Phase 1 — DONE
 - Phase 2 — DONE
 - Phase 3 — DONE (v0 milestone complete)
-- Phase 4 — ACTIVE (frontend uses real API locally; routing pending)
-- Phase 4.5 — NEXT (Live API deployment on DigitalOcean)
+- Phase 4 — ACTIVE (routing + layout in progress)
+- Phase 4.5 — DONE (Live API deployment on DigitalOcean v0)
 - Phase 5 — PLANNED
 - Phase 6 — PLANNED
 - Phase 7 — PLANNED
@@ -135,43 +134,36 @@ Goal: Real site layout and a clean way to call the API.
 
 Deliverables:
 
-- Routing + layout (Home, Projects, Blog, Resume, Contact)
+- Routing + layout (Home, Resume, Projects, Games, Contact, Site, Stats)
+- Universal header + footer
 - API client pattern (single place for fetch logic)
 - Shared components, loading/error states
 - Basic SEO metadata once routes exist
 
 Definition of Done:
 
-- No “god components”
+- No "god components"
 - API calls centralized and consistent
+- All primary routes exist and are navigable
 
-Progress notes:
+## Phase 4.5 — Live API Deployment on DigitalOcean (DONE for v0)
 
-- API client exists and Home renders Projects locally.
-- Live site currently cannot call the API (frontend-only deploy).
-
-## Phase 4.5 — Live API Deployment on DigitalOcean (NEXT)
-
-Goal: Make the live site talk to a real API now (not waiting for Phase 9).
+Goal: Make the live site talk to a real API.
 
 Deliverables:
 
 - Django deployed on DigitalOcean App Platform
 - DigitalOcean Managed Postgres connected
 - Migrations run; Admin usable
-- Frontend configured to call the deployed API (base URL env var)
+- Frontend successfully calls deployed API
 - Live site shows:
   - API Status OK
   - Projects loaded from API
 
 Definition of Done:
 
-- Live Vercel home page shows API Status OK
-- Live Vercel home page renders Projects from API
-
-Notes:
-
-- This is not “full hardening.” That’s Phase 9.
+- Live home page shows API Status OK
+- Live home page renders Projects from API
 
 ## Phase 5 — Content System (Blog/Admin Workflow) (PLANNED)
 
@@ -251,8 +243,8 @@ Deliverables:
 
 Definition of Done:
 
-- Public site reachable over HTTPS
 - Rollback steps documented and tested
+- Backups and monitoring have a documented plan
 
 ## Phase 10 — Hardening + Polish (PLANNED)
 
@@ -267,4 +259,4 @@ Deliverables:
 
 Definition of Done:
 
-- “Production readiness” checklist mostly complete
+- "Production readiness" checklist mostly complete
