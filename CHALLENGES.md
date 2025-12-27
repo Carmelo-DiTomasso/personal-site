@@ -84,3 +84,7 @@ Guidelines:
 #### Refs
 
 - Commit/PR: [fill in]
+
+#### New
+
+Local dev: backend may require re-login; symptoms: /api/* calls fail until you authenticate; fix: open admin/login or run dev script and login.
