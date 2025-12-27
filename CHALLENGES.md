@@ -1,5 +1,3 @@
-<!-- markdownlint-disable MD013 -->
-
 # Challenges
 
 Running log of issues we hit while building this monorepo.
@@ -87,4 +85,5 @@ Guidelines:
 
 #### New
 
-Local dev: backend may require re-login; symptoms: /api/* calls fail until you authenticate; fix: open admin/login or run dev script and login.
+Local dev: backend may require re-login; symptoms: /api/* calls fail until you
+authenticate; fix: open admin/login or run dev script and login.
