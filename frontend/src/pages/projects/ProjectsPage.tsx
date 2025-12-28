@@ -93,7 +93,8 @@ export function ProjectsPage() {
     <SimplePage title="Projects">
       <div className={styles.headerRow}>
         <p className={styles.subtitle}>
-          Fetched from <code className={styles.code}>/api/content/projects/</code>
+          Fetched from{' '}
+          <code className={styles.code}>/api/content/projects/</code>
         </p>
         <StatusBadge kind={state.kind} label={badgeLabel} />
       </div>
