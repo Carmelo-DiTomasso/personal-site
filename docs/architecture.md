@@ -234,10 +234,6 @@ Non-2xx responses should use the standard error envelope:
 
 ## Deployment (later)
 
-Target hosting:
-
-- DigitalOcean via GitHub Student Pack
-
 Goals:
 
 - HTTPS

@@ -27,36 +27,30 @@ We are optimizing for momentum:
 
 - **Live hosting:** Vercel (frontend)
 - **Backend hosting:** DigitalOcean App Platform + DO Managed Postgres
-- **Last completed sprint:** Sprint 5 — Live API on DigitalOcean v0 ✅
+- **Last completed sprint:** Sprint 6 — Phase 4: Site Skeleton v0 ✅
 - **Live behavior:** API Status and Projects work on the live homepage
 
 ---
 
-## Now (Sprint 6 / Milestone: Phase 4 — Site Skeleton v0)
+## Now (Sprint 7 / Milestone: Phase 5 — Content + UX v0)
 
-Goal: Lay groundwork for a multi-page site with shared layout and navigation.
-No heavy content work yet; pages can be placeholders.
+Goal: Replace placeholders with real page content and improve UX for common
+dev/prod failure modes (auth, empty states).
 
-- [ ] Add routing for:
-  - [ ] `/` (Home)
-  - [ ] `/resume`
-  - [ ] `/projects`
-  - [ ] `/games`
-  - [ ] `/contact`
-  - [ ] `/site` (site info)
-  - [ ] `/stats`
-- [ ] Add universal layout:
-  - [ ] Header (brand + nav)
-  - [ ] Footer (basic links + copyright)
-  - [ ] Shared page wrapper (consistent spacing)
-- [ ] Add nav UX baseline:
-  - [ ] Active link state
-  - [ ] Keyboard accessible navigation
-  - [ ] Mobile-friendly baseline (simple stacked or menu button, minimal)
-- [ ] Add a root "check" command (universal pre-PR check)
-  - [ ] Create `.\scripts\check.ps1`
-  - [ ] Run lint + backend tests (and any existing frontend checks)
-  - [ ] Document in README as "run before PR"
+- [ ] Projects page v0
+  - [ ] Render projects from `GET /api/content/projects/` on `/projects`
+  - [ ] Loading / empty / error states
+  - [ ] Reuse existing UI primitives (no duplicate badge/card CSS)
+- [ ] Resume page v0 polish
+  - [ ] Consistent embed/download behavior
+  - [ ] Works on refresh/direct URL
+- [ ] Contact page v0
+  - [ ] Real copy + mailto + social links (accessible)
+- [ ] DX: graceful auth failures for API calls
+  - [ ] Friendly UI when `/api/*` returns 401/403 (no noisy console errors)
+  - [ ] Document in `CHALLENGES.md`
+- [ ] Docs: routing/layout conventions
+  - [ ] Update `docs/architecture.md` with current route/layout structure
 
 ---
 
@@ -116,3 +110,9 @@ No heavy content work yet; pages can be placeholders.
 - CI fixed for SECRET_KEY enforcement during tests
 - Production Projects seeded via admin
 - Live homepage API Status + Projects working
+
+### Sprint 6 — Phase 4: Site Skeleton v0 ✅
+
+- Routing skeleton for top-level pages
+- Universal header/footer + layout wrapper
+- Root pre-PR command: `.\scripts\check.ps1` documented

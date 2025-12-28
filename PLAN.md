@@ -128,7 +128,7 @@ Milestone notes:
   - API error envelope baseline
   - first endpoint: `GET /api/content/projects/`
 
-## Phase 4 — Frontend Foundations (ACTIVE)
+## Phase 4 — Frontend Foundations (DONE)
 
 Goal: Real site layout and a clean way to call the API.
 
@@ -165,7 +165,7 @@ Definition of Done:
 - Live home page shows API Status OK
 - Live home page renders Projects from API
 
-## Phase 5 — Content System (Blog/Admin Workflow) (PLANNED)
+## Phase 5 — Content System (Blog/Admin Workflow) (ACTIVE)
 
 Goal: Create/edit content in Django Admin and display in frontend.
 
