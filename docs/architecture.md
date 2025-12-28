@@ -18,12 +18,56 @@ The frontend is responsible for UI and calling backend APIs.
 
 Responsibilities:
 
-- UI routes/pages (Home, Projects, Blog, Resume, Contact, etc.)
+- UI routes/pages (Home, Resume, Projects, Games, Contact, Site, Stats, etc.)
 - API calls to backend
 - Client-side state and rendering
-- Frontend structure uses src/pages/*for route-level components and
-    src/components/sections/* for page sections. - Styling uses CSS
-    Modules (*.module.css) to keep styles local and scalable.
+
+Structure (conventions):
+
+- `src/pages/*` contains **route-level** components (one folder per route).
+  - Examples:
+    - `src/pages/home/HomePage.tsx`
+    - `src/pages/resume/ResumePage.tsx`
+    - `src/pages/projects/ProjectsPage.tsx`
+- `src/components/sections/*` contains **page sections** (primarily Home page sections).
+- `src/components/layout/*` contains **app-wide layout primitives**:
+  - `AppLayout` (wraps every route)
+  - `Header` / `Footer`
+  - `Container` (shared max-width + gutters; used by layout + pages)
+- `src/components/nav/*` contains navigation UI:
+  - `SiteNav` renders the route links (layout-agnostic;
+    spacing is owned by layout components)
+
+Routing:
+
+- Uses React Router (`react-router-dom`).
+- Route table lives in `src/App.tsx`.
+- Uses a nested route wrapper:
+  - `AppLayout` renders on every route and hosts `<Outlet />` for page content.
+- Current top-level routes:
+  - `/` (Home)
+  - `/resume`
+  - `/projects`
+  - `/games`
+  - `/contact`
+  - `/site`
+  - `/stats`
+  - `*` (Not Found)
+
+Styling:
+
+- Uses CSS Modules (`*.module.css`) for component/page styles to keep
+  styles local and scalable.
+- Global styles live in `src/index.css` and `src/App.css`.
+
+API client:
+
+- `src/lib/api.ts` centralizes fetch logic.
+- `VITE_API_BASE_URL` controls whether requests go to an absolute API origin
+  (prod) or remain relative (dev proxy).
+  - If `VITE_API_BASE_URL` is empty, callers should use relative paths like
+    `/api/...` and Vite will proxy in dev.
+  - If `VITE_API_BASE_URL` is set, requests resolve against that base.
 
 ### Backend (`backend/`)
 
@@ -58,8 +102,11 @@ Scripts:
 
 - `.\scripts\dev.ps1` starts the stack (`docker compose up -d --build`)
 - `.\scripts\down.ps1` stops everything (`docker compose down`)
+- `.\scripts\status.ps1` shows service status
 - `.\scripts\migrate.ps1` runs migrations in backend container
 - `.\scripts\superuser.ps1` creates a Django admin user
+- `.\scripts\check.ps1` runs the universal pre-PR checks
+  (lint/format + backend tests + frontend lint + frontend typecheck)
 
 ## API conventions
 
@@ -106,16 +153,23 @@ Errors:
   ```
 
   Examples:
+
   - 400: invalid input / validation errors
+
   - 401: unauthenticated
+
   - 403: unauthorized
+
   - 404: not found
+
   - 500: unexpected server error (avoid leaking internals)
 
 Local dev routing:
 
-- Frontend calls APIs via relative paths like `fetch("/api/...")`.
+- Frontend calls APIs via relative paths like `/api/...`.
+
 - In Docker dev, Vite proxies `/api/*` to the backend service.
+
 - Backend is reachable at `http://localhost:8000`, frontend at `http://localhost:5173`.
 
 ### Projects
@@ -124,7 +178,7 @@ Local dev routing:
 
 Returns the list of Projects for the site.
 
-##### Ordering
+#### Ordering
 
 - Sorted by `sort_order` (ascending), then `title` (ascending).
 
@@ -173,7 +227,7 @@ Non-2xx responses should use the standard error envelope:
 ```
 
 | Field            | Type      | Notes                                      |
-|-----------------|-----------|--------------------------------------------|
+|------------------|-----------|--------------------------------------------|
 | `error.code`     | string    | Stable, machine-readable error code        |
 | `error.message`  | string    | User/developer-readable description        |
 | `error.details`  | any\|null | Optional extra context for debugging       |
