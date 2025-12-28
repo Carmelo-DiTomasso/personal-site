@@ -1,8 +1,3 @@
-.section {
-  padding: 2rem 0;
-  border-top: 1px solid rgba(255, 255, 255, 0.08);
-}
-
 .headerRow {
   display: flex;
   align-items: baseline;
@@ -11,17 +6,10 @@
   margin-bottom: 1rem;
 }
 
-.title {
+.subtitle {
   margin: 0;
-  font-size: 1.25rem;
-}
-
-.badge {
-  border: 1px solid rgba(255, 255, 255, 0.16);
-  border-radius: 999px;
-  padding: 0.25rem 0.6rem;
-  font-size: 0.85rem;
   opacity: 0.9;
+  line-height: 1.5;
 }
 
 .text {
@@ -57,6 +45,7 @@
   border: 1px solid rgba(255, 255, 255, 0.12);
   border-radius: 1rem;
   padding: 1rem;
+  min-width: 0;
 }
 
 .cardHeader {
@@ -65,11 +54,13 @@
   justify-content: space-between;
   gap: 0.75rem;
   margin-bottom: 0.5rem;
+  min-width: 0;
 }
 
 .cardTitle {
   margin: 0;
   font-size: 1.05rem;
+  min-width: 0;
 }
 
 .featuredTag {
@@ -78,6 +69,7 @@
   padding: 0.2rem 0.5rem;
   font-size: 0.75rem;
   opacity: 0.9;
+  white-space: nowrap;
 }
 
 .cardText {
@@ -88,9 +80,21 @@
 .linksRow {
   display: flex;
   gap: 0.75rem;
+  flex-wrap: wrap;
 }
 
 .link {
   text-decoration: none;
   opacity: 0.9;
+  border-radius: 0.5rem;
+}
+
+.link:hover {
+  opacity: 1;
+  text-decoration: underline;
+}
+
+.link:focus-visible {
+  outline: 2px solid currentColor;
+  outline-offset: 2px;
 }
