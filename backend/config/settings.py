@@ -55,6 +55,17 @@ STATIC_URL = "/static/"
 STATIC_ROOT = BASE_DIR / "staticfiles"
 STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
 
+# REST framework settings
+REST_FRAMEWORK = {
+    "DEFAULT_RENDERER_CLASSES": [
+        "rest_framework.renderers.JSONRenderer",
+    ],
+    "DEFAULT_THROTTLE_RATES": {
+        "submissions": os.getenv("SUBMISSIONS_THROTTLE_RATE", "5/min"),
+    },
+}
+
+
 # Application definition
 
 INSTALLED_APPS = [
@@ -73,6 +84,7 @@ INSTALLED_APPS = [
 
     # Local apps
     'apps.accounts.apps.AccountsConfig',
+    'apps.submissions.apps.SubmissionsConfig',
     'apps.content.apps.ContentConfig',
     'apps.games.apps.GamesConfig',
     'apps.analytics.apps.AnalyticsConfig',
