@@ -11,16 +11,15 @@ import { AboutSection } from '../../components/sections/AboutSection';
 export function HomePage() {
   return (
     <div className={styles.page}>
-      <HeroSection
-        tagline="Welcome"
-        locationLine="Computer Science @ Purdue"
-      />
+      <HeroSection tagline="Welcome" locationLine="Computer Science @ Purdue" />
 
       <main className={styles.main}>
-        <AboutSection shortBio="
+        <AboutSection
+          shortBio="
           Welcome to my personal site!
           The purpose of this site is for me to learn, practice, and demonstrate full-stack web development skills.
-        " />
+        "
+        />
         <ApiStatusSection />
       </main>
     </div>
