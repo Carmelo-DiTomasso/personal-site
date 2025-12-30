@@ -1,6 +1,9 @@
 import json
 
-from django.test import SimpleTestCase
+from django.contrib.auth import get_user_model
+from django.test import SimpleTestCase, TestCase
+from rest_framework.test import APIClient
+
 
 class HealthEndpointTests(SimpleTestCase):
     def test_health_returns_ok(self):
@@ -23,3 +26,27 @@ class HealthEndpointTests(SimpleTestCase):
                 }
             },
         )
+
+
+class AuthCheckEndpointTests(TestCase):
+    def setUp(self):
+        self.client = APIClient()
+
+    def test_auth_check_logged_out_is_unauthorized(self):
+        resp = self.client.get("/api/auth-check/")
+        # Depending on DRF config, this can be 401 or 403 (SessionAuth often yields 403).
+        self.assertIn(resp.status_code, (401, 403))
+
+    def test_auth_check_logged_in_returns_ok(self):
+        User = get_user_model()
+        user = User.objects.create_user(
+            username="tester",
+            email="tester@example.com",
+            password="pass",
+        )
+
+        self.client.force_authenticate(user=user)
+        resp = self.client.get("/api/auth-check/")
+
+        self.assertEqual(resp.status_code, 200)
+        self.assertEqual(resp.json(), {"status": "ok"})
