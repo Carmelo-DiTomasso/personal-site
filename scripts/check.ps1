@@ -40,7 +40,7 @@ Step "Repo lint + format checks" {
 }
 
 Step "Backend tests" {
-  docker compose exec backend python manage.py test
+  docker compose exec backend pytest
 }
 
 Step "Frontend lint" {
