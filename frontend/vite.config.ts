@@ -13,6 +13,7 @@ export default defineConfig({
     },
   },
   server: {
+    host: true,
     proxy: {
       // Proxy API requests during local dev to the Django backend container.
       '/api': {
