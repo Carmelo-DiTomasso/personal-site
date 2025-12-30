@@ -192,7 +192,27 @@ docker compose logs -f --tail 200 frontend
 
 ## Environment Variables
 
-Local dev uses `.env` (not committed). See `.env.example` for required variables.
+### Backend (repo root `.env`)
+
+Used by the Django container via `docker-compose.yml` (`env_file: .env`).
+
+- `TURNSTILE_SECRET_KEY` — Cloudflare Turnstile secret
+  (server-side verification).
+- `SUBMISSIONS_THROTTLE_RATE` (default `5/min`) — rate limit for
+  unauthenticated submissions to reduce spam/abuse.
+
+### Frontend (`frontend/.env.local`)
+
+Vite reads environment variables from the frontend project. For local dev, add:
+
+- `VITE_TURNSTILE_SITE_KEY` — Cloudflare Turnstile site key
+  (renders the widget in the UI).
+
+Notes:
+
+- Turnstile may emit browser console warnings
+  (PAT challenge / preload notices).
+  Ignore if the widget works and the backend verifies tokens.
 
 ## Development Workflow
 

@@ -85,6 +85,8 @@ Planned Django apps:
 - `content`: blog posts + projects portfolio
 - `games`: games, score submissions, leaderboards
 - `analytics`: event capture and aggregates for dashboards
+- `submissions`: contact + feedback intake
+  (Turnstile + honeypot + throttling + cooldown + dedupe)
 
 ### Database (`db`)
 
@@ -107,6 +109,26 @@ Scripts:
 - `.\scripts\superuser.ps1` creates a Django admin user
 - `.\scripts\check.ps1` runs the universal pre-PR checks
   (lint/format + backend tests + frontend lint + frontend typecheck)
+
+## Environment Variables (important)
+
+Backend (Docker `backend` service reads repo root `.env`
+via `docker-compose.yml`):
+
+- `TURNSTILE_SECRET_KEY` (required in prod): Cloudflare Turnstile secret for
+  server-side verification.
+- `SUBMISSIONS_THROTTLE_RATE` (default `5/min`): DRF throttle rate for
+  unauthenticated submissions.
+
+  Rationale: protects the submissions inbox + DB from spam bursts while
+  keeping normal users unblocked.
+
+Frontend (Vite env):
+
+- `VITE_TURNSTILE_SITE_KEY` (required for CAPTCHA): Cloudflare Turnstile site
+  key used by the widget.
+  - Put this in `frontend/.env.local` for local development
+    (Vite reliably loads this file).
 
 ## API conventions
 
@@ -171,6 +193,65 @@ Local dev routing:
 - In Docker dev, Vite proxies `/api/*` to the backend service.
 
 - Backend is reachable at `http://localhost:8000`, frontend at `http://localhost:5173`.
+
+### Submissions
+
+Turnstile may emit browser console warnings (PAT challenge / preload notices).
+Treat as non-actionable if:
+
+- the widget renders,
+- a token is produced, and
+- the backend verifies successfully.
+
+#### POST /api/submissions/
+
+Creates a new submission of kind `contact` or `feedback`.
+
+Spam/abuse defenses (layered):
+
+- Cloudflare Turnstile (token verification in backend)
+- Honeypot field (silent drop with 204)
+- DRF throttle scope `submissions` (rate controlled by `SUBMISSIONS_THROTTLE_RATE`)
+- Cooldown: 1 successful submit per IP per `COOLDOWN_SECONDS`
+- Dedupe: blocks duplicate content within `DEDUPE_WINDOW_SECONDS`
+
+##### 201 Created (JSON)
+
+```json
+{ "status": "ok", "cooldown_seconds": 60 }
+```
+
+##### 204 No Content
+
+returned when honeypot triggers (silent drop)
+
+#### 409 Conflict (JSON)
+
+```json
+{ "detail": "DUPLICATE_SUBMISSION", "retry_after_seconds": 123 }
+```
+
+#### 429 Too Many Requests (JSON)
+
+```json
+{ "detail": "COOLDOWN", "retry_after_seconds": 41 }
+```
+
+Also sets a `Retry-After` header
+
+#### 400 Bad Request (JSON)
+
+- Validation errors (DRF default validation shape)
+
+- CAPTCHA failure
+
+```json
+{ "detail": "CAPTCHA_FAILED", "error_codes": ["..."] }
+```
+
+- Note: The broader "error envelope" is planned;
+  `submissions` currently uses DRF's
+  default `{detail: ...}`/ field-error shapes
 
 ### Projects
 
