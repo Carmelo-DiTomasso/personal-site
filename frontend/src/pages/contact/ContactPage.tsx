@@ -2,29 +2,11 @@ import { useState } from 'react';
 import { SimplePage } from '../shared/SimplePage';
 import { SubmissionForm } from '@/components/forms/SubmissionForm';
 import { ExternalIconLink } from '@/components/ui/ExternalIconLink/ExternalIconLink';
+import {
+  GitHubIcon,
+  LinkedInIcon,
+} from '@/components/ui/ExternalIconLink/icons';
 import styles from './ContactPage.module.css';
-
-function GitHubIcon() {
-  return (
-    <svg viewBox="0 0 24 24" role="img" aria-hidden="true">
-      <path
-        fill="currentColor"
-        d="M12 .5C5.73.5.75 5.6.75 12c0 5.1 3.2 9.4 7.6 10.9.56.1.77-.25.77-.55v-2c-3.1.7-3.75-1.3-3.75-1.3-.5-1.35-1.25-1.7-1.25-1.7-1.02-.72.08-.71.08-.71 1.13.08 1.72 1.2 1.72 1.2 1 .1 1.53-.74 1.9-1.3.1-.75.4-1.3.72-1.6-2.48-.29-5.1-1.28-5.1-5.7 0-1.26.43-2.3 1.14-3.1-.12-.29-.5-1.45.1-3.02 0 0 .95-.31 3.1 1.19.9-.26 1.86-.39 2.82-.39.96 0 1.92.13 2.82.39 2.15-1.5 3.1-1.19 3.1-1.19.6 1.57.22 2.73.1 3.02.7.8 1.14 1.84 1.14 3.1 0 4.43-2.62 5.4-5.12 5.69.42.37.8 1.1.8 2.22v3.29c0 .31.2.66.78.55 4.4-1.5 7.6-5.8 7.6-10.9C23.25 5.6 18.27.5 12 .5Z"
-      />
-    </svg>
-  );
-}
-
-function LinkedInIcon() {
-  return (
-    <svg viewBox="0 0 24 24" role="img" aria-hidden="true">
-      <path
-        fill="currentColor"
-        d="M20.45 20.45h-3.55v-5.57c0-1.33-.03-3.05-1.86-3.05-1.86 0-2.15 1.45-2.15 2.95v5.67H9.34V9h3.41v1.56h.05c.47-.9 1.63-1.86 3.36-1.86 3.6 0 4.26 2.37 4.26 5.46v6.29ZM5.34 7.43a2.06 2.06 0 1 1 0-4.12 2.06 2.06 0 0 1 0 4.12ZM7.12 20.45H3.56V9h3.56v11.45Z"
-      />
-    </svg>
-  );
-}
 
 type Mode = 'contact' | 'feedback';
 
