@@ -35,7 +35,7 @@ export function ContactPage() {
     <SimplePage title="Contact">
       <div className={styles.headerRow}>
         <p className={styles.intro}>
-          Use the form below — submissions go to a single inbox in the admin.
+          Use the form below, submissions go to a single inbox in the admin.
         </p>
 
         <div className={styles.links}>
