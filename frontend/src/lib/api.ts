@@ -1,3 +1,5 @@
+import { data } from 'react-router-dom';
+
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL ?? '';
 
 function resolveUrl(path: string) {
@@ -9,6 +11,21 @@ function resolveUrl(path: string) {
 
   // Avoid double slashes.
   return `${API_BASE_URL.replace(/\/$/, '')}${path}`;
+}
+
+function friendlyAuthMessage(status: number): string {
+  const isDev = import.meta.env.DEV;
+
+  if (status === 401) {
+    return isDev
+      ? 'You are not logged in. Open /admin and sign in, then refresh.'
+      : 'You are not logged in.';
+  }
+
+  // 403
+  return isDev
+    ? 'You do not have permission (403). If this is dev, re-login at /admin and refresh.'
+    : 'You do not have permission to do that.';
 }
 
 export type ApiErrorEnvelope = {
@@ -97,14 +114,16 @@ export async function apiRequest<T>(
 
   // Error path
   if (isJson) {
-    const data: unknown = await response.json();
+    const isAuthFailure = response.status === 401 || response.status === 403;
 
     if (isErrorEnvelope(data)) {
       throw new ApiError({
         status: response.status,
         statusText: response.statusText,
         code: data.error.code,
-        message: data.error.message,
+        message: isAuthFailure
+          ? friendlyAuthMessage(response.status)
+          : data.error.message,
         details: data.error.details,
       });
     }
@@ -112,15 +131,21 @@ export async function apiRequest<T>(
     throw new ApiError({
       status: response.status,
       statusText: response.statusText,
-      message: `HTTP ${response.status} ${response.statusText}`,
+      message: isAuthFailure
+        ? friendlyAuthMessage(response.status)
+        : `HTTP ${response.status} ${response.statusText}`,
       details: data,
     });
   }
 
+  const isAuthFailure = response.status === 401 || response.status === 403;
+
   throw new ApiError({
     status: response.status,
     statusText: response.statusText,
-    message: `HTTP ${response.status} ${response.statusText}`,
+    message: isAuthFailure
+      ? friendlyAuthMessage(response.status)
+      : `HTTP ${response.status} ${response.statusText}`,
   });
 }
 
