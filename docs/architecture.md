@@ -16,13 +16,13 @@ The frontend is responsible for UI and calling backend APIs.
 
 ### Frontend (`frontend/`)
 
-Responsibilities:
+#### Responsibilities
 
 - UI routes/pages (Home, Resume, Projects, Games, Contact, Site, Stats, etc.)
 - API calls to backend
 - Client-side state and rendering
 
-Structure (conventions):
+#### Structure (conventions)
 
 - `src/pages/*` contains **route-level** components (one folder per route).
   - Examples:
@@ -38,7 +38,7 @@ Structure (conventions):
   - `SiteNav` renders the route links (layout-agnostic;
     spacing is owned by layout components)
 
-Routing:
+#### Routing
 
 - Uses React Router (`react-router-dom`).
 - Route table lives in `src/App.tsx`.
@@ -54,13 +54,46 @@ Routing:
   - `/stats`
   - `*` (Not Found)
 
-Styling:
+#### Styling
 
 - Uses CSS Modules (`*.module.css`) for component/page styles to keep
   styles local and scalable.
 - Global styles live in `src/index.css` and `src/App.css`.
 
-API client:
+#### UI primitives: ExternalIconLink
+
+Use `ExternalIconLink` for pill-style links that include an icon (e.g., Resume/GitHub/LinkedIn).
+
+Location:
+
+- `frontend/src/components/ui/ExternalIconLink/ExternalIconLink.tsx`
+- `frontend/src/components/ui/ExternalIconLink/ExternalIconLink.module.css`
+- Shared SVG icons: `frontend/src/components/ui/ExternalIconLink/icons.tsx`
+
+Behavior:
+
+- Renders an external `<a>` (new tab) for `https://...` links.
+- Renders an internal React Router `<Link>` for relative paths like `/resume`.
+
+Styling knobs (edit `ExternalIconLink.module.css`):
+
+- Hover lift: `.link:hover { transform: translateY(-Npx); }`
+- Animation timing/easing: `.link { transition: ... 140ms ease; }`
+- Visual emphasis:
+  - Opacity: `.link { opacity: ... }`
+  - Border color: `.link { border: 1px solid ... }` and
+    `.link:hover { border-color: ... }`
+  - Optional text/icon color: `.link:hover { color: ... }`
+- Icon sizing: `.icon svg { width/height: ... }`
+- Spacing + shape: `.link { gap: ...; padding: ...; border-radius: ... }`
+- Keyboard focus ring: `.link:focus-visible { outline: ...; outline-offset: ... }`
+
+Icon color rule:
+
+- Icons use `fill="currentColor"` so they inherit the link’s CSS `color`.
+  Changing `.link`/`.link:hover { color: ... }` updates both text and icon.
+
+#### API client
 
 - `src/lib/api.ts` centralizes fetch logic.
 - `VITE_API_BASE_URL` controls whether requests go to an absolute API origin
