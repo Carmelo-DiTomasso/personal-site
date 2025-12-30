@@ -12,14 +12,15 @@ export function HomePage() {
   return (
     <div className={styles.page}>
       <HeroSection
-        tagline="Learning"
+        tagline="Welcome"
         locationLine="Computer Science @ Purdue"
-        primaryCtaHref="#projects"
-        primaryCtaLabel="See projects"
       />
 
       <main className={styles.main}>
-        <AboutSection shortBio="I'm Carmelo, a double major in CS + AI at Purdue. I'm working on building reliable web apps and services with security in mind. Most recently I built a Kotlin shipping microservice integrating FedEx/UPS/USPS and helped modernize a large Rails + React codebase. Right now I'm building this site as a real full-stack project (React + Django + Postgres, Docker-first) and I'm targeting software engineering roles that lean towards security and infrastructure." />
+        <AboutSection shortBio="
+          Welcome to my personal site!
+          The purpose of this site is for me to learn, practice, and demonstrate full-stack web development skills.
+        " />
         <ApiStatusSection />
       </main>
     </div>
