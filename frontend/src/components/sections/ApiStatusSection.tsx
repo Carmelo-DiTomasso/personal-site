@@ -1,76 +1,115 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { ApiError, apiGet } from '@/lib/api';
 import { StatusBadge } from '@/components/ui/StatusBadge/StatusBadge';
 import { Container } from '../layout/Container';
 import styles from './ApiStatusSection.module.css';
 
-// What we render in the UI depending on the fetch result.
 type ApiStatusState =
   | { kind: 'loading' }
   | { kind: 'ok' }
   | { kind: 'error'; message: string };
 
 type HealthResponse = { status: 'ok' };
+type AuthCheckResponse = { status: 'ok' };
 
-/**
- * ApiStatusSection
- * - Calls GET /api/health/ (proxied by Vite in local dev)
- * - Shows loading/ok/error
- */
+function badgeLabelFor(kind: ApiStatusState['kind']) {
+  return kind === 'loading' ? 'Loading...' : kind === 'ok' ? 'OK' : 'Error';
+}
+
+function StatusRow(props: {
+  label: string;
+  path: string;
+  state: ApiStatusState;
+}) {
+  const ok = props.state.kind === 'ok';
+  const loading = props.state.kind === 'loading';
+  const dotClass = loading
+    ? styles.dotLoading
+    : ok
+      ? styles.dotOk
+      : styles.dotError;
+
+  const text = loading ? 'Loading…' : ok ? 'OK' : 'Error';
+
+  return (
+    <div className={styles.row}>
+      <div className={styles.rowMain}>
+        <div className={styles.rowLeft}>
+          <span className={styles.rowLabel}>{props.label}:</span>
+          <code className={styles.code}>{props.path}</code>
+        </div>
+
+        <div className={styles.rowRight}>
+          <span className={`${styles.dot} ${dotClass}`} aria-hidden="true" />
+          <span className={styles.rowStatus}>{text}</span>
+        </div>
+      </div>
+
+      {props.state.kind === 'error' && (
+        <div className={styles.rowMeta} role="alert">
+          <span className={styles.errorText}>{props.state.message}</span>
+        </div>
+      )}
+    </div>
+  );
+}
+
 export function ApiStatusSection() {
-  // React state: drives what we render.
-  const [status, setStatus] = useState<ApiStatusState>({ kind: 'loading' });
+  const [health, setHealth] = useState<ApiStatusState>({ kind: 'loading' });
+  const [authCheck, setAuthCheck] = useState<ApiStatusState>({
+    kind: 'loading',
+  });
 
   useEffect(() => {
-    // AbortController lets us cancel fetch if the component unmounts.
     const abortController = new AbortController();
 
-    async function loadHealth() {
+    async function runCheck<T>(
+      path: string,
+      setState: (s: ApiStatusState) => void,
+    ) {
       try {
-        setStatus({ kind: 'loading' });
+        setState({ kind: 'loading' });
 
-        const data = await apiGet<HealthResponse>('/api/health/', {
-          signal: abortController.signal,
-        });
+        const data = await apiGet<T>(path, { signal: abortController.signal });
 
-        if (data.status === 'ok') {
-          setStatus({ kind: 'ok' });
+        if ((data as { status?: unknown }).status === 'ok') {
+          setState({ kind: 'ok' });
           return;
         }
 
-        setStatus({ kind: 'error', message: 'Unexpected response shape' });
+        setState({ kind: 'error', message: 'Unexpected response shape' });
       } catch (err) {
-        // Ignore abort errors (happens on unmount / fast refresh).
         if (err instanceof DOMException && err.name === 'AbortError') return;
 
         if (err instanceof ApiError) {
-          setStatus({
+          setState({
             kind: 'error',
             message: err.code ? `${err.code}: ${err.message}` : err.message,
           });
           return;
         }
 
-        setStatus({
+        setState({
           kind: 'error',
           message: err instanceof Error ? err.message : 'Unknown error',
         });
       }
     }
 
-    loadHealth();
+    runCheck<HealthResponse>('/api/health/', setHealth);
+    runCheck<AuthCheckResponse>('/api/auth-check/', setAuthCheck);
 
-    return () => {
-      abortController.abort();
-    };
+    return () => abortController.abort();
   }, []);
 
-  const statusLabel =
-    status.kind === 'loading'
-      ? 'Loading...'
-      : status.kind === 'ok'
-        ? 'OK'
-        : 'Error';
+  const overallKind = useMemo<ApiStatusState['kind']>(() => {
+    if (health.kind === 'loading' || authCheck.kind === 'loading')
+      return 'loading';
+    if (health.kind === 'error' || authCheck.kind === 'error') return 'error';
+    return 'ok';
+  }, [health.kind, authCheck.kind]);
+
+  const anyError = health.kind === 'error' || authCheck.kind === 'error';
 
   return (
     <section
@@ -83,36 +122,25 @@ export function ApiStatusSection() {
           <h2 className={styles.title} id="api-status-title">
             API Status
           </h2>
-          <StatusBadge kind={status.kind} label={statusLabel} />
+          <StatusBadge kind={overallKind} label={badgeLabelFor(overallKind)} />
         </div>
 
         <div className={styles.card}>
-          {status.kind === 'loading' && (
-            <p className={styles.text}>
-              Calling <code className={styles.code}>/api/health/</code>...
-            </p>
-          )}
+          <div className={styles.rows}>
+            <StatusRow label="Health" path="/api/health/" state={health} />
+            <StatusRow
+              label="Auth check"
+              path="/api/auth-check/"
+              state={authCheck}
+            />
+          </div>
 
-          {status.kind === 'ok' && (
-            <p className={styles.text}>
-              Backend is reachable.{' '}
-              <code className={styles.code}>/api/health/</code> returned{' '}
-              <code className={styles.code}>{'{ status: "ok" }'}</code>.
+          {anyError && (
+            <p className={styles.hint}>
+              If you're running locally, try{' '}
+              <code className={styles.code}>http://localhost:8000/admin/</code>{' '}
+              to log in, then refresh.
             </p>
-          )}
-
-          {status.kind === 'error' && (
-            <div className={styles.text}>
-              <p>
-                Backend health check failed:{' '}
-                <span className={styles.errorText}>{status.message}</span>
-              </p>
-              <p className={styles.hint}>
-                If you're running locally, try{' '}
-                <code className={styles.code}>.\scripts\dev.ps1</code> and
-                refresh.
-              </p>
-            </div>
           )}
         </div>
       </Container>
