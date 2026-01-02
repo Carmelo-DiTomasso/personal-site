@@ -9,17 +9,17 @@ import { AboutSection } from '../../components/sections/AboutSection';
  * Keeps data/structure here, and pushes UI rendering down to sections.
  */
 export function HomePage() {
+  const shortBio = `
+      Welcome to my personal site!
+      The purpose of this site is for me to learn, practice, and demonstrate full-stack web development skills.
+    `.trim();
+
   return (
     <div className={styles.page}>
       <HeroSection tagline="Welcome" locationLine="Computer Science @ Purdue" />
 
       <main className={styles.main}>
-        <AboutSection
-          shortBio="
-          Welcome to my personal site!
-          The purpose of this site is for me to learn, practice, and demonstrate full-stack web development skills.
-        "
-        />
+        <AboutSection shortBio={shortBio} />
         <ApiStatusSection />
       </main>
     </div>
