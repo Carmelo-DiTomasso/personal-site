@@ -18,8 +18,10 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
-IS_TESTING = os.getenv("PYTEST_CURRENT_TEST") is not None or any(
-    "pytest" in arg for arg in sys.argv
+IS_TESTING = (
+    os.getenv("PYTEST_CURRENT_TEST") is not None
+    or any("pytest" in arg for arg in sys.argv)
+    or any(arg == "test" for arg in sys.argv)
 )
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -28,7 +30,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = os.getenv("SECRET_KEY") or os.getenv("DJANGO_SECRET_KEY")
 
 # In CI/tests, use a throwaway key so Django can boot.
-if not SECRET_KEY and IS_TESTING:
+if not SECRET_KEY and (IS_TESTING or os.getenv("CI")):
     SECRET_KEY = "insecure-test-secret-key"
 
 if not SECRET_KEY:
