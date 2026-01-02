@@ -56,9 +56,7 @@ TURNSTILE_VERIFY_URL = os.getenv(
 )
 TURNSTILE_ENABLED = os.getenv("TURNSTILE_ENABLED", "1") == "1"
 
-# Fail fast in prod if Turnstile is enabled but misconfigured.
-if TURNSTILE_ENABLED and not DEBUG and not IS_TESTING and not TURNSTILE_SECRET_KEY:
-    raise RuntimeError("TURNSTILE_SECRET_KEY is not set (required in production)")
+TURNSTILE_CONFIGURED = bool(TURNSTILE_SECRET_KEY)
 
 # CORS settings
 CORS_ALLOWED_ORIGINS = csv_env("CORS_ALLOWED_ORIGINS")
