@@ -40,7 +40,7 @@ Step "Repo lint + format checks" {
 }
 
 Step "Backend tests" {
-  docker compose exec backend pytest
+  docker compose exec -e TURNSTILE_SECRET_KEY= backend pytest
 }
 
 Step "Frontend lint" {
