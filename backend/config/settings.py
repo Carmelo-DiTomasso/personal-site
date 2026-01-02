@@ -18,7 +18,11 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
-IS_TESTING = "test" in sys.argv
+IS_TESTING = (
+    os.getenv("PYTEST_CURRENT_TEST") is not None
+    or any("pytest" in arg for arg in sys.argv)
+    or any(arg == "test" for arg in sys.argv)
+)
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -26,7 +30,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = os.getenv("SECRET_KEY") or os.getenv("DJANGO_SECRET_KEY")
 
 # In CI/tests, use a throwaway key so Django can boot.
-if not SECRET_KEY and IS_TESTING:
+if not SECRET_KEY and (IS_TESTING or os.getenv("CI")):
     SECRET_KEY = "insecure-test-secret-key"
 
 if not SECRET_KEY:
@@ -55,10 +59,7 @@ TURNSTILE_VERIFY_URL = os.getenv(
     "https://challenges.cloudflare.com/turnstile/v0/siteverify",
 )
 TURNSTILE_ENABLED = os.getenv("TURNSTILE_ENABLED", "1") == "1"
-
-# Fail fast in prod if Turnstile is enabled but misconfigured.
-if TURNSTILE_ENABLED and not DEBUG and not IS_TESTING and not TURNSTILE_SECRET_KEY:
-    raise RuntimeError("TURNSTILE_SECRET_KEY is not set (required in production)")
+TURNSTILE_CONFIGURED = bool(TURNSTILE_SECRET_KEY)
 
 # CORS settings
 CORS_ALLOWED_ORIGINS = csv_env("CORS_ALLOWED_ORIGINS")
