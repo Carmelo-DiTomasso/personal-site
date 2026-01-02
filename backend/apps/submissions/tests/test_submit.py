@@ -1,11 +1,18 @@
 from unittest.mock import patch
 
-from django.test import TestCase
+from django.test import TestCase, override_settings
 from rest_framework.test import APIClient
 
 from apps.submissions.models import Submission
 
 
+# In tests, we want Turnstile to be "configured" so the view doesn't return 503/500,
+# and we patch verify_turnstile to always succeed (unless a test wants to assert failure).
+@override_settings(
+    TURNSTILE_ENABLED=True,
+    TURNSTILE_CONFIGURED=True,
+    TURNSTILE_SECRET_KEY="test-secret",
+)
 class TestSubmissions(TestCase):
     def setUp(self):
         self.client = APIClient()
@@ -25,46 +32,48 @@ class TestSubmissions(TestCase):
         return base
 
     @patch("apps.submissions.views.verify_turnstile")
-    @patch("apps.submissions.views.os.getenv")
-    def test_create_submission_ok(self, mock_getenv, mock_verify):
-        mock_getenv.side_effect = lambda name, default="": "test-secret" if name == "TURNSTILE_SECRET_KEY" else default
+    def test_create_submission_ok(self, mock_verify):
         mock_verify.return_value = type("R", (), {"success": True, "error_codes": []})()
 
-        resp = self.client.post("/api/submissions/", self._payload(), format="json", REMOTE_ADDR="1.2.3.4")
+        resp = self.client.post(
+            "/api/submissions/", self._payload(), format="json", REMOTE_ADDR="1.2.3.4"
+        )
         assert resp.status_code == 201
         assert Submission.objects.count() == 1
 
     @patch("apps.submissions.views.verify_turnstile")
-    @patch("apps.submissions.views.os.getenv")
-    def test_cooldown_blocks_second_submit_same_ip(self, mock_getenv, mock_verify):
-        mock_getenv.side_effect = lambda name, default="": "test-secret" if name == "TURNSTILE_SECRET_KEY" else default
+    def test_cooldown_blocks_second_submit_same_ip(self, mock_verify):
         mock_verify.return_value = type("R", (), {"success": True, "error_codes": []})()
 
-        resp1 = self.client.post("/api/submissions/", self._payload(), format="json", REMOTE_ADDR="1.2.3.4")
+        resp1 = self.client.post(
+            "/api/submissions/", self._payload(), format="json", REMOTE_ADDR="1.2.3.4"
+        )
         assert resp1.status_code == 201
 
-        resp2 = self.client.post("/api/submissions/", self._payload(), format="json", REMOTE_ADDR="1.2.3.4")
+        resp2 = self.client.post(
+            "/api/submissions/", self._payload(), format="json", REMOTE_ADDR="1.2.3.4"
+        )
         assert resp2.status_code == 429
         assert resp2.data["detail"] == "COOLDOWN"
 
     @patch("apps.submissions.views.verify_turnstile")
-    @patch("apps.submissions.views.os.getenv")
-    def test_dedupe_blocks_same_content_different_ip(self, mock_getenv, mock_verify):
-        mock_getenv.side_effect = lambda name, default="": "test-secret" if name == "TURNSTILE_SECRET_KEY" else default
+    def test_dedupe_blocks_same_content_different_ip(self, mock_verify):
         mock_verify.return_value = type("R", (), {"success": True, "error_codes": []})()
 
-        resp1 = self.client.post("/api/submissions/", self._payload(), format="json", REMOTE_ADDR="1.2.3.4")
+        resp1 = self.client.post(
+            "/api/submissions/", self._payload(), format="json", REMOTE_ADDR="1.2.3.4"
+        )
         assert resp1.status_code == 201
 
         # different IP so cooldown doesn't trigger; dedupe should
-        resp2 = self.client.post("/api/submissions/", self._payload(), format="json", REMOTE_ADDR="5.6.7.8")
+        resp2 = self.client.post(
+            "/api/submissions/", self._payload(), format="json", REMOTE_ADDR="5.6.7.8"
+        )
         assert resp2.status_code == 409
         assert resp2.data["detail"] == "DUPLICATE_SUBMISSION"
 
     @patch("apps.submissions.views.verify_turnstile")
-    @patch("apps.submissions.views.os.getenv")
-    def test_honeypot_drops_request(self, mock_getenv, mock_verify):
-        mock_getenv.side_effect = lambda name, default="": "test-secret" if name == "TURNSTILE_SECRET_KEY" else default
+    def test_honeypot_drops_request(self, mock_verify):
         mock_verify.return_value = type("R", (), {"success": True, "error_codes": []})()
 
         resp = self.client.post(
@@ -82,9 +91,7 @@ class TestSubmissions(TestCase):
         assert Submission.objects.count() == 0
 
     @patch("apps.submissions.views.verify_turnstile")
-    @patch("apps.submissions.views.os.getenv")
-    def test_feedback_allows_missing_name_email(self, mock_getenv, mock_verify):
-        mock_getenv.side_effect = lambda name, default="": "test-secret" if name == "TURNSTILE_SECRET_KEY" else default
+    def test_feedback_allows_missing_name_email(self, mock_verify):
         mock_verify.return_value = type("R", (), {"success": True, "error_codes": []})()
 
         payload = {
@@ -93,5 +100,7 @@ class TestSubmissions(TestCase):
             "turnstile_token": "token",
             "honeypot": "",
         }
-        resp = self.client.post("/api/submissions/", payload, format="json", REMOTE_ADDR="1.2.3.4")
+        resp = self.client.post(
+            "/api/submissions/", payload, format="json", REMOTE_ADDR="1.2.3.4"
+        )
         assert resp.status_code == 201
