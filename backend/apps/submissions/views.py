@@ -3,6 +3,7 @@ from datetime import timedelta
 from hashlib import sha256
 
 from django.utils import timezone
+from django.conf import settings
 from rest_framework import status
 from rest_framework.permissions import AllowAny
 from rest_framework.response import Response
@@ -92,25 +93,43 @@ class SubmissionCreateView(APIView):
         # 2) Dedupe: same email + same content within 10 minutes
         window_start = now - timedelta(seconds=DEDUPE_WINDOW_SECONDS)
         if email:
-            recent_dupe = Submission.objects.filter(
-                email=email,
-                content_hash=content_hash,
-                created_at__gte=window_start,
-            ).order_by("-created_at").only("created_at").first()
+            recent_dupe = (
+                Submission.objects.filter(
+                    email=email,
+                    content_hash=content_hash,
+                    created_at__gte=window_start,
+                )
+                .order_by("-created_at")
+                .only("created_at")
+                .first()
+            )
         else:
             recent_dupe = None
             if remoteip:
-                recent_dupe = Submission.objects.filter(
-                    ip_address=remoteip,
-                    content_hash=content_hash,
-                    created_at__gte=window_start,
-                ).order_by("-created_at").only("created_at").first()
+                recent_dupe = (
+                    Submission.objects.filter(
+                        ip_address=remoteip,
+                        content_hash=content_hash,
+                        created_at__gte=window_start,
+                    )
+                    .order_by("-created_at")
+                    .only("created_at")
+                    .first()
+                )
         if recent_dupe:
             elapsed = (now - recent_dupe.created_at).total_seconds()
             retry_after = int(max(0, DEDUPE_WINDOW_SECONDS - elapsed))
             return Response(
                 {"detail": "DUPLICATE_SUBMISSION", "retry_after_seconds": retry_after},
                 status=status.HTTP_409_CONFLICT,
+            )
+
+        if settings.TURNSTILE_ENABLED and not getattr(
+            settings, "TURNSTILE_CONFIGURED", False
+        ):
+            return Response(
+                {"detail": "CAPTCHA verification is not configured on the server."},
+                status=status.HTTP_503_SERVICE_UNAVAILABLE,
             )
 
         secret_key = os.getenv("TURNSTILE_SECRET_KEY", "")
