@@ -1,10 +1,26 @@
 import { SimplePage } from '../../shared/SimplePage';
+import { GameShell } from '../../../components/games/GameShell/GameShell';
+import { HowToPlay } from '../../../components/games/HowToPlay/HowToPlay';
 
 export function SudokuPage() {
   return (
-    <SimplePage title="Sudoku">
+    <SimplePage title="">
       <div data-testid="sudoku-page">
-        <p>Coming soon.</p>
+        <GameShell
+          title="Sudoku"
+          description="Mini Sudoku: fill the grid with valid numbers."
+          howToPlay={
+            <HowToPlay>
+              <ul>
+                <li>Fill empty cells with numbers.</li>
+                <li>No duplicates are allowed in any row or column.</li>
+                <li>Smaller sub-grids also must not contain duplicates.</li>
+              </ul>
+            </HowToPlay>
+          }
+        >
+          <p>Game UI coming soon.</p>
+        </GameShell>
       </div>
     </SimplePage>
   );

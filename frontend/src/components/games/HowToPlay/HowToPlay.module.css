@@ -1,0 +1,40 @@
+.root {
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 1rem;
+  padding: 0.75rem 1rem;
+}
+
+.summary {
+  cursor: pointer;
+  -webkit-user-select: none;
+  user-select: none;
+  font-weight: 600;
+  list-style: none;
+}
+
+.summary::-webkit-details-marker {
+  display: none;
+}
+
+.summary::after {
+  content: '▾';
+  float: right;
+  opacity: 0.85;
+}
+
+.root[open] .summary::after {
+  content: '▴';
+}
+
+.body {
+  margin-top: 0.75rem;
+  opacity: 0.95;
+}
+
+.body > :first-child {
+  margin-top: 0;
+}
+
+.body > :last-child {
+  margin-bottom: 0;
+}
