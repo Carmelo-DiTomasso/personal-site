@@ -1,0 +1,134 @@
+.boardWrap {
+  display: flex;
+  justify-content: center;
+}
+
+.board {
+  display: grid;
+  gap: 0.3rem;
+  justify-content: center;
+}
+
+.cols6 {
+  grid-template-columns: repeat(6, 3.25rem);
+  grid-auto-rows: 3.25rem;
+}
+
+@media (max-width: 520px) {
+  .cols6 {
+    grid-template-columns: repeat(6, 2.75rem);
+    grid-auto-rows: 2.75rem;
+  }
+}
+
+.cell {
+  position: relative;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 0.65rem;
+  background: transparent;
+  color: inherit;
+  cursor: pointer;
+  font: inherit;
+  display: grid;
+  place-items: center;
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+.cell:hover,
+.cell:focus-visible {
+  border-color: rgba(255, 255, 255, 0.24);
+  outline: none;
+}
+
+.blocked {
+  border-radius: 0.65rem;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.inPath {
+  border-color: rgba(255, 255, 255, 0.18);
+}
+
+.head {
+  outline: 2px solid rgba(255, 255, 255, 0.55);
+  outline-offset: 2px;
+}
+
+.candidate {
+  border-color: rgba(120, 220, 140, 0.6);
+}
+
+/* Zip “track” */
+.track {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+.trackCenter {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 70%;
+  height: 70%;
+  transform: translate(-50%, -50%);
+  border-radius: 0.55rem;
+  background: rgba(70, 200, 110, 0.35);
+}
+
+.trackSeg {
+  position: absolute;
+  background: rgba(70, 200, 110, 0.35);
+}
+
+.segUp {
+  left: 50%;
+  top: 0.15rem;
+  width: 38%;
+  height: 55%;
+  transform: translateX(-50%);
+  border-radius: 0.4rem;
+}
+
+.segDown {
+  left: 50%;
+  bottom: 0.15rem;
+  width: 38%;
+  height: 55%;
+  transform: translateX(-50%);
+  border-radius: 0.4rem;
+}
+
+.segLeft {
+  left: 0.15rem;
+  top: 50%;
+  width: 55%;
+  height: 38%;
+  transform: translateY(-50%);
+  border-radius: 0.4rem;
+}
+
+.segRight {
+  right: 0.15rem;
+  top: 50%;
+  width: 55%;
+  height: 38%;
+  transform: translateY(-50%);
+  border-radius: 0.4rem;
+}
+
+/* Waypoint circles */
+.number {
+  position: relative;
+  z-index: 1;
+  width: 1.85rem;
+  height: 1.85rem;
+  border-radius: 999px;
+  display: grid;
+  place-items: center;
+  font-weight: 800;
+  border: 1px solid rgba(255, 255, 255, 0.22);
+  background: rgba(0, 0, 0, 0.35);
+}

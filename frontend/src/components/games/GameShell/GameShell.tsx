@@ -11,6 +11,7 @@ type Props = {
   status?: ReactNode;
   howToPlay?: ReactNode;
   children: ReactNode;
+  controlsPlacement?: 'header' | 'belowHowTo';
 };
 
 export function GameShell({
@@ -22,8 +23,32 @@ export function GameShell({
   status,
   howToPlay,
   children,
+  controlsPlacement = 'header',
 }: Props) {
   const hasDefaultControls = Boolean(onNewPuzzle || onReset);
+
+  const controlsNode = controls ? (
+    <div className={styles.controls}>{controls}</div>
+  ) : hasDefaultControls ? (
+    <div className={styles.controls} aria-label="Game controls">
+      <GameButton
+        type="button"
+        onClick={onNewPuzzle}
+        disabled={!onNewPuzzle}
+        aria-label="New puzzle"
+      >
+        New puzzle
+      </GameButton>
+      <GameButton
+        type="button"
+        onClick={onReset}
+        disabled={!onReset}
+        aria-label="Reset puzzle"
+      >
+        Reset
+      </GameButton>
+    </div>
+  ) : null;
 
   return (
     <div className={styles.root}>
@@ -35,31 +60,12 @@ export function GameShell({
           ) : null}
         </div>
 
-        {controls ? (
-          <div className={styles.controls}>{controls}</div>
-        ) : hasDefaultControls ? (
-          <div className={styles.controls} aria-label="Game controls">
-            <GameButton
-              type="button"
-              onClick={onNewPuzzle}
-              disabled={!onNewPuzzle}
-              aria-label="New puzzle"
-            >
-              New puzzle
-            </GameButton>
-            <GameButton
-              type="button"
-              onClick={onReset}
-              disabled={!onReset}
-              aria-label="Reset puzzle"
-            >
-              Reset
-            </GameButton>
-          </div>
-        ) : null}
+        {controlsPlacement === 'header' ? controlsNode : null}
       </header>
 
       {howToPlay ? <div className={styles.howToPlay}>{howToPlay}</div> : null}
+
+      {controlsPlacement === 'belowHowTo' ? controlsNode : null}
 
       {status ? <div className={styles.status}>{status}</div> : null}
 
