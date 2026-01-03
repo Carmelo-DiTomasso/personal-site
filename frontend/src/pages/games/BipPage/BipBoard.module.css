@@ -1,6 +1,7 @@
 .boardWrap {
   display: flex;
   justify-content: center;
+  touch-action: none; /* important for drag on touch devices too */
 }
 
 .board {

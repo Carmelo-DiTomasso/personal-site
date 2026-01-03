@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import { SimplePage } from '../../shared/SimplePage';
 import { GameShell } from '../../../components/games/GameShell/GameShell';
 import { HowToPlay } from '../../../components/games/HowToPlay/HowToPlay';
@@ -24,17 +24,54 @@ type ZipPuzzleConfig = {
   size: number;
   blockedCells: Pos[];
   solutionPath: Pos[]; // covers every playable cell exactly once
-  waypointStepIndexes: number[]; // indices into solutionPath
 };
 
-function makePuzzle(config: ZipPuzzleConfig): ZipPuzzle {
+function clamp(value: number, min: number, max: number): number {
+  return Math.min(max, Math.max(min, value));
+}
+
+function randomWaypointCount(solutionLen: number): number {
+  const min = 5;
+  const max = Math.min(30, solutionLen);
+  return min + Math.floor(Math.random() * (max - min + 1));
+}
+
+function chooseWaypointIndices(solutionLen: number, count: number): number[] {
+  const last = solutionLen - 1;
+  const clampedCount = clamp(count, 5, Math.min(30, solutionLen));
+
+  const indices = new Set<number>();
+  indices.add(0);
+  indices.add(last);
+
+  for (let i = 1; i <= clampedCount - 2; i += 1) {
+    const base = Math.round((i * last) / (clampedCount - 1));
+    const jitter = Math.floor(Math.random() * 3) - 1; // -1, 0, 1
+    let candidate = clamp(base + jitter, 1, last - 1);
+
+    // ensure uniqueness
+    while (indices.has(candidate)) {
+      candidate = candidate < last - 1 ? candidate + 1 : candidate - 1;
+    }
+    indices.add(candidate);
+  }
+
+  return Array.from(indices).sort((a, b) => a - b);
+}
+
+function makePuzzleFromConfig(
+  config: ZipPuzzleConfig,
+  waypointCount: number,
+): ZipPuzzle {
+  const indices = chooseWaypointIndices(
+    config.solutionPath.length,
+    waypointCount,
+  );
   return {
-    id: config.id,
+    id: `${config.id}-w${waypointCount}-${indices.join('-')}`, // unique per waypoint selection
     size: config.size,
     blockedCells: config.blockedCells,
-    waypointsInOrder: config.waypointStepIndexes.map(
-      (idx) => config.solutionPath[idx],
-    ),
+    waypointsInOrder: indices.map((i) => config.solutionPath[i]),
   };
 }
 
@@ -42,7 +79,7 @@ function totalPlayableCells(puzzle: ZipPuzzle): number {
   return puzzle.size * puzzle.size - puzzle.blockedCells.length;
 }
 
-function nextExpectedNumber(puzzle: ZipPuzzle, pathKeys: string[]): number {
+function computeExpectedNext(puzzle: ZipPuzzle, pathKeys: string[]): number {
   const numberByKey = new Map<string, number>();
   puzzle.waypointsInOrder.forEach((pos, idx) =>
     numberByKey.set(keyFromPos(pos), idx + 1),
@@ -59,16 +96,14 @@ function nextExpectedNumber(puzzle: ZipPuzzle, pathKeys: string[]): number {
 function isSolved(puzzle: ZipPuzzle, pathKeys: string[]): boolean {
   const playableCount = totalPlayableCells(puzzle);
   const lastNumber = puzzle.waypointsInOrder.length;
-
   if (pathKeys.length !== playableCount) return false;
 
-  const blockedSet = new Set<string>(puzzle.blockedCells.map(keyFromPos));
   const startKey = keyFromPos(puzzle.waypointsInOrder[0]);
   const endKey = keyFromPos(puzzle.waypointsInOrder[lastNumber - 1]);
-
   if (pathKeys[0] !== startKey) return false;
   if (pathKeys[pathKeys.length - 1] !== endKey) return false;
 
+  const blockedSet = new Set<string>(puzzle.blockedCells.map(keyFromPos));
   const numberByKey = new Map<string, number>();
   puzzle.waypointsInOrder.forEach((pos, idx) =>
     numberByKey.set(keyFromPos(pos), idx + 1),
@@ -100,14 +135,12 @@ function isSolved(puzzle: ZipPuzzle, pathKeys: string[]): boolean {
   return expected === lastNumber + 1;
 }
 
-// Two solvable puzzles with different start/end and different waypoint counts.
-// (No blocked tiles yet, but the model supports them.)
+// Two solvable base paths (no walls). Waypoint count is randomized 5–30.
 const PUZZLE_CONFIGS: ZipPuzzleConfig[] = [
   {
     id: 'zip-a',
     size: 6,
     blockedCells: [],
-    // Start (2,2), End (4,3) — interior endpoints.
     solutionPath: [
       { row: 2, col: 2 },
       { row: 2, col: 3 },
@@ -146,14 +179,11 @@ const PUZZLE_CONFIGS: ZipPuzzleConfig[] = [
       { row: 4, col: 4 },
       { row: 4, col: 3 },
     ],
-    // 12 waypoints (not required, but common)
-    waypointStepIndexes: [0, 3, 6, 10, 14, 18, 21, 24, 27, 30, 33, 35],
   },
   {
     id: 'zip-b',
     size: 6,
     blockedCells: [],
-    // Start (1,3), End (2,5) — not top/bottom.
     solutionPath: [
       { row: 1, col: 3 },
       { row: 0, col: 3 },
@@ -192,26 +222,42 @@ const PUZZLE_CONFIGS: ZipPuzzleConfig[] = [
       { row: 3, col: 5 },
       { row: 2, col: 5 },
     ],
-    // 9 waypoints (varies by puzzle)
-    waypointStepIndexes: [0, 4, 8, 12, 16, 20, 24, 28, 35],
   },
 ];
 
-const PUZZLES: ZipPuzzle[] = PUZZLE_CONFIGS.map(makePuzzle);
-
 export function BipPage() {
-  const [puzzleIndex, setPuzzleIndex] = useState(0);
-  const puzzle = PUZZLES[puzzleIndex];
+  const focusRef = useRef<HTMLDivElement | null>(null);
 
-  const startKey = keyFromPos(puzzle.waypointsInOrder[0]);
-  const [pathKeys, setPathKeys] = useState<string[]>(() => [startKey]);
+  const initialConfigIndex = 0;
+  const initialWaypointCount = randomWaypointCount(
+    PUZZLE_CONFIGS[0].solutionPath.length,
+  );
+  const initialPuzzle = makePuzzleFromConfig(
+    PUZZLE_CONFIGS[0],
+    initialWaypointCount,
+  );
 
-  const playableCount = totalPlayableCells(puzzle);
-  const lastNumber = puzzle.waypointsInOrder.length;
+  const [configIndex, setConfigIndex] = useState(initialConfigIndex);
+  const [waypointCount, setWaypointCount] = useState(initialWaypointCount);
+  const [puzzleIdNonce, setPuzzleIdNonce] = useState(() => 0);
 
-  const blockedSet = useMemo(() => {
-    return new Set<string>(puzzle.blockedCells.map(keyFromPos));
-  }, [puzzle.blockedCells]);
+  const puzzle = useMemo(() => {
+    // nonce forces a rebuild for “New puzzle” even if config index repeats
+    const base = makePuzzleFromConfig(
+      PUZZLE_CONFIGS[configIndex],
+      waypointCount,
+    );
+    return { ...base, id: `${base.id}-n${puzzleIdNonce}` };
+  }, [configIndex, waypointCount, puzzleIdNonce]);
+
+  const [pathKeys, setPathKeys] = useState<string[]>(() => [
+    keyFromPos(initialPuzzle.waypointsInOrder[0]),
+  ]);
+
+  const blockedSet = useMemo(
+    () => new Set(puzzle.blockedCells.map(keyFromPos)),
+    [puzzle.blockedCells],
+  );
 
   const numberByKey = useMemo(() => {
     const map = new Map<string, number>();
@@ -221,21 +267,78 @@ export function BipPage() {
     return map;
   }, [puzzle.waypointsInOrder]);
 
+  const playableCount = totalPlayableCells(puzzle);
+  const lastNumber = puzzle.waypointsInOrder.length;
+
   const expectedNext = useMemo(
-    () => nextExpectedNumber(puzzle, pathKeys),
+    () => computeExpectedNext(puzzle, pathKeys),
     [puzzle, pathKeys],
   );
   const solved = useMemo(() => isSolved(puzzle, pathKeys), [puzzle, pathKeys]);
 
+  useEffect(() => {
+    // Focus the keyboard zone when puzzle changes.
+    focusRef.current?.focus();
+  }, [puzzle.id]);
+
+  function resetToStart(nextPuzzle: ZipPuzzle) {
+    setPathKeys([keyFromPos(nextPuzzle.waypointsInOrder[0])]);
+  }
+
   function handleReset() {
-    setPathKeys([keyFromPos(puzzle.waypointsInOrder[0])]);
+    resetToStart(puzzle);
   }
 
   function handleNewPuzzle() {
-    const nextIndex = (puzzleIndex + 1) % PUZZLES.length;
-    const nextPuzzle = PUZZLES[nextIndex];
-    setPuzzleIndex(nextIndex);
-    setPathKeys([keyFromPos(nextPuzzle.waypointsInOrder[0])]);
+    const nextIndex = (configIndex + 1) % PUZZLE_CONFIGS.length;
+    const nextCount = randomWaypointCount(
+      PUZZLE_CONFIGS[nextIndex].solutionPath.length,
+    );
+    const nextPuzzle = makePuzzleFromConfig(
+      PUZZLE_CONFIGS[nextIndex],
+      nextCount,
+    );
+
+    setConfigIndex(nextIndex);
+    setWaypointCount(nextCount);
+    setPuzzleIdNonce((n) => n + 1);
+    resetToStart(nextPuzzle);
+  }
+
+  function handleCellAction(pos: Pos) {
+    const cellKey = keyFromPos(pos);
+
+    setPathKeys((prev) => {
+      if (blockedSet.has(cellKey)) return prev;
+
+      // Backtrack to any cell already in the path
+      const existingIndex = prev.indexOf(cellKey);
+      if (existingIndex >= 0) return prev.slice(0, existingIndex + 1);
+
+      // Don’t extend if already full
+      if (prev.length >= playableCount) return prev;
+
+      const headKey = prev[prev.length - 1];
+      const headPos = posFromKey(headKey);
+
+      // Must extend from head and be adjacent
+      if (!isAdjacent(headPos, pos)) return prev;
+
+      // Cannot revisit
+      if (prev.includes(cellKey)) return prev;
+
+      // Zip: once you’ve reached the last number, you must be done (end at N)
+      const headNumber = numberByKey.get(headKey);
+      if (headNumber === lastNumber && prev.length < playableCount) return prev;
+
+      // Waypoint ordering must be respected
+      const expected = computeExpectedNext(puzzle, prev);
+      const steppedNumber = numberByKey.get(cellKey);
+      if (steppedNumber !== undefined && steppedNumber !== expected)
+        return prev;
+
+      return [...prev, cellKey];
+    });
   }
 
   const candidateKeys = useMemo(() => {
@@ -246,6 +349,8 @@ export function BipPage() {
     const headNumber = numberByKey.get(headKey);
     if (headNumber === lastNumber && pathKeys.length < playableCount)
       return keys;
+
+    const expected = computeExpectedNext(puzzle, pathKeys);
 
     const deltas = [
       { row: -1, col: 0 },
@@ -269,54 +374,40 @@ export function BipPage() {
       if (pathKeys.includes(k)) continue;
 
       const steppedNumber = numberByKey.get(k);
-      if (steppedNumber !== undefined && steppedNumber !== expectedNext)
-        continue;
+      if (steppedNumber !== undefined && steppedNumber !== expected) continue;
 
       keys.push(k);
     }
 
     return keys;
-  }, [
-    blockedSet,
-    expectedNext,
-    lastNumber,
-    numberByKey,
-    pathKeys,
-    playableCount,
-    puzzle.size,
-  ]);
+  }, [blockedSet, lastNumber, numberByKey, pathKeys, playableCount, puzzle]);
 
-  function handleCellAction(pos: Pos) {
-    const cellKey = keyFromPos(pos);
+  function handleKeyDown(e: React.KeyboardEvent<HTMLDivElement>) {
+    const key = e.key;
+    if (!key.startsWith('Arrow')) return;
 
-    setPathKeys((prev) => {
-      if (blockedSet.has(cellKey)) return prev;
+    e.preventDefault();
 
-      // Backtrack
-      const existingIndex = prev.indexOf(cellKey);
-      if (existingIndex >= 0) return prev.slice(0, existingIndex + 1);
+    const headPos = posFromKey(pathKeys[pathKeys.length - 1]);
+    const delta =
+      key === 'ArrowUp'
+        ? { row: -1, col: 0 }
+        : key === 'ArrowDown'
+          ? { row: 1, col: 0 }
+          : key === 'ArrowLeft'
+            ? { row: 0, col: -1 }
+            : { row: 0, col: 1 };
 
-      // Must extend from head, adjacent only
-      if (prev.length >= playableCount) return prev;
+    const next = { row: headPos.row + delta.row, col: headPos.col + delta.col };
+    if (
+      next.row < 0 ||
+      next.row >= puzzle.size ||
+      next.col < 0 ||
+      next.col >= puzzle.size
+    )
+      return;
 
-      const headKey = prev[prev.length - 1];
-      const headPos = posFromKey(headKey);
-      if (!isAdjacent(headPos, pos)) return prev;
-
-      // Cannot revisit
-      if (prev.includes(cellKey)) return prev;
-
-      // If stepping onto a waypoint, must be the next expected number
-      const steppedNumber = numberByKey.get(cellKey);
-      if (steppedNumber !== undefined && steppedNumber !== expectedNext)
-        return prev;
-
-      // If already at last number and not complete, don’t allow extending past it
-      const headNumber = numberByKey.get(headKey);
-      if (headNumber === lastNumber && prev.length < playableCount) return prev;
-
-      return [...prev, cellKey];
-    });
+    handleCellAction(next);
   }
 
   const status = (
@@ -347,24 +438,34 @@ export function BipPage() {
                   Start at <strong>1</strong> and end at{' '}
                   <strong>{lastNumber}</strong>.
                 </li>
-                <li>Move up/down/left/right only (no diagonals).</li>
                 <li>
-                  Visit numbered waypoints in order: 1 → 2 → … → {lastNumber}.
+                  Fill <strong>every cell exactly once</strong>.
+                </li>
+                <li>Move up/down/left/right only.</li>
+                <li>
+                  Use <strong>drag + hold</strong> to draw, or use{' '}
+                  <strong>arrow keys</strong> (click board to focus).
                 </li>
                 <li>
-                  Fill <strong>every playable cell exactly once</strong>.
+                  Click a cell in your path to <strong>backtrack</strong> to it.
                 </li>
-                <li>Drag to draw; click a cell in your path to backtrack.</li>
               </ul>
             </HowToPlay>
           }
         >
-          <BipBoard
-            puzzle={puzzle}
-            pathKeys={pathKeys}
-            candidateKeys={candidateKeys}
-            onCellAction={handleCellAction}
-          />
+          <div
+            ref={focusRef}
+            tabIndex={0}
+            onKeyDown={handleKeyDown}
+            aria-label="Bip board keyboard controls"
+          >
+            <BipBoard
+              puzzle={puzzle}
+              pathKeys={pathKeys}
+              candidateKeys={candidateKeys}
+              onCellAction={handleCellAction}
+            />
+          </div>
         </GameShell>
       </div>
     </SimplePage>

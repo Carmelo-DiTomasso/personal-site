@@ -37,17 +37,28 @@ function direction(
   return null;
 }
 
+function closestCellButton(el: Element | null): HTMLButtonElement | null {
+  if (!el) return null;
+  if (el instanceof HTMLButtonElement && el.dataset.cellKey) return el;
+  return (
+    (el.closest('button[data-cell-key]') as HTMLButtonElement | null) ?? null
+  );
+}
+
 export function BipBoard({
   puzzle,
   pathKeys,
   candidateKeys,
   onCellAction,
 }: Props) {
+  const boardRef = useRef<HTMLDivElement | null>(null);
   const isDrawingRef = useRef(false);
+  const lastKeyRef = useRef<string | null>(null);
 
-  const blockedSet = useMemo(() => {
-    return new Set<string>(puzzle.blockedCells.map(keyFromPos));
-  }, [puzzle.blockedCells]);
+  const blockedSet = useMemo(
+    () => new Set(puzzle.blockedCells.map(keyFromPos)),
+    [puzzle.blockedCells],
+  );
 
   const numberByKey = useMemo(() => {
     const map = new Map<string, number>();
@@ -65,14 +76,66 @@ export function BipBoard({
 
   const pathSet = useMemo(() => new Set(pathKeys), [pathKeys]);
   const candidateSet = useMemo(() => new Set(candidateKeys), [candidateKeys]);
-
   const headKey = pathKeys[pathKeys.length - 1];
+
+  function startDrawFromEvent(e: React.PointerEvent<HTMLDivElement>) {
+    const button = closestCellButton(e.target as Element);
+    if (!button) return;
+
+    const cellKey = button.dataset.cellKey;
+    if (!cellKey) return;
+
+    isDrawingRef.current = true;
+    lastKeyRef.current = cellKey;
+
+    const [rowStr, colStr] = cellKey.split(',');
+    onCellAction({ row: Number(rowStr), col: Number(colStr) });
+
+    try {
+      boardRef.current?.setPointerCapture(e.pointerId);
+    } catch {
+      // ignore
+    }
+  }
+
+  function continueDrawFromEvent(e: React.PointerEvent<HTMLDivElement>) {
+    if (!isDrawingRef.current) return;
+    if (e.buttons !== 1) return;
+
+    const el = document.elementFromPoint(e.clientX, e.clientY);
+    const button = closestCellButton(el);
+    if (!button) return;
+
+    const cellKey = button.dataset.cellKey;
+    if (!cellKey) return;
+    if (cellKey === lastKeyRef.current) return;
+
+    lastKeyRef.current = cellKey;
+    const [rowStr, colStr] = cellKey.split(',');
+    onCellAction({ row: Number(rowStr), col: Number(colStr) });
+  }
+
+  function endDraw() {
+    isDrawingRef.current = false;
+    lastKeyRef.current = null;
+  }
 
   return (
     <div
       className={styles.boardWrap}
       data-testid="zip-board-wrap"
       aria-label="Zip board"
+      ref={boardRef}
+      onPointerDown={(e) => {
+        e.preventDefault();
+        startDrawFromEvent(e);
+      }}
+      onPointerMove={(e) => {
+        e.preventDefault();
+        continueDrawFromEvent(e);
+      }}
+      onPointerUp={() => endDraw()}
+      onPointerCancel={() => endDraw()}
     >
       <div
         className={`${styles.board} ${styles.cols6}`}
@@ -93,7 +156,7 @@ export function BipBoard({
 
           const pathIndex = pathIndexByKey.get(cellKey);
 
-          // Connection segments (Zip “track” feel)
+          // Zip “track” connections
           let connUp = false;
           let connDown = false;
           let connLeft = false;
@@ -147,34 +210,14 @@ export function BipBoard({
               key={cellKey}
               type="button"
               className={className}
+              data-cell-key={cellKey}
               aria-label={
                 numberHere
                   ? `Row ${row + 1}, Column ${col + 1}, Number ${numberHere}`
                   : `Row ${row + 1}, Column ${col + 1}`
               }
-              onPointerDown={(e) => {
-                e.preventDefault();
-                isDrawingRef.current = true;
-                onCellAction(pos);
-                try {
-                  (e.currentTarget as HTMLElement).setPointerCapture(
-                    e.pointerId,
-                  );
-                } catch {
-                  // ignore
-                }
-              }}
-              onPointerEnter={(e) => {
-                if (!isDrawingRef.current) return;
-                if (e.buttons !== 1) return;
-                onCellAction(pos);
-              }}
-              onPointerUp={() => {
-                isDrawingRef.current = false;
-              }}
-              onPointerCancel={() => {
-                isDrawingRef.current = false;
-              }}
+              // Still allow plain click (non-drag)
+              onClick={() => onCellAction(pos)}
             >
               {isInPath ? (
                 <span className={styles.track} aria-hidden="true">
