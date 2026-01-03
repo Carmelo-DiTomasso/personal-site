@@ -6,15 +6,14 @@ export type Pos = { row: number; col: number };
 export type ZipPuzzle = {
   id: string;
   size: number;
-  blockedCells: Pos[]; // supports “hole tiles”
+  blockedCells: Pos[]; // walls (entire squares)
   waypointsInOrder: Pos[]; // number i is at waypointsInOrder[i-1]
-  walls: Array<{ a: Pos; b: Pos }>; // barrier between adjacent cells
 };
 
 type Props = {
   puzzle: ZipPuzzle;
   pathKeys: string[];
-  candidateKeys: string[]; // legal next moves from head
+  candidateKeys: string[];
   onCellAction: (pos: Pos) => void;
 };
 
@@ -38,12 +37,6 @@ function direction(
   return null;
 }
 
-function edgeKey(a: Pos, b: Pos): string {
-  const aKey = keyFromPos(a);
-  const bKey = keyFromPos(b);
-  return aKey < bKey ? `${aKey}|${bKey}` : `${bKey}|${aKey}`;
-}
-
 export function BipBoard({
   puzzle,
   pathKeys,
@@ -64,12 +57,6 @@ export function BipBoard({
     );
     return map;
   }, [puzzle.waypointsInOrder]);
-
-  const wallSet = useMemo(() => {
-    const set = new Set<string>();
-    for (const w of puzzle.walls) set.add(edgeKey(w.a, w.b));
-    return set;
-  }, [puzzle.walls]);
 
   const pathIndexByKey = useMemo(() => {
     const map = new Map<string, number>();
@@ -97,12 +84,12 @@ export function BipBoard({
           const pos = { row, col };
           const cellKey = keyFromPos(pos);
 
-          const isBlocked = blockedSet.has(cellKey);
-          if (isBlocked) {
+          const isWall = blockedSet.has(cellKey);
+          if (isWall) {
             return (
               <div
                 key={cellKey}
-                className={styles.blocked}
+                className={styles.wallTile}
                 aria-hidden="true"
               />
             );
@@ -115,7 +102,6 @@ export function BipBoard({
 
           const pathIndex = pathIndexByKey.get(cellKey);
 
-          // Track connections (Zip “path” feel)
           let connUp = false;
           let connDown = false;
           let connLeft = false;
@@ -134,6 +120,7 @@ export function BipBoard({
               if (dir === 'left') connLeft = true;
               if (dir === 'right') connRight = true;
             }
+
             if (nextKey) {
               const nextPos = posFromKey(nextKey);
               const dir = direction(pos, nextPos);
@@ -144,19 +131,11 @@ export function BipBoard({
             }
           }
 
-          // Draw each wall once (top + left) so we don’t double-render
-          const hasTopWall =
-            row > 0 && wallSet.has(edgeKey(pos, { row: row - 1, col }));
-          const hasLeftWall =
-            col > 0 && wallSet.has(edgeKey(pos, { row, col: col - 1 }));
-
           const className = [
             styles.cell,
             isInPath ? styles.inPath : '',
             isHead ? styles.head : '',
             isCandidate ? styles.candidate : '',
-            hasTopWall ? styles.wallTop : '',
-            hasLeftWall ? styles.wallLeft : '',
           ]
             .filter(Boolean)
             .join(' ');
@@ -184,7 +163,6 @@ export function BipBoard({
                 }
               }}
               onPointerEnter={() => {
-                // drag+hold: rely on our internal flag, not `buttons`
                 if (!isDrawingRef.current) return;
                 onCellAction(pos);
               }}

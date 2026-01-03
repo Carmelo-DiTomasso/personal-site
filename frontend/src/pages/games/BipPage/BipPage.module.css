@@ -1,0 +1,63 @@
+.solvedOverlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.45);
+  display: grid;
+  place-items: center;
+  z-index: 50;
+}
+
+.solvedModal {
+  width: min(520px, calc(100% - 2rem));
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  border-radius: 1rem;
+  background: rgba(20, 20, 20, 0.95);
+  padding: 1rem;
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.5);
+}
+
+.titleRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+}
+
+.title {
+  margin: 0;
+  font-size: 1.1rem;
+  font-weight: 800;
+}
+
+.closeBtn {
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  background: transparent;
+  color: inherit;
+  border-radius: 0.75rem;
+  padding: 0.35rem 0.6rem;
+  cursor: pointer;
+}
+
+.closeBtn:hover {
+  border-color: rgba(255, 255, 255, 0.24);
+}
+
+.body {
+  margin-top: 1rem;
+  opacity: 0.92;
+}
+
+.actions {
+  margin-top: 0.9rem;
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.5rem;
+}
+
+.boardMeta {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  margin: 0.75rem 0 0.5rem;
+  opacity: 0.9;
+}

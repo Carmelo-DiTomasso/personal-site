@@ -1,11 +1,17 @@
 .boardWrap {
-  display: flex;
-  justify-content: center;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 1.25rem;
+
+  /* key fix: keep border away from grid */
+  padding: 1rem;
+
+  /* avoid any overlay pseudo-elements sitting on top */
+  position: relative;
 }
 
 .board {
   display: grid;
-  gap: 0.1rem;
+  gap: 0.2rem;
   justify-content: center;
 }
 
@@ -32,8 +38,8 @@
   font: inherit;
   display: grid;
   place-items: center;
-  user-select: none;
   -webkit-user-select: none;
+  user-select: none;
 }
 
 .cell:hover,
@@ -42,11 +48,16 @@
   outline: none;
 }
 
-.blocked {
+/* WALLS = full squares */
+.wallTile {
   box-sizing: border-box;
   border-radius: 0.55rem;
-  background: rgba(255, 255, 255, 0.04);
-  border: 1px solid rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  background: linear-gradient(
+    135deg,
+    rgba(255, 255, 255, 1),
+    rgba(255, 255, 255, 1)
+  );
 }
 
 .inPath {
@@ -60,17 +71,6 @@
 
 .candidate {
   border-color: rgba(120, 220, 140, 0.6);
-}
-
-/* Walls (barriers between cells) */
-.wallTop {
-  border-top-width: 6px;
-  border-top-color: rgba(255, 255, 255, 0.32);
-}
-
-.wallLeft {
-  border-left-width: 6px;
-  border-left-color: rgba(255, 255, 255, 0.32);
 }
 
 /* Zip “track” */
@@ -134,13 +134,21 @@
 
 /* Waypoint circles */
 .number {
-  position: relative;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+
   z-index: 1;
   width: 1.85rem;
   height: 1.85rem;
   border-radius: 999px;
-  display: grid;
-  place-items: center;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 1;
+
   font-weight: 800;
   border: 1px solid rgba(255, 255, 255, 0.22);
   background: rgba(0, 0, 0, 0.35);
