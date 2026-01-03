@@ -9,12 +9,14 @@ export function BipPage() {
         <GameShell
           title="Bip"
           description="Draw a continuous path to satisfy the clues."
+          onNewPuzzle={undefined}
+          onReset={undefined}
           howToPlay={
             <HowToPlay>
               <ul>
                 <li>Drag to draw a single continuous path through the grid.</li>
                 <li>
-                  The path must follow the game’s rules (shown by clues on the
+                  The path must follow the game's rules (shown by clues on the
                   board).
                 </li>
                 <li>

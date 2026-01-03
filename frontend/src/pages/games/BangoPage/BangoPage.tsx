@@ -9,6 +9,8 @@ export function BangoPage() {
         <GameShell
           title="Bango"
           description="Place two symbols while obeying row/column constraints."
+          onNewPuzzle={undefined}
+          onReset={undefined}
           howToPlay={
             <HowToPlay>
               <ul>

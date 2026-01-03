@@ -8,7 +8,9 @@ export function BeensPage() {
       <div data-testid="beens-page">
         <GameShell
           title="Beens"
-          description="Place queens so they don’t attack each other (with constraints)."
+          description="Place queens so they don't attack each other (with constraints)."
+          onNewPuzzle={undefined}
+          onReset={undefined}
           howToPlay={
             <HowToPlay>
               <ul>

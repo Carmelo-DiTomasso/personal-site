@@ -9,6 +9,8 @@ export function SudokuPage() {
         <GameShell
           title="Sudoku"
           description="Mini Sudoku: fill the grid with valid numbers."
+          onNewPuzzle={undefined}
+          onReset={undefined}
           howToPlay={
             <HowToPlay>
               <ul>
