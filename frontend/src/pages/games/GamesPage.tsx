@@ -1,5 +1,6 @@
 import styles from './GamesPage.module.css';
 import { SimplePage } from '../shared/SimplePage';
+import { Link } from 'react-router-dom';
 
 type GameCard = {
   title: string;
@@ -46,7 +47,7 @@ export function GamesPage() {
         aria-label="Games list"
       >
         {GAMES.map((game) => (
-          <a key={game.href} className={styles.card} href={game.href}>
+          <Link key={game.href} className={styles.card} to={game.href}>
             <div className={styles.cardTop}>
               <h2 className={styles.cardTitle}>{game.title}</h2>
               <span className={styles.playCta} aria-hidden="true">
@@ -54,7 +55,7 @@ export function GamesPage() {
               </span>
             </div>
             <p className={styles.cardTagline}>{game.tagline}</p>
-          </a>
+          </Link>
         ))}
       </section>
     </SimplePage>
