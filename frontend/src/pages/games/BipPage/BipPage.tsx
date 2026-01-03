@@ -409,13 +409,6 @@ export function BipPage() {
     applyAction(next, 'arrow');
   }
 
-  const status = (
-    <span>
-      Cells {pathKeys.length}/{playableCount}
-      {expectedNext <= lastNumber ? ` • Next: ${expectedNext}` : ''}
-    </span>
-  );
-
   return (
     <div data-testid="bip-page">
       <GameShell
@@ -423,7 +416,6 @@ export function BipPage() {
         description={`Zip-style: connect 1 → ${lastNumber} in order and fill every playable cell.`}
         onNewPuzzle={handleNewPuzzle}
         onReset={handleReset}
-        status={status}
         howToPlay={
           <HowToPlay>
             <ul>
