@@ -1,63 +1,102 @@
-.solvedOverlay {
-  position: fixed;
-  inset: 0;
-  background: rgba(0, 0, 0, 0.45);
-  display: grid;
-  place-items: center;
-  z-index: 50;
-}
-
-.solvedModal {
-  width: min(520px, calc(100% - 2rem));
-  border: 1px solid rgba(255, 255, 255, 0.14);
-  border-radius: 1rem;
-  background: rgba(20, 20, 20, 0.95);
-  padding: 1rem;
-  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.5);
-}
-
-.titleRow {
+.root {
+  width: 100%;
+  max-width: 72rem;
+  margin: 0 auto;
+  padding: 2rem 1rem 3rem;
   display: flex;
-  align-items: center;
+  flex-direction: column;
+  align-items: stretch; /* IMPORTANT: makes HowToPlay stretch to match the board */
+  gap: 1rem;
+  box-sizing: border-box;
+}
+
+.headerRow {
+  display: flex;
   justify-content: space-between;
-  gap: 0.75rem;
+  align-items: flex-start;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.titleBlock {
+  min-width: 16rem;
 }
 
 .title {
   margin: 0;
-  font-size: 1.1rem;
-  font-weight: 800;
+  font-size: 2.6rem;
+  line-height: 1.1;
 }
 
-.closeBtn {
-  border: 1px solid rgba(255, 255, 255, 0.14);
+.description {
+  margin: 1rem 0 0;
+  opacity: 0.9;
+}
+
+.controls {
+  display: flex;
+  gap: 0.75rem;
+}
+
+.controlBtn {
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  border-radius: 0.9rem;
   background: transparent;
   color: inherit;
-  border-radius: 0.75rem;
-  padding: 0.35rem 0.6rem;
+  padding: 0.7rem 1rem;
   cursor: pointer;
 }
 
-.closeBtn:hover {
-  border-color: rgba(255, 255, 255, 0.24);
+.controlBtn:hover,
+.controlBtn:focus-visible {
+  border-color: rgba(255, 255, 255, 0.28);
+  outline: none;
 }
 
-.body {
-  margin-top: 1rem;
-  opacity: 0.92;
+.metaRow {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 0.25rem;
+  opacity: 0.9;
 }
 
-.actions {
-  margin-top: 0.9rem;
+.metaLeft,
+.metaRight {
+  white-space: nowrap;
+}
+
+.modalBackdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.55);
+  display: grid;
+  place-items: center;
+  z-index: 50;
+  padding: 1rem;
+}
+
+.modal {
+  width: min(34rem, 100%);
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  border-radius: 1.25rem;
+  background: rgba(20, 20, 20, 0.92);
+  padding: 1rem;
+  box-sizing: border-box;
+}
+
+.modalTitle {
+  margin: 0 0 0.25rem;
+  font-size: 1.25rem;
+}
+
+.modalBody {
+  margin: 0 0 1rem;
+  opacity: 0.9;
+}
+
+.modalActions {
   display: flex;
   justify-content: flex-end;
-  gap: 0.5rem;
-}
-
-.boardMeta {
-  display: flex;
-  align-items: baseline;
-  justify-content: space-between;
-  margin: 0.75rem 0 0.5rem;
-  opacity: 0.9;
+  gap: 0.75rem;
 }

@@ -3,10 +3,19 @@ import styles from './BipBoard.module.css';
 
 export type Pos = { row: number; col: number };
 
+/**
+ * Walls live on the TOP or LEFT edge of a cell.
+ * - A "top" wall at (r,c) blocks movement between (r,c) and (r-1,c)
+ * - A "left" wall at (r,c) blocks movement between (r,c) and (r,c-1)
+ *
+ * (Right/bottom walls are represented as left/top walls of the neighbor cell.)
+ */
+export type Wall = { row: number; col: number; side: 'top' | 'left' };
+
 export type ZipPuzzle = {
   id: string;
   size: number;
-  blockedCells: Pos[]; // walls (entire squares)
+  walls: Wall[];
   waypointsInOrder: Pos[]; // number i is at waypointsInOrder[i-1]
 };
 
@@ -43,24 +52,38 @@ export function BipBoard({
   candidateKeys,
   onCellAction,
 }: Props) {
+  // Used for "click and drag" drawing.
   const isDrawingRef = useRef(false);
 
-  const blockedSet = useMemo(
-    () => new Set<string>(puzzle.blockedCells.map(keyFromPos)),
-    [puzzle.blockedCells],
-  );
+  const wallTopSet = useMemo(() => {
+    const set = new Set<string>();
+    puzzle.walls.forEach((wall) => {
+      if (wall.side === 'top')
+        set.add(keyFromPos({ row: wall.row, col: wall.col }));
+    });
+    return set;
+  }, [puzzle.walls]);
+
+  const wallLeftSet = useMemo(() => {
+    const set = new Set<string>();
+    puzzle.walls.forEach((wall) => {
+      if (wall.side === 'left')
+        set.add(keyFromPos({ row: wall.row, col: wall.col }));
+    });
+    return set;
+  }, [puzzle.walls]);
 
   const numberByKey = useMemo(() => {
     const map = new Map<string, number>();
-    puzzle.waypointsInOrder.forEach((pos, idx) =>
-      map.set(keyFromPos(pos), idx + 1),
+    puzzle.waypointsInOrder.forEach((pos, index) =>
+      map.set(keyFromPos(pos), index + 1),
     );
     return map;
   }, [puzzle.waypointsInOrder]);
 
   const pathIndexByKey = useMemo(() => {
     const map = new Map<string, number>();
-    pathKeys.forEach((k, idx) => map.set(k, idx));
+    pathKeys.forEach((key, index) => map.set(key, index));
     return map;
   }, [pathKeys]);
 
@@ -84,55 +107,50 @@ export function BipBoard({
           const pos = { row, col };
           const cellKey = keyFromPos(pos);
 
-          const isWall = blockedSet.has(cellKey);
-          if (isWall) {
-            return (
-              <div
-                key={cellKey}
-                className={styles.wallTile}
-                aria-hidden="true"
-              />
-            );
-          }
-
           const numberHere = numberByKey.get(cellKey);
           const isInPath = pathSet.has(cellKey);
           const isHead = cellKey === headKey;
           const isCandidate = candidateSet.has(cellKey);
 
+          const hasWallTop = wallTopSet.has(cellKey);
+          const hasWallLeft = wallLeftSet.has(cellKey);
+
           const pathIndex = pathIndexByKey.get(cellKey);
 
-          let connUp = false;
-          let connDown = false;
-          let connLeft = false;
-          let connRight = false;
+          // Used for drawing the green "track" connections.
+          let connectsUp = false;
+          let connectsDown = false;
+          let connectsLeft = false;
+          let connectsRight = false;
 
           if (pathIndex !== undefined) {
-            const prevKey = pathIndex > 0 ? pathKeys[pathIndex - 1] : null;
+            const previousKey = pathIndex > 0 ? pathKeys[pathIndex - 1] : null;
             const nextKey =
               pathIndex < pathKeys.length - 1 ? pathKeys[pathIndex + 1] : null;
 
-            if (prevKey) {
-              const prevPos = posFromKey(prevKey);
-              const dir = direction(pos, prevPos);
-              if (dir === 'up') connUp = true;
-              if (dir === 'down') connDown = true;
-              if (dir === 'left') connLeft = true;
-              if (dir === 'right') connRight = true;
+            if (previousKey) {
+              const previousPos = posFromKey(previousKey);
+              const dir = direction(pos, previousPos);
+              if (dir === 'up') connectsUp = true;
+              if (dir === 'down') connectsDown = true;
+              if (dir === 'left') connectsLeft = true;
+              if (dir === 'right') connectsRight = true;
             }
 
             if (nextKey) {
               const nextPos = posFromKey(nextKey);
               const dir = direction(pos, nextPos);
-              if (dir === 'up') connUp = true;
-              if (dir === 'down') connDown = true;
-              if (dir === 'left') connLeft = true;
-              if (dir === 'right') connRight = true;
+              if (dir === 'up') connectsUp = true;
+              if (dir === 'down') connectsDown = true;
+              if (dir === 'left') connectsLeft = true;
+              if (dir === 'right') connectsRight = true;
             }
           }
 
           const className = [
             styles.cell,
+            hasWallTop ? styles.wallTop : '',
+            hasWallLeft ? styles.wallLeft : '',
             isInPath ? styles.inPath : '',
             isHead ? styles.head : '',
             isCandidate ? styles.candidate : '',
@@ -150,13 +168,15 @@ export function BipBoard({
                   ? `Row ${row + 1}, Column ${col + 1}, Number ${numberHere}`
                   : `Row ${row + 1}, Column ${col + 1}`
               }
-              onPointerDown={(e) => {
-                e.preventDefault();
+              onPointerDown={(event) => {
+                event.preventDefault();
                 isDrawingRef.current = true;
                 onCellAction(pos);
+
+                // Pointer capture improves drag reliability.
                 try {
-                  (e.currentTarget as HTMLElement).setPointerCapture(
-                    e.pointerId,
+                  (event.currentTarget as HTMLElement).setPointerCapture(
+                    event.pointerId,
                   );
                 } catch {
                   // ignore
@@ -176,16 +196,16 @@ export function BipBoard({
               {isInPath ? (
                 <span className={styles.track} aria-hidden="true">
                   <span className={styles.trackCenter} />
-                  {connUp ? (
+                  {connectsUp ? (
                     <span className={`${styles.trackSeg} ${styles.segUp}`} />
                   ) : null}
-                  {connDown ? (
+                  {connectsDown ? (
                     <span className={`${styles.trackSeg} ${styles.segDown}`} />
                   ) : null}
-                  {connLeft ? (
+                  {connectsLeft ? (
                     <span className={`${styles.trackSeg} ${styles.segLeft}`} />
                   ) : null}
-                  {connRight ? (
+                  {connectsRight ? (
                     <span className={`${styles.trackSeg} ${styles.segRight}`} />
                   ) : null}
                 </span>

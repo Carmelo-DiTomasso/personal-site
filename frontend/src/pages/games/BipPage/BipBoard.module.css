@@ -1,18 +1,17 @@
 .boardWrap {
   border: 1px solid rgba(255, 255, 255, 0.12);
   border-radius: 1.25rem;
-
-  /* key fix: keep border away from grid */
   padding: 1rem;
-
-  /* avoid any overlay pseudo-elements sitting on top */
   position: relative;
+  width: 100%;
+  box-sizing: border-box;
 }
 
 .board {
   display: grid;
   gap: 0.2rem;
   justify-content: center;
+  touch-action: none; /* helps drag behavior on touch devices */
 }
 
 .cols6 {
@@ -30,14 +29,22 @@
 .cell {
   position: relative;
   box-sizing: border-box;
+
+  /* remove native button spacing */
+  padding: 0;
+  margin: 0;
+  appearance: none;
+
   border: 1px solid rgba(255, 255, 255, 0.12);
   border-radius: 0.55rem;
   background: transparent;
   color: inherit;
   cursor: pointer;
   font: inherit;
+
   display: grid;
   place-items: center;
+
   -webkit-user-select: none;
   user-select: none;
 }
@@ -48,16 +55,29 @@
   outline: none;
 }
 
-/* WALLS = full squares */
-.wallTile {
-  box-sizing: border-box;
-  border-radius: 0.55rem;
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  background: linear-gradient(
-    135deg,
-    rgba(255, 255, 255, 1),
-    rgba(255, 255, 255, 1)
-  );
+/* Walls are per-edge */
+.wallTop::before,
+.wallLeft::before {
+  content: '';
+  position: absolute;
+  background: rgba(255, 255, 255, 0.6);
+  pointer-events: none;
+}
+
+.wallTop::before {
+  left: 0;
+  right: 0;
+  top: -1px;
+  height: 4px;
+  border-radius: 999px;
+}
+
+.wallLeft::before {
+  top: 0;
+  bottom: 0;
+  left: -1px;
+  width: 4px;
+  border-radius: 999px;
 }
 
 .inPath {
@@ -73,7 +93,6 @@
   border-color: rgba(120, 220, 140, 0.6);
 }
 
-/* Zip “track” */
 .track {
   position: absolute;
   inset: 0;
@@ -147,9 +166,10 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  line-height: 1;
 
+  line-height: 1;
   font-weight: 800;
+
   border: 1px solid rgba(255, 255, 255, 0.22);
   background: rgba(0, 0, 0, 0.35);
 }
