@@ -20,13 +20,13 @@
 }
 
 .summary::after {
-  content: '▾';
+  content: '\25BE'; /* ▾ */
   float: right;
   opacity: 0.85;
 }
 
 .root[open] .summary::after {
-  content: '▴';
+  content: '\25B4'; /* ▴ */
 }
 
 .body {
@@ -40,4 +40,13 @@
 
 .body > :last-child {
   margin-bottom: 0;
+}
+
+.body ul {
+  margin: 0;
+  padding-left: 1.1rem;
+}
+
+.body li + li {
+  margin-top: 0.35rem;
 }

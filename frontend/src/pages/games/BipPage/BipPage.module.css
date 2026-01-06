@@ -1,69 +1,7 @@
-.root {
-  width: 100%;
-  max-width: 72rem;
-  margin: 0 auto;
-  padding: 2rem 1rem 3rem;
-  display: flex;
-  flex-direction: column;
-  align-items: stretch; /* IMPORTANT: makes HowToPlay stretch to match the board */
-  gap: 1rem;
-  box-sizing: border-box;
-}
-
-.headerRow {
+.statusRow {
   display: flex;
   justify-content: space-between;
-  align-items: flex-start;
   gap: 1rem;
-  flex-wrap: wrap;
-}
-
-.titleBlock {
-  min-width: 16rem;
-}
-
-.title {
-  margin: 0;
-  font-size: 2.6rem;
-  line-height: 1.1;
-}
-
-.description {
-  margin: 1rem 0 0;
-  opacity: 0.9;
-}
-
-.controls {
-  display: flex;
-  gap: 0.75rem;
-}
-
-.controlBtn {
-  border: 1px solid rgba(255, 255, 255, 0.18);
-  border-radius: 0.9rem;
-  background: transparent;
-  color: inherit;
-  padding: 0.7rem 1rem;
-  cursor: pointer;
-}
-
-.controlBtn:hover,
-.controlBtn:focus-visible {
-  border-color: rgba(255, 255, 255, 0.28);
-  outline: none;
-}
-
-.metaRow {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 0 0.25rem;
-  opacity: 0.9;
-}
-
-.metaLeft,
-.metaRight {
-  white-space: nowrap;
 }
 
 .modalBackdrop {
@@ -72,31 +10,33 @@
   background: rgba(0, 0, 0, 0.55);
   display: grid;
   place-items: center;
-  z-index: 50;
   padding: 1rem;
+  z-index: 50;
 }
 
 .modal {
-  width: min(34rem, 100%);
-  border: 1px solid rgba(255, 255, 255, 0.14);
-  border-radius: 1.25rem;
-  background: rgba(20, 20, 20, 0.92);
+  width: min(520px, 92vw);
+  border-radius: 1rem;
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  background: rgba(30, 30, 30, 0.95);
   padding: 1rem;
-  box-sizing: border-box;
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.45);
 }
 
 .modalTitle {
-  margin: 0 0 0.25rem;
+  margin: 0 0 0.5rem;
   font-size: 1.25rem;
+  font-weight: 800;
 }
 
 .modalBody {
-  margin: 0 0 1rem;
+  margin: 0 0 0.9rem;
   opacity: 0.9;
 }
 
 .modalActions {
   display: flex;
+  gap: 0.5rem;
   justify-content: flex-end;
-  gap: 0.75rem;
+  flex-wrap: wrap;
 }

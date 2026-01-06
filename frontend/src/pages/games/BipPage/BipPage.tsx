@@ -1,5 +1,9 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+
+import { GameShell } from '../../../components/games/GameShell/GameShell';
+import { GameButton } from '../../../components/games/GameButton/GameButton';
 import { HowToPlay } from '../../../components/games/HowToPlay/HowToPlay';
+
 import { BipBoard, type Pos, type Wall, type ZipPuzzle } from './BipBoard';
 import styles from './BipPage.module.css';
 
@@ -92,7 +96,7 @@ function generateHamiltonianPath(size: number): Pos[] {
     if (dfs(0, start)) return path;
   }
 
-  // This *should* basically never happen on 6x6.
+  // Fallback (should basically never happen on 6x6).
   return Array.from({ length: totalCells }).map((_, index) => ({
     row: Math.floor(index / size),
     col: index % size,
@@ -240,14 +244,12 @@ export function BipPage() {
     [puzzle.waypointsInOrder],
   );
 
-  // Path is stored as a list of keys ("row,col") so it's easy to use Sets/Maps.
   const [pathKeys, setPathKeys] = useState<string[]>(() => [startKey]);
 
-  // If the user closes the solved popup, we remember it per puzzle id.
   const [acknowledgedSolvedPuzzleId, setAcknowledgedSolvedPuzzleId] =
     useState<string>('');
 
-  // Keep refs for key handlers (so we don’t rebind listeners constantly).
+  // Refs for key handler
   const puzzleRef = useRef<ZipPuzzle>(puzzle);
   const pathRef = useRef<string[]>(pathKeys);
 
@@ -271,7 +273,6 @@ export function BipPage() {
   const lastNumber = puzzle.waypointsInOrder.length;
 
   const reachedMaxNumber = useMemo(() => {
-    // Because we enforce order, "max reached" is basically how far we progressed (1..N).
     let maxReached = 0;
     for (const key of pathKeys) {
       const numberHere = numberByKey.get(key);
@@ -284,6 +285,7 @@ export function BipPage() {
 
   const nextNumber =
     reachedMaxNumber >= lastNumber ? null : reachedMaxNumber + 1;
+
   const headKey = pathKeys[pathKeys.length - 1];
   const headPos = posFromKey(headKey);
 
@@ -296,17 +298,14 @@ export function BipPage() {
 
       const toKey = keyFromPos(toPos);
 
-      // Disallow revisiting (Zip path is a single trail).
       if (pathSet.has(toKey)) return false;
 
       const numberHere = numberByKey.get(toKey);
 
-      // If it's a numbered cell, it MUST be the next number.
       if (numberHere) {
         if (!nextNumber) return false;
         if (numberHere !== nextNumber) return false;
 
-        // Zip expects the last number to be the endpoint of the full trail.
         if (numberHere === lastNumber && pathKeys.length !== totalCells - 1)
           return false;
 
@@ -364,7 +363,6 @@ export function BipPage() {
     (pos: Pos) => {
       const clickedKey = keyFromPos(pos);
 
-      // Allow backtracking by stepping onto the immediately previous cell.
       const previousKey =
         pathKeys.length >= 2 ? pathKeys[pathKeys.length - 2] : null;
       if (previousKey && clickedKey === previousKey) {
@@ -372,13 +370,11 @@ export function BipPage() {
         return;
       }
 
-      // Starting over by clicking "1" is a nice UX.
       if (clickedKey === startKey && pathKeys.length > 1) {
         resetPuzzle();
         return;
       }
 
-      // Only allow extending into currently-valid candidates.
       if (!candidateKeys.includes(clickedKey)) return;
 
       setPathKeys((previous) => [...previous, clickedKey]);
@@ -409,7 +405,6 @@ export function BipPage() {
 
       if (!targetPos) return;
 
-      // Prevent page scrolling when using arrow keys.
       event.preventDefault();
 
       if (
@@ -421,7 +416,6 @@ export function BipPage() {
         return;
       }
 
-      // We route through the same click/drag logic.
       handleCellAction(targetPos);
     };
 
@@ -433,56 +427,39 @@ export function BipPage() {
   const nextLabel = nextNumber ? String(nextNumber) : 'Done';
 
   return (
-    <div className={styles.root} data-testid="bip-page">
-      <div className={styles.headerRow}>
-        <div className={styles.titleBlock}>
-          <h1 className={styles.title}>Bip</h1>
-          <p className={styles.description}>
-            Connect 1 → {lastNumber} in order and fill every cell.
-          </p>
+    <GameShell
+      title="Bip"
+      description={`Connect 1 → ${lastNumber} in order and fill every cell.`}
+      onNewPuzzle={newPuzzle}
+      onReset={resetPuzzle}
+      howToPlay={
+        <HowToPlay>
+          <ul>
+            <li>
+              Start at <strong>1</strong>.
+            </li>
+            <li>
+              Draw a single continuous path through the grid (no revisits).
+            </li>
+            <li>
+              When you step on a number, it must be the <strong>next</strong>{' '}
+              number.
+            </li>
+            <li>
+              Fill <strong>every</strong> cell exactly once. The last number is
+              the final cell.
+            </li>
+            <li>Use click+drag, or arrow keys.</li>
+          </ul>
+        </HowToPlay>
+      }
+      status={
+        <div className={styles.statusRow} aria-label="Puzzle status">
+          <span>Cells {cellsLabel}</span>
+          <span>Next: {nextLabel}</span>
         </div>
-
-        <div className={styles.controls} aria-label="Game controls">
-          <button
-            type="button"
-            className={styles.controlBtn}
-            onClick={newPuzzle}
-          >
-            New puzzle
-          </button>
-          <button
-            type="button"
-            className={styles.controlBtn}
-            onClick={resetPuzzle}
-          >
-            Reset
-          </button>
-        </div>
-      </div>
-
-      <HowToPlay>
-        <ul>
-          <li>
-            Start at <strong>1</strong>.
-          </li>
-          <li>Draw a single continuous path through the grid (no revisits).</li>
-          <li>
-            When you step on a number, it must be the <strong>next</strong>{' '}
-            number.
-          </li>
-          <li>
-            Fill <strong>every</strong> cell exactly once. The last number is
-            the final cell.
-          </li>
-          <li>Use click+drag, or arrow keys.</li>
-        </ul>
-      </HowToPlay>
-
-      <div className={styles.metaRow} aria-label="Puzzle status">
-        <div className={styles.metaLeft}>Cells {cellsLabel}</div>
-        <div className={styles.metaRight}>Next: {nextLabel}</div>
-      </div>
-
+      }
+    >
       <BipBoard
         puzzle={puzzle}
         pathKeys={pathKeys}
@@ -496,31 +473,33 @@ export function BipPage() {
           role="dialog"
           aria-modal="true"
           aria-label="Puzzle solved"
+          onClick={() => setAcknowledgedSolvedPuzzleId(puzzle.id)}
         >
-          <div className={styles.modal}>
+          <div className={styles.modal} onClick={(e) => e.stopPropagation()}>
             <h2 className={styles.modalTitle}>Solved 🎉</h2>
             <p className={styles.modalBody}>
               You connected 1 → {lastNumber} in order and filled every cell.
             </p>
             <div className={styles.modalActions}>
-              <button
+              <GameButton
                 type="button"
-                className={styles.controlBtn}
                 onClick={() => setAcknowledgedSolvedPuzzleId(puzzle.id)}
               >
                 Close
-              </button>
-              <button
+              </GameButton>
+              <GameButton
                 type="button"
-                className={styles.controlBtn}
-                onClick={newPuzzle}
+                onClick={() => {
+                  setAcknowledgedSolvedPuzzleId(puzzle.id);
+                  newPuzzle();
+                }}
               >
                 New puzzle
-              </button>
+              </GameButton>
             </div>
           </div>
         </div>
       ) : null}
-    </div>
+    </GameShell>
   );
 }
