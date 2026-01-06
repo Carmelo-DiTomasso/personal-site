@@ -5,7 +5,7 @@ import { HowToPlay } from '../../../components/games/HowToPlay/HowToPlay';
 import { GameButton } from '../../../components/games/GameButton/GameButton';
 import styles from './BangoPage.module.css';
 
-import { TangoBoard } from './BangoBoard';
+import { BangoBoard } from './BangoBoard';
 import {
   type Pos,
   type TangoCell,
@@ -106,7 +106,7 @@ export function BangoPage() {
 
   return (
     <GameShell
-      title="Tango"
+      title="Bango"
       description="Fill the grid with ☀ and ☾ using = / × constraints."
       status={statusText}
       howToPlay={
@@ -132,7 +132,7 @@ export function BangoPage() {
       onNewPuzzle={startNewPuzzle}
       onReset={resetPuzzle}
     >
-      <TangoBoard
+      <BangoBoard
         puzzle={puzzle}
         grid={grid}
         active={active}

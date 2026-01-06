@@ -1,6 +1,7 @@
-import { useMemo, useRef } from 'react';
+import { useMemo } from 'react';
 import styles from './BangoBoard.module.css';
 import type { Pos, TangoCell, TangoPuzzle, TangoSymbol } from './bangoPuzzles';
+import { BoardFrame } from '../../../components/games/BoardFrame/BoardFrame';
 
 type Props = {
   puzzle: TangoPuzzle;
@@ -27,7 +28,7 @@ function clamp(n: number, min: number, max: number) {
   return Math.max(min, Math.min(max, n));
 }
 
-export function TangoBoard({
+export function BangoBoard({
   puzzle,
   grid,
   active,
@@ -37,8 +38,6 @@ export function TangoBoard({
   onSet,
   onMoveActive,
 }: Props) {
-  const wrapRef = useRef<HTMLDivElement | null>(null);
-
   const givens = puzzle.givens;
 
   // map links for fast render of right/down markers from each cell
@@ -126,12 +125,11 @@ export function TangoBoard({
   }
 
   return (
-    <div
-      ref={wrapRef}
-      className={styles.wrap}
-      tabIndex={0}
+    <BoardFrame
+      className={undefined}
+      focusable
       onKeyDown={handleKeyDown}
-      aria-label="Tango board"
+      ariaLabel="Bango board"
     >
       <div className={`${styles.board} ${styles.size6}`}>
         {Array.from({ length: puzzle.size * puzzle.size }).map((_, index) => {
@@ -218,6 +216,6 @@ export function TangoBoard({
           );
         })}
       </div>
-    </div>
+    </BoardFrame>
   );
 }

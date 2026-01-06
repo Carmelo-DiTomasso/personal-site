@@ -11,7 +11,7 @@
   display: grid;
   place-items: center;
   padding: 1rem;
-  z-index: 50;
+  z-index: 60;
 }
 
 .modal {
@@ -24,19 +24,26 @@
 }
 
 .modalTitle {
-  margin: 0 0 0.5rem;
-  font-size: 1.25rem;
+  /* margin: 0 0 0.5rem; */
+  font-size: 1.15rem;
   font-weight: 800;
 }
 
 .modalBody {
-  margin: 0 0 0.9rem;
-  opacity: 0.9;
+  /* margin: 0 0 0.9rem;
+  opacity: 0.9; */
+  margin-top: 0.35rem;
+  opacity: 0.95;
 }
 
 .modalActions {
-  display: flex;
+  /* display: flex;
   gap: 0.5rem;
   justify-content: flex-end;
+  flex-wrap: wrap; */
+  margin-top: 0.9rem;
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.75rem;
   flex-wrap: wrap;
 }

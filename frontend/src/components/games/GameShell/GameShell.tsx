@@ -1,5 +1,6 @@
 import type { ReactNode } from 'react';
 import { GameButton } from '../GameButton/GameButton';
+import { Container } from '../../layout/Container';
 import styles from './GameShell.module.css';
 
 type Props = {
@@ -51,27 +52,29 @@ export function GameShell({
   ) : null;
 
   return (
-    <div className={styles.root}>
-      <header className={styles.header}>
-        <div className={styles.headerText}>
-          <h1 className={styles.title}>{title}</h1>
-          {description ? (
-            <p className={styles.description}>{description}</p>
-          ) : null}
-        </div>
+    <Container>
+      <div className={styles.root}>
+        <header className={styles.header}>
+          <div className={styles.headerText}>
+            <h1 className={styles.title}>{title}</h1>
+            {description ? (
+              <p className={styles.description}>{description}</p>
+            ) : null}
+          </div>
 
-        {controlsPlacement === 'header' ? controlsNode : null}
-      </header>
+          {controlsPlacement === 'header' ? controlsNode : null}
+        </header>
 
-      {howToPlay ? <div className={styles.howToPlay}>{howToPlay}</div> : null}
+        {howToPlay ? <div className={styles.howToPlay}>{howToPlay}</div> : null}
 
-      {controlsPlacement === 'belowHowTo' ? controlsNode : null}
+        {controlsPlacement === 'belowHowTo' ? controlsNode : null}
 
-      {status ? <div className={styles.status}>{status}</div> : null}
+        {status ? <div className={styles.status}>{status}</div> : null}
 
-      <section className={styles.content} aria-label={`${title} game`}>
-        {children}
-      </section>
-    </div>
+        <section className={styles.content} aria-label={`${title} game`}>
+          {children}
+        </section>
+      </div>
+    </Container>
   );
 }

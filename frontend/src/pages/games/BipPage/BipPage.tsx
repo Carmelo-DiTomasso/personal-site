@@ -427,79 +427,81 @@ export function BipPage() {
   const nextLabel = nextNumber ? String(nextNumber) : 'Done';
 
   return (
-    <GameShell
-      title="Bip"
-      description={`Connect 1 → ${lastNumber} in order and fill every cell.`}
-      onNewPuzzle={newPuzzle}
-      onReset={resetPuzzle}
-      howToPlay={
-        <HowToPlay>
-          <ul>
-            <li>
-              Start at <strong>1</strong>.
-            </li>
-            <li>
-              Draw a single continuous path through the grid (no revisits).
-            </li>
-            <li>
-              When you step on a number, it must be the <strong>next</strong>{' '}
-              number.
-            </li>
-            <li>
-              Fill <strong>every</strong> cell exactly once. The last number is
-              the final cell.
-            </li>
-            <li>Use click+drag, or arrow keys.</li>
-          </ul>
-        </HowToPlay>
-      }
-      status={
-        <div className={styles.statusRow} aria-label="Puzzle status">
-          <span>Cells {cellsLabel}</span>
-          <span>Next: {nextLabel}</span>
-        </div>
-      }
-    >
-      <BipBoard
-        puzzle={puzzle}
-        pathKeys={pathKeys}
-        candidateKeys={candidateKeys}
-        onCellAction={handleCellAction}
-      />
+    <div className={styles.root} data-testid="bip-page">
+      <GameShell
+        title="Bip"
+        description={`Connect 1 → ${lastNumber} in order and fill every cell.`}
+        onNewPuzzle={newPuzzle}
+        onReset={resetPuzzle}
+        howToPlay={
+          <HowToPlay>
+            <ul>
+              <li>
+                Start at <strong>1</strong>.
+              </li>
+              <li>
+                Draw a single continuous path through the grid (no revisits).
+              </li>
+              <li>
+                When you step on a number, it must be the <strong>next</strong>{' '}
+                number.
+              </li>
+              <li>
+                Fill <strong>every</strong> cell exactly once. The last number
+                is the final cell.
+              </li>
+              <li>Use click+drag, or arrow keys.</li>
+            </ul>
+          </HowToPlay>
+        }
+        status={
+          <div className={styles.statusRow} aria-label="Puzzle status">
+            <span>Cells {cellsLabel}</span>
+            <span>Next: {nextLabel}</span>
+          </div>
+        }
+      >
+        <BipBoard
+          puzzle={puzzle}
+          pathKeys={pathKeys}
+          candidateKeys={candidateKeys}
+          onCellAction={handleCellAction}
+        />
 
-      {shouldShowSolved ? (
-        <div
-          className={styles.modalBackdrop}
-          role="dialog"
-          aria-modal="true"
-          aria-label="Puzzle solved"
-          onClick={() => setAcknowledgedSolvedPuzzleId(puzzle.id)}
-        >
-          <div className={styles.modal} onClick={(e) => e.stopPropagation()}>
-            <h2 className={styles.modalTitle}>Solved 🎉</h2>
-            <p className={styles.modalBody}>
-              You connected 1 → {lastNumber} in order and filled every cell.
-            </p>
-            <div className={styles.modalActions}>
-              <GameButton
-                type="button"
-                onClick={() => setAcknowledgedSolvedPuzzleId(puzzle.id)}
-              >
-                Close
-              </GameButton>
-              <GameButton
-                type="button"
-                onClick={() => {
-                  setAcknowledgedSolvedPuzzleId(puzzle.id);
-                  newPuzzle();
-                }}
-              >
-                New puzzle
-              </GameButton>
+        {shouldShowSolved ? (
+          <div
+            className={styles.modalBackdrop}
+            role="dialog"
+            aria-modal="true"
+            aria-label="Puzzle solved"
+            onClick={() => setAcknowledgedSolvedPuzzleId(puzzle.id)}
+          >
+            <div className={styles.modal} onClick={(e) => e.stopPropagation()}>
+              <h2 className={styles.modalTitle}>Solved 🎉</h2>
+              <p className={styles.modalBody}>
+                You connected 1 → {lastNumber} in order and filled every cell.
+              </p>
+              <div className={styles.modalActions}>
+                <GameButton
+                  type="button"
+                  onClick={() => setAcknowledgedSolvedPuzzleId(puzzle.id)}
+                >
+                  Close
+                </GameButton>
+                <GameButton
+                  type="button"
+                  onClick={() => {
+                    setAcknowledgedSolvedPuzzleId(puzzle.id);
+                    newPuzzle();
+                  }}
+                >
+                  New puzzle
+                </GameButton>
+              </div>
             </div>
           </div>
-        </div>
-      ) : null}
-    </GameShell>
+        ) : null}
+      </GameShell>
+    </div>
   );
 }

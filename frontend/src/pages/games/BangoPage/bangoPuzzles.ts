@@ -81,7 +81,7 @@ export function makeRandomTangoPuzzle(): TangoPuzzle {
   });
 
   return {
-    id: `tango-${Date.now()}-${Math.random().toString(16).slice(2)}`,
+    id: `bango-${Date.now()}-${Math.random().toString(16).slice(2)}`,
     size,
     givens,
     links,
