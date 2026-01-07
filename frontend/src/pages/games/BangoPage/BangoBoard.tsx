@@ -1,7 +1,7 @@
 import { useMemo } from 'react';
+import type { KeyboardEvent as ReactKeyboardEvent } from 'react';
 import styles from './BangoBoard.module.css';
 import type { Pos, TangoCell, TangoPuzzle, TangoSymbol } from './bangoPuzzles';
-import { BoardFrame } from '../../../components/games/BoardFrame/BoardFrame';
 
 type Props = {
   puzzle: TangoPuzzle;
@@ -40,12 +40,10 @@ export function BangoBoard({
 }: Props) {
   const givens = puzzle.givens;
 
-  // map links for fast render of right/down markers from each cell
   const linkRight = useMemo(() => {
     const m = new Map<string, 'same' | 'diff'>();
     for (const link of puzzle.links) {
       const { a, b, kind } = link;
-      // normalize: left cell is key, right marker
       if (a.row === b.row && Math.abs(a.col - b.col) === 1) {
         const left = a.col < b.col ? a : b;
         const right = a.col < b.col ? b : a;
@@ -59,7 +57,6 @@ export function BangoBoard({
     const m = new Map<string, 'same' | 'diff'>();
     for (const link of puzzle.links) {
       const { a, b, kind } = link;
-      // normalize: top cell is key, down marker
       if (a.col === b.col && Math.abs(a.row - b.row) === 1) {
         const top = a.row < b.row ? a : b;
         const bottom = a.row < b.row ? b : a;
@@ -75,7 +72,7 @@ export function BangoBoard({
     return ka < kb ? `${ka}|${kb}` : `${kb}|${ka}`;
   }
 
-  function handleKeyDown(e: React.KeyboardEvent) {
+  function handleKeyDown(e: ReactKeyboardEvent<HTMLDivElement>) {
     const { row, col } = active;
 
     if (e.key === 'ArrowUp') {
@@ -125,11 +122,11 @@ export function BangoBoard({
   }
 
   return (
-    <BoardFrame
-      className={undefined}
-      focusable
+    <div
+      className={styles.wrap}
+      tabIndex={0}
       onKeyDown={handleKeyDown}
-      ariaLabel="Bango board"
+      aria-label="Bango board"
     >
       <div className={`${styles.board} ${styles.size6}`}>
         {Array.from({ length: puzzle.size * puzzle.size }).map((_, index) => {
@@ -171,6 +168,9 @@ export function BangoBoard({
               ? conflictLinks.has(linkId(pos, { row: row + 1, col }))
               : false;
 
+          const symbolClass =
+            value === 'sun' ? styles.sun : value === 'moon' ? styles.moon : '';
+
           return (
             <button
               key={k}
@@ -179,7 +179,12 @@ export function BangoBoard({
               onClick={() => onCycle(pos)}
               aria-label={`Row ${row + 1}, Column ${col + 1}`}
             >
-              <span className={styles.value} aria-hidden="true">
+              <span
+                className={[styles.value, symbolClass]
+                  .filter(Boolean)
+                  .join(' ')}
+                aria-hidden="true"
+              >
                 {glyph(value)}
               </span>
 
@@ -216,6 +221,6 @@ export function BangoBoard({
           );
         })}
       </div>
-    </BoardFrame>
+    </div>
   );
 }

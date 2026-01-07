@@ -22,12 +22,16 @@
   user-select: none;
 }
 
+.cell:focus {
+  outline: none;
+}
+
 .cell:hover {
   border-color: rgba(255, 255, 255, 0.22);
 }
 
 .locked {
-  background: rgba(255, 255, 255, 0.04);
+  background: rgba(149, 149, 149, 0.3);
   border-color: rgba(255, 255, 255, 0.18);
 }
 
@@ -132,4 +136,25 @@
 
 .size6 {
   grid-template-columns: repeat(6, var(--cell));
+}
+
+.wrap {
+  outline: none;
+}
+
+.board {
+  --sunColor: #ffd166;
+  --moonColor: #7dd3fc;
+}
+
+.sun {
+  color: var(--sunColor);
+}
+
+.moon {
+  color: var(--moonColor);
+}
+
+.value {
+  text-shadow: 0 0 12px rgba(255, 255, 255, 0.12);
 }

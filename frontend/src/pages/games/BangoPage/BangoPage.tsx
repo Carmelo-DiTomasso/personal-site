@@ -145,23 +145,22 @@ export function BangoPage() {
 
       {showSolved ? (
         <div
+          className={styles.modalOverlay}
           role="dialog"
           aria-modal="true"
-          className={styles.solvedBackdrop}
+          aria-label="Puzzle solved"
           onClick={() => setShowSolved(false)}
         >
           <div
-            className={styles.solvedModal}
+            className={styles.modalCard}
             onClick={(e) => e.stopPropagation()}
           >
-            <div className={styles.solvedTitle}>Puzzle solved ✅</div>
-            <div className={styles.solvedBody}>Nice — all rules satisfied.</div>
-
-            <div className={styles.solvedActions}>
+            <div className={styles.modalTitle}>Puzzle solved ✅</div>
+            <div className={styles.modalBody}>Nice — all rules satisfied.</div>
+            <div className={styles.modalActions}>
               <GameButton type="button" onClick={() => setShowSolved(false)}>
                 Close
               </GameButton>
-
               <GameButton
                 type="button"
                 onClick={() => {

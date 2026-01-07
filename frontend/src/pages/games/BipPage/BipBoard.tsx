@@ -1,6 +1,5 @@
 import { useMemo, useRef } from 'react';
 import styles from './BipBoard.module.css';
-import { BoardFrame } from '../../../components/games/BoardFrame/BoardFrame';
 
 export type Pos = { row: number; col: number };
 
@@ -93,7 +92,7 @@ export function BipBoard({
   const headKey = pathKeys[pathKeys.length - 1];
 
   return (
-    <BoardFrame testId="zip-board-wrap" ariaLabel="Zip board">
+    <div>
       <div
         className={`${styles.board} ${styles.cols6}`}
         data-testid="zip-board"
@@ -215,6 +214,6 @@ export function BipBoard({
           );
         })}
       </div>
-    </BoardFrame>
+    </div>
   );
 }
