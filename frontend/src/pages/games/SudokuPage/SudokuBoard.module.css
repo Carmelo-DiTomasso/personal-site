@@ -1,0 +1,170 @@
+.wrap {
+  width: 100%;
+  outline: none;
+  display: flex;
+  justify-content: center;
+}
+
+.wrap:focus-visible {
+  outline: none;
+}
+
+.board {
+  --cell: clamp(2.35rem, 6.2vw, 3.15rem);
+  --gap: 0.35rem; /* gap between cells inside a 3x3 block */
+  --blockGap: 1.3rem; /* space between 3x3 blocks */
+  --innerDivider: 5px; /* inner divider thickness */
+  --outerDivider: 6px; /* outer border thickness */
+  --innerLine: rgba(255, 255, 255, 0.22);
+  --outerLine: rgba(255, 255, 255, 0.34);
+  --framePad: 0.7rem; /* space between outer border and blocks */
+
+  display: grid;
+
+  --block: calc(3 * var(--cell) + 2 * var(--gap));
+
+  grid-template-columns: repeat(3, var(--block));
+  grid-template-rows: repeat(3, var(--block));
+  gap: var(--blockGap);
+
+  justify-content: center;
+  align-content: start;
+
+  width: fit-content;
+  margin: 0 auto;
+
+  position: relative;
+
+  padding: var(--framePad);
+  border: var(--outerDivider) solid var(--outerLine);
+  border-radius: 1.25rem;
+
+  background: rgba(255, 255, 255, 0.01);
+
+  -webkit-user-select: none;
+  user-select: none;
+}
+
+.board::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+  border-radius: inherit;
+
+  background-image:
+    linear-gradient(to right, var(--innerLine), var(--innerLine)),
+    linear-gradient(to right, var(--innerLine), var(--innerLine)),
+    linear-gradient(to bottom, var(--innerLine), var(--innerLine)),
+    linear-gradient(to bottom, var(--innerLine), var(--innerLine));
+
+  background-repeat: no-repeat;
+
+  background-size:
+    var(--innerDivider) 100%,
+    var(--innerDivider) 100%,
+    100% var(--innerDivider),
+    100% var(--innerDivider);
+
+  /* same math as before, but shifted by the frame padding */
+  background-position:
+    calc(
+        var(--framePad) + var(--block) + (var(--blockGap) / 2) -
+          (var(--innerDivider) / 2)
+      )
+      0,
+    calc(
+        var(--framePad) + (2 * var(--block)) + (3 * var(--blockGap) / 2) -
+          (var(--innerDivider) / 2)
+      )
+      0,
+    0
+      calc(
+        var(--framePad) + var(--block) + (var(--blockGap) / 2) -
+          (var(--innerDivider) / 2)
+      ),
+    0
+      calc(
+        var(--framePad) + (2 * var(--block)) + (3 * var(--blockGap) / 2) -
+          (var(--innerDivider) / 2)
+      );
+}
+
+.block {
+  display: grid;
+  grid-template-columns: repeat(3, var(--cell));
+  grid-auto-rows: var(--cell);
+  gap: var(--gap);
+  z-index: 1;
+}
+
+.cell {
+  position: relative;
+  z-index: 1;
+  width: var(--cell);
+  height: var(--cell);
+  border-radius: 0.65rem;
+
+  border: none; /* key */
+  background: rgba(255, 255, 255, 0.03);
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.08);
+
+  color: inherit;
+  cursor: pointer;
+  padding: 0;
+  margin: 0;
+  appearance: none;
+  -webkit-tap-highlight-color: transparent;
+
+  display: grid;
+  place-items: center;
+}
+
+.cell:focus {
+  outline: none;
+}
+
+.cell:focus-visible {
+  outline: none;
+  box-shadow: inset 0 0 0 2px rgba(255, 255, 255, 0.16);
+}
+
+.locked {
+  background: rgba(255, 255, 255, 0.28);
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.12);
+}
+
+.active {
+  outline: 2px solid rgba(120, 220, 140, 0.55);
+  outline-offset: 2px;
+}
+
+.conflict {
+  box-shadow: inset 0 0 0 3px rgba(255, 120, 120, 0.6);
+}
+
+.value {
+  font-size: 1.2rem;
+  font-weight: 850;
+  line-height: 1;
+}
+
+.notes {
+  position: absolute;
+  inset: 0.25rem;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  grid-template-rows: repeat(3, 1fr);
+  gap: 0.05rem;
+  opacity: 0.9;
+  pointer-events: none;
+}
+
+.note {
+  display: grid;
+  place-items: center;
+  font-size: 0.65rem;
+  line-height: 1;
+  opacity: 0.85;
+}
