@@ -215,6 +215,23 @@ Notes:
   (PAT challenge / preload notices).
   Ignore if the widget works and the backend verifies tokens.
 
+## Production
+
+- Frontend: <https://carmeloditomasso.app>
+- Backend API base: <https://octopus-app-gpnxr.ondigitalocean.app/api/>
+- Backend admin: <https://octopus-app-gpnxr.ondigitalocean.app/admin/>
+
+Routing notes:
+
+- Vercel is configured to:
+  - proxy `/api/*` to the DigitalOcean backend, and
+  - serve the SPA entrypoint for deep-link refresh/direct-open of client routes.
+
+Production env vars (high-level):
+
+- Vercel: `VITE_TURNSTILE_SITE_KEY`
+- DigitalOcean App Platform: `TURNSTILE_SECRET_KEY`
+
 ## Development Workflow
 
 - Work in small, focused commits.

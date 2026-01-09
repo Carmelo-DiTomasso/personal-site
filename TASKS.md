@@ -33,25 +33,27 @@ We are optimizing for momentum:
 
 ---
 
-## Now (Sprint 7 / Milestone: Phase 5 — Content + UX v0)
+## Now (Sprint 10 / Milestone: Phase 6 → Phase 7 — Auth + Game scoring v0)
 
-Goal: Replace placeholders with real page content and improve UX for common
-dev/prod failure modes (auth, empty states).
+Goal: Add user accounts + login and persist game scores (fastest solve time)
+with per-game leaderboards.
 
-- [ ] Projects page v0
-  - [ ] Render projects from `GET /api/content/projects/` on `/projects`
-  - [ ] Loading / empty / error states
-  - [ ] Reuse existing UI primitives (no duplicate badge/card CSS)
-- [ ] Resume page v0 polish
-  - [ ] Consistent embed/download behavior
-  - [ ] Works on refresh/direct URL
-- [ ] Contact page v0
-  - [ ] Real copy + mailto + social links (accessible)
-- [ ] DX: graceful auth failures for API calls
-  - [ ] Friendly UI when `/api/*` returns 401/403 (no noisy console errors)
-  - [ ] Document in `CHALLENGES.md`
-- [ ] Docs: routing/layout conventions
-  - [ ] Update `docs/architecture.md` with current route/layout structure
+- [ ] Accounts + auth v0 (backend + frontend)
+
+  - [ ] Registration/login/logout endpoints
+  - [ ] Frontend auth UI (login/register pages + global signed-in state)
+  - [ ] Auth-protected behavior where needed
+
+- [ ] Game scoring v0 (fastest solve time)
+
+  - [ ] Timer per game (start, stop, reset) and “solved” detection hooks
+  - [ ] Submit score to backend (authenticated)
+  - [ ] Per-game leaderboard UI (top scores)
+  - [ ] “My best” / basic score history view (v0)
+
+- [ ] Docs + verification
+  - [ ] Update `docs/architecture.md` with auth + games API routes
+  - [ ] Run `.\scripts\check.ps1` before closing the sprint
 
 ---
 
@@ -122,6 +124,13 @@ dev/prod failure modes (auth, empty states).
 - Routing skeleton for top-level pages
 - Universal header/footer + layout wrapper
 - Root pre-PR command: `.\scripts\check.ps1` documented
+
+### Sprint 8 — Phase 5: Production Stability v0 ✅
+
+- Fixed Vercel SPA deep-link refresh 404s for non-home routes
+- Added Vercel `/api/*` proxy routing so frontend requests hit the Django backend
+- Wired Cloudflare Turnstile end-to-end in production
+- Cleaned up repo “Problems” (TS/editor + test brittleness)
 
 ### Sprint 9 — Games v0 ✅
 

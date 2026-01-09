@@ -63,7 +63,8 @@ The frontend is responsible for UI and calling backend APIs.
     - `/games/beens` (Queens-style)
     - `/games/sudoku` (Mini Sudoku)
     - Zip-style route: see `src/App.tsx`
-      (folder exists as `src/pages/games/BipPage/`) - `/contact`
+      (folder exists as `src/pages/games/BipPage/`)
+  - `/contact`
   - `/site`
   - `/stats`
   - `*` (Not Found)

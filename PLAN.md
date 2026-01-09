@@ -60,11 +60,11 @@ To keep momentum, we're minimizing admin overhead:
 - Phase 1 — DONE
 - Phase 2 — DONE
 - Phase 3 — DONE (v0 milestone complete)
-- Phase 4 — ACTIVE (routing + layout in progress)
+- Phase 4 — DONE (Frontend foundations)
 - Phase 4.5 — DONE (Live API deployment on DigitalOcean v0)
-- Phase 5 — PLANNED
-- Phase 6 — PLANNED
-- Phase 7 — PLANNED
+- Phase 5 — ACTIVE (Content system)
+- Phase 6 — PLANNED (Auth)
+- Phase 7 — PLANNED (Games persistence + leaderboards; games UI v0 shipped)
 - Phase 8 — PLANNED
 - Phase 9 — PLANNED (hardening and ops polish)
 - Phase 10 — PLANNED

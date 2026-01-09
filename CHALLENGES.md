@@ -181,3 +181,35 @@ Guidelines:
 
 - When using browser-sensitive CSS features, include vendor-prefixed equivalents
   where recommended by tooling (or rely on a configured autoprefixing pipeline).
+
+### CH-0006: Vercel deep-link refresh 404 + `/api` requests hitting Vercel (405)
+
+- Date: 2026-01-02
+- Area: infra
+- Impact: high
+- Status: resolved
+
+#### 0006 Symptoms
+
+- Refreshing or direct-opening non-home routes (e.g., `/contact`, `/resume`)
+  returned a Vercel 404.
+- Form POSTs to `/api/...` returned 405
+  (requests were handled by Vercel instead of the Django backend).
+
+#### 0006 Root cause
+
+- Missing/incorrect Vercel rewrites for SPA fallback routing.
+- Missing/incorrect proxy routing for `/api/*` to the DigitalOcean backend.
+
+#### 0006 Fix
+
+- Add Vercel rewrites to:
+  - proxy `/api/(.*)` to the backend API, and
+  - rewrite other routes to the SPA entrypoint for deep-link refresh.
+
+#### 0006 Prevention
+
+- Treat `vercel.json` as part of “production correctness” (review it like code).
+- After any routing/submission change, manually verify on production:
+  - deep-link refresh for at least 2 non-home routes
+  - a real submission POST to `/api/...` (should not hit Vercel).
