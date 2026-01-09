@@ -1,0 +1,49 @@
+.statusRow {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.modalBackdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.55);
+  display: grid;
+  place-items: center;
+  padding: 1rem;
+  z-index: 60;
+}
+
+.modal {
+  width: min(520px, 92vw);
+  border-radius: 1rem;
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  background: rgba(30, 30, 30, 0.95);
+  padding: 1rem;
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.45);
+}
+
+.modalTitle {
+  /* margin: 0 0 0.5rem; */
+  font-size: 1.15rem;
+  font-weight: 800;
+}
+
+.modalBody {
+  /* margin: 0 0 0.9rem;
+  opacity: 0.9; */
+  margin-top: 0.35rem;
+  opacity: 0.95;
+}
+
+.modalActions {
+  /* display: flex;
+  gap: 0.5rem;
+  justify-content: flex-end;
+  flex-wrap: wrap; */
+  margin-top: 0.9rem;
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+}

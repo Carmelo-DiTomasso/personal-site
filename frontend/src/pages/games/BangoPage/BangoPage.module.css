@@ -1,0 +1,118 @@
+.header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.title {
+  margin: 0;
+  font-size: 2.25rem;
+  line-height: 1.1;
+}
+
+.subtitle {
+  margin: 0.35rem 0 0;
+  opacity: 0.9;
+}
+
+.actions {
+  display: flex;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+}
+
+.howList {
+  margin: 0;
+  padding-left: 1.25rem;
+}
+
+.boardSection {
+  width: 100%;
+  box-sizing: border-box;
+
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 1.25rem;
+  padding: 1rem;
+}
+
+.boardTopRow {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: 0.75rem;
+}
+
+.metric {
+  opacity: 0.95;
+}
+
+.metricRight {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.solvedPill {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  padding: 0.25rem 0.6rem;
+  border-radius: 999px;
+  border: 1px solid rgba(120, 220, 140, 0.45);
+  background: rgba(70, 200, 110, 0.18);
+  font-weight: 700;
+}
+
+/* Solved popup (no inline styles) */
+.modalOverlay {
+  position: fixed;
+  inset: 0;
+  z-index: 60;
+
+  background: rgba(0, 0, 0, 0.55);
+  display: grid;
+  place-items: center;
+  padding: 1rem;
+}
+
+.modalCard {
+  width: min(520px, 92vw);
+  border-radius: 1rem;
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  background: rgba(20, 20, 20, 0.92);
+
+  padding: 1rem;
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.45);
+}
+
+.modalTitle {
+  font-size: 1.15rem;
+  font-weight: 800;
+}
+
+.modalBody {
+  margin-top: 0.35rem;
+  opacity: 0.95;
+}
+
+.modalActions {
+  margin-top: 0.9rem;
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+}
+
+@media (max-width: 720px) {
+  .header {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .actions {
+    justify-content: flex-start;
+  }
+}

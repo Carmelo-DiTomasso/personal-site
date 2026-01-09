@@ -1,0 +1,41 @@
+.howList {
+  margin: 0;
+  padding-left: 1.1rem;
+}
+
+.modalOverlay {
+  position: fixed;
+  inset: 0;
+  z-index: 60;
+  background: rgba(0, 0, 0, 0.55);
+  display: grid;
+  place-items: center;
+  padding: 1rem;
+}
+
+.modalCard {
+  width: min(520px, 92vw);
+  border-radius: 1rem;
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  background: rgba(20, 20, 20, 0.92);
+  padding: 1rem;
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.45);
+}
+
+.modalTitle {
+  font-size: 1.15rem;
+  font-weight: 800;
+}
+
+.modalBody {
+  margin-top: 0.35rem;
+  opacity: 0.95;
+}
+
+.modalActions {
+  margin-top: 0.9rem;
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+}

@@ -1,6 +1,11 @@
 .root {
   display: grid;
   gap: 1rem;
+  width: 100%;
+  box-sizing: border-box;
+
+  /* match the general page vertical rhythm */
+  padding: 2rem 0 3rem;
 }
 
 .header {
@@ -11,6 +16,7 @@
 }
 
 .headerText {
+  flex: 1 1 auto;
   min-width: 0;
 }
 
@@ -29,11 +35,13 @@
   align-items: center;
   gap: 0.5rem;
   flex-wrap: wrap;
+  flex-shrink: 0;
   justify-content: flex-end;
 }
 
+/* IMPORTANT: this is what was making Tango/Bango "How to play" look shorter */
 .howToPlay {
-  max-width: 56rem;
+  width: 100%;
 }
 
 .status {

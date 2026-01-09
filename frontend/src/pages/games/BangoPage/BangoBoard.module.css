@@ -1,0 +1,160 @@
+.board {
+  --cell: clamp(2.6rem, 6.2vw, 3.25rem);
+  display: grid;
+  gap: 0.35rem;
+  justify-content: center;
+  align-content: start;
+}
+
+.cell {
+  position: relative;
+  width: var(--cell);
+  height: var(--cell);
+  border-radius: 0.75rem;
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  background: rgba(255, 255, 255, 0.02);
+  color: inherit;
+  cursor: pointer;
+  display: grid;
+  place-items: center;
+  padding: 0;
+  -webkit-user-select: none;
+  user-select: none;
+}
+
+.cell:focus {
+  outline: none;
+}
+
+.cell:hover {
+  border-color: rgba(255, 255, 255, 0.22);
+}
+
+.locked {
+  background: rgba(149, 149, 149, 0.3);
+  border-color: rgba(255, 255, 255, 0.18);
+}
+
+.active {
+  outline: 2px solid rgba(120, 220, 140, 0.55);
+  outline-offset: 2px;
+}
+
+.conflict {
+  border-color: rgba(255, 120, 120, 0.55);
+}
+
+.value {
+  font-size: 1.35rem;
+  line-height: 1;
+  font-weight: 800;
+  transform: translateY(-0.02rem);
+}
+
+/* Link markers (right / down) */
+.linkRight,
+.linkDown {
+  position: absolute;
+  width: 1.35rem;
+  height: 1.05rem;
+  display: grid;
+  place-items: center;
+  border-radius: 999px;
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  background: rgba(0, 0, 0, 0.28);
+  font-weight: 900;
+  font-size: 0.9rem;
+  line-height: 1;
+  pointer-events: none;
+}
+
+.linkRight {
+  right: -0.78rem;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+.linkDown {
+  bottom: -0.78rem;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+.same {
+  opacity: 0.92;
+}
+
+.diff {
+  opacity: 0.92;
+}
+
+.linkBad {
+  border-color: rgba(255, 120, 120, 0.7);
+}
+
+.howToList {
+  margin: 0;
+  padding-left: 1.1rem;
+}
+
+.solvedBackdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.55);
+  display: grid;
+  place-items: center;
+  padding: 1rem;
+  z-index: 50;
+}
+
+.solvedModal {
+  width: min(520px, 92vw);
+  border-radius: 1rem;
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  background: rgba(30, 30, 30, 0.95);
+  padding: 1rem;
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.45);
+}
+
+.solvedTitle {
+  font-size: 1.25rem;
+  font-weight: 800;
+  margin-bottom: 0.5rem;
+}
+
+.solvedBody {
+  opacity: 0.9;
+  margin-bottom: 0.9rem;
+}
+
+.solvedActions {
+  display: flex;
+  gap: 0.5rem;
+  justify-content: flex-end;
+  flex-wrap: wrap;
+}
+
+.size6 {
+  grid-template-columns: repeat(6, var(--cell));
+}
+
+.wrap {
+  outline: none;
+}
+
+.board {
+  --sunColor: #ffd166;
+  --moonColor: #7dd3fc;
+}
+
+.sun {
+  color: var(--sunColor);
+}
+
+.moon {
+  color: var(--moonColor);
+}
+
+.value {
+  text-shadow: 0 0 12px rgba(255, 255, 255, 0.12);
+}
