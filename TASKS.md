@@ -6,6 +6,7 @@ The PM Hub conversation plans sprints from this file.
 ## How we work (ChatGPT Projects workflow)
 
 - **PM Hub conversation:**
+
   - Chooses the next **Milestone**
   - Proposes a sprint backlog
   - After each sprint, ingests a **Sprint Handoff Packet** and updates docs and
@@ -27,7 +28,7 @@ We are optimizing for momentum:
 
 - **Live hosting:** Vercel (frontend)
 - **Backend hosting:** DigitalOcean App Platform + DO Managed Postgres
-- **Last completed sprint:** Sprint 6 — Phase 4: Site Skeleton v0 ✅
+- **Last completed sprint:** Sprint 9 — Games v0
 - **Live behavior:** API Status and Projects work on the live homepage
 
 ---
@@ -76,6 +77,11 @@ dev/prod failure modes (auth, empty states).
 - [ ] DO production hardening (reverse proxy, backups, monitoring, rollback)
 - [ ] Security headers + CSP + dependency scanning
 - [ ] Performance + accessibility baseline
+- [ ] add "turnstile token must be fresh"
+- [ ] Add the resubmission timer to both the contact and feedback forms
+- [ ] placeholder text in the form fields
+- [ ] linter enforce import order
+- [ ] move new puzzle and reset buttons below the game board
 
 ---
 
@@ -116,3 +122,36 @@ dev/prod failure modes (auth, empty states).
 - Routing skeleton for top-level pages
 - Universal header/footer + layout wrapper
 - Root pre-PR command: `.\scripts\check.ps1` documented
+
+### Sprint 9 — Games v0 ✅
+
+- `/games` hub shipped with shared game shell + on-page instructions UI
+- Zip game v0 shipped
+- Tango game v0 shipped
+- Queens game v0 shipped (generator-based; not preset rotation)
+- Mini Sudoku game v0 shipped (board + notes mode + keyboard controls + divider styling)
+
+## Current Sprint Notes
+
+### undecided location
+
+- None
+
+### Challenges
+
+- None
+
+### todo this sprint
+
+- None
+
+### additional instructions to add
+
+- Sprint quality gates:
+- Remove dead code and duplication introduced during the sprint.
+- Ensure key UI blocks are selectable in DevTools (accessible names and/or
+  stable data-testid on page roots/major sections).
+- Run scripts/check.ps1 before finishing each issue.
+- If any tool/workflow change is needed (Dev Container, new scripts, new env
+  var), document it in README in the same PR.
+- Responsive + cross-browser sanity check is part of DoD.

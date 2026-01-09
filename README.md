@@ -81,6 +81,7 @@ Services:
 - Backend: <http://localhost:8000>
 - Health: <http://localhost:8000/api/health/>
 - Admin: <http://localhost:8000/admin/>
+- Games hub: <http://localhost:5173/games>
 - DB: localhost:5432
 
 ### 3) Run migrations

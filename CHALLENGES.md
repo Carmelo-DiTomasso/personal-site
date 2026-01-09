@@ -155,3 +155,29 @@ Guidelines:
 #### 0004 Prevention
 
 - Treat as non-actionable unless the widget fails or token verification fails.
+
+### CH-0005: Safari compatibility warning for `user-select`
+
+- Date: 2026-01-09
+- Area: frontend
+- Impact: low
+- Status: resolved
+
+#### 0005 Symptoms
+
+- VSCode / Edge DevTools warning:
+  `user-select` is not supported by Safari (iOS/Safari), suggests adding `-webkit-user-select`.
+
+#### 0005 Root cause
+
+- Safari requires the prefixed property for consistent support.
+
+#### 0005 Fix
+
+- Add `-webkit-user-select: none;` alongside `user-select: none;`
+  on the relevant container.
+
+#### 0005 Prevention
+
+- When using browser-sensitive CSS features, include vendor-prefixed equivalents
+  where recommended by tooling (or rely on a configured autoprefixing pipeline).

@@ -29,6 +29,16 @@ The frontend is responsible for UI and calling backend APIs.
     - `src/pages/home/HomePage.tsx`
     - `src/pages/resume/ResumePage.tsx`
     - `src/pages/projects/ProjectsPage.tsx`
+- `src/pages/games/*` contains the Games hub + individual game routes.
+  - Example folders (v0):
+    - `src/pages/games/BipPage/` (Zip-style game; route slug may differ — see `src/App.tsx`)
+    - `src/pages/games/BangoPage/` (Tango-style game; currently served at `/games/bango`)
+    - `src/pages/games/BeensPage/` (Queens-style game; currently served at `/games/beens`)
+    - `src/pages/games/SudokuPage/` (Mini Sudoku; currently served at `/games/sudoku`)
+- `src/components/games/*` contains **shared** game UI primitives
+  used across multiple games.
+  - Example:
+    - `src/components/games/BoardFrame/*` (focusable wrapper + consistent board framing)
 - `src/components/sections/*` contains **page sections** (primarily Home page sections).
 - `src/components/layout/*` contains **app-wide layout primitives**:
   - `AppLayout` (wraps every route)
@@ -48,8 +58,12 @@ The frontend is responsible for UI and calling backend APIs.
   - `/` (Home)
   - `/resume`
   - `/projects`
-  - `/games`
-  - `/contact`
+  - `/games` (Games hub)
+    - `/games/bango` (Tango-style)
+    - `/games/beens` (Queens-style)
+    - `/games/sudoku` (Mini Sudoku)
+    - Zip-style route: see `src/App.tsx`
+      (folder exists as `src/pages/games/BipPage/`) - `/contact`
   - `/site`
   - `/stats`
   - `*` (Not Found)
@@ -316,15 +330,15 @@ Returns a JSON array of project objects:
 
 ##### Fields
 
-| Field        | Type    | Notes                                        |
-|--------------|---------|----------------------------------------------|
-| `slug`       | string  | Unique, stable identifier (use as UI key)    |
-| `title`      | string  | Display name                                 |
-| `description`| string  | Optional; may be empty                       |
-| `live_url`   | string  | Optional; may be empty                       |
-| `repo_url`   | string  | Optional; may be empty                       |
-| `sort_order` | number  | Lower comes first                            |
-| `is_featured`| boolean | Optional UI emphasis flag                    |
+| Field         | Type    | Notes                                     |
+| ------------- | ------- | ----------------------------------------- |
+| `slug`        | string  | Unique, stable identifier (use as UI key) |
+| `title`       | string  | Display name                              |
+| `description` | string  | Optional; may be empty                    |
+| `live_url`    | string  | Optional; may be empty                    |
+| `repo_url`    | string  | Optional; may be empty                    |
+| `sort_order`  | number  | Lower comes first                         |
+| `is_featured` | boolean | Optional UI emphasis flag                 |
 
 #### Error envelope
 
@@ -340,11 +354,11 @@ Non-2xx responses should use the standard error envelope:
 }
 ```
 
-| Field            | Type      | Notes                                      |
-|------------------|-----------|--------------------------------------------|
-| `error.code`     | string    | Stable, machine-readable error code        |
-| `error.message`  | string    | User/developer-readable description        |
-| `error.details`  | any\|null | Optional extra context for debugging       |
+| Field           | Type      | Notes                                |
+| --------------- | --------- | ------------------------------------ |
+| `error.code`    | string    | Stable, machine-readable error code  |
+| `error.message` | string    | User/developer-readable description  |
+| `error.details` | any\|null | Optional extra context for debugging |
 
 ## Deployment (later)
 

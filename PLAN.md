@@ -32,7 +32,7 @@ Every issue must have exactly:
 
 - 1 area: `area:frontend | area:backend | area:db | area:infra`
 - 1 type: `type:feature | type:bug | type:docs | type:chore | type:security |
-  type:refactor | type:test | type:ci | type:perf | type:deps`
+type:refactor | type:test | type:ci | type:perf | type:deps`
 - 1 priority: `priority:P0 | priority:P1 | priority:P2 | priority:P3`
 
 ### Reduced overhead mode (current)
@@ -205,12 +205,25 @@ Definition of Done:
 
 Goal: Small interactive games and user score tracking.
 
+Status note:
+
+- Games UI **v0 shipped in Sprint 9** as **frontend-only**
+  (no auth, no persistence yet):
+  - `/games` hub + 4 games (Zip, Tango, Queens, Mini Sudoku)
+  - On-page “How to play” UI (accordion/modal-style UX)
+
 Deliverables:
 
-- Score submission endpoint
-- Leaderboard endpoints (pagination)
-- Frontend UI for scores and leaderboards
-- Validation + basic rate limiting
+- Backend `games` API:
+  - Score submission endpoint
+  - Leaderboard endpoints (pagination)
+  - Score history endpoint (per-user)
+  - Validation + basic rate limiting
+- Frontend:
+  - Wire v0 games UI to score submission
+  - Leaderboard UI + personal history UI
+- Auth dependency:
+  - Requires user accounts/login (Phase 6) before per-user history is meaningful
 
 Definition of Done:
 
